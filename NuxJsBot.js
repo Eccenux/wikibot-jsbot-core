@@ -25,11 +25,17 @@
 		var orig_cleanerWikiVaria = wp_sk.cleanerWikiVaria;
 		var summary = ['[[WP:SK]]'];
 		wp_sk.cleanerWikiVaria = function(str) {
+			var after = '';
 			// orig
 			str = orig_cleanerWikiVaria.apply(this, arguments);
 			// col-begin/break
-			summary.push('odstęp col-begin/break');
-			str = str.replace(/(\{\{col-begin[^}]*\}\})\s+(\{\{col-break)/g, '$1$2');
+			after = str.replace(/(\{\{col-begin[^}]*\}\})\s+(\{\{col-break)/g, '$1$2');
+			if (after !== str) {
+				summary.push('odstęp col-begin/break');
+				str = after;
+			} else {
+				console.warn('[jsbot]', 'brak dopasowania')
+			}
 			/**
 			// old link
 			summary.push('poprawa linków');
