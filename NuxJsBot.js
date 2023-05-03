@@ -27,7 +27,10 @@
 		wp_sk.cleanerWikiVaria = function(str) {
 			// orig
 			str = orig_cleanerWikiVaria.apply(this, arguments);
-			/**/
+			// col-begin/break
+			summary.push('odstęp col-begin/break');
+			str = str.replace(/(\{\{col-begin[^}]*\}\})\s+(\{\{col-break)/g, '$1$2');
+			/**
 			// old link
 			summary.push('poprawa linków');
 			str = str.replace(/https?:\/\/web.archive.org\/\w+\/\d+\/(http:\/\/(?:www\.)?itsanhonour\.gov\.au\/honours\/\w+\/.+?aus_award_id=)/g, '$1');
