@@ -17,6 +17,59 @@ class ReviewCheck {
 		});
 		return result;
 	}
+	
+	/**
+	 * Check reviewed.
+	 * @param {Array} titles {t:title, a:node}
+	 * @returns {Promise}
+	 */
+	checkReviewed(titles) {
+		let result = new Promise((resolve, reject) => {
+			const api = new mw.Api();
+			api.get( {
+				action: 'query',
+				prop: 'flagged',
+				titles: titles.map(o=>o.t),
+			} ).done( ( data ) => {
+				let pages = Object.values(data.query.pages);
+				console.log('done', pages);
+				let reviewed = this.findReviewed(pages);
+				let rTitles = reviewed.map(r=>r.title);
+				let result = {
+					reviewed: titles.filter(o=>rTitles.indexOf(o.title)>=0),
+					stale: titles.filter(o=>rTitles.indexOf(o.title)<0),
+				}
+				console.log('done', {rTitles, result});
+				resolve(result);
+			} ).fail( () => {
+				console.error('failed to get reviewd data');
+				reject();
+			} );
+		});
+		return result;
+	}
+
+	/**
+	 * Find reviewd pages in the set.
+	 * 
+	 * prop=flagged spec:
+	 * https://www.mediawiki.org/wiki/Extension:FlaggedRevs#prop=flagged
+	 * 
+	 * @param {Array} pages Array of objects that are returned by a query with prop=flagged.
+	 * @returns {Array} Filtered array of page objects.
+	 */
+	findReviewed(pages) {
+		return pages.filter(page => {
+			// was reviewed at all
+			if ('flagged' in page) {
+				// doesn't have pending changes
+				if (!('pending_since' in page.flagged)) {
+					return true;
+				}
+			}
+			return false;
+		});
+	}
 
 	/**
 	 * Extract titles from node.
@@ -54,3 +107,14 @@ class ReviewCheck {
 		return mwT.getPrefixedText();
 	}
 }
+
+/*
+// mark unreviewed
+var reviewCheck = new ReviewCheck();
+var links = document.querySelectorAll('.mw-search-results a');
+reviewCheck.check(links).then((result) => {
+	result.stale.forEach(o => {
+		o.a.style.cssText = 'background:yellow;';
+	});	
+});
+*/
