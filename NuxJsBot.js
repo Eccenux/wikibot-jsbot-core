@@ -21,10 +21,6 @@
 			this.prepareSk(wp_sk);
 			// auto-run
 			wp_sk.cleanup( document.getElementById( 'wpTextbox1' ) );
-			// drób
-			$('#wpMinoredit').prop('checked', 'checked');
-			// auto-diff
-			$('#wpDiff').click();
 		}
 	
 		/* Select node (range selection). */
@@ -101,12 +97,16 @@
 			
 			wp_sk.warning = function() {
 				if (!wp_sk.nochanges) {
-					wpSummary.value = summary.join(', ');
-					wpMinoredit.checked = true;
-					wpWatchthis.checked = false;
+					document.getElementById('wpSummary').value = summary.join(', ');
+					// drób
+					document.getElementById('wpMinoredit').checked = true;
+					// don't watch
+					document.getElementById('wpWatchthis').checked = false;
 				} else {
 					console.warn(logTag, 'brak zmian');
 				}
+				// auto-diff
+				$('#wpDiff').click();
 			}
 		}
 	}
