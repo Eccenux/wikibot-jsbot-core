@@ -1,11 +1,12 @@
-/* eslint-disable no-empty */
-/* global mw */
+/* global mw, $ */
 (function(){
-	var link_prep_done = false;
 	var logTag = '[jsbot]';
 
-	/**/
 	class NuxJsBot {
+		constructor() {
+			this.linkPrepDone = false;
+		}
+		
 		/**
 		 * Prepare and execute WP:SK.
 		 * 
@@ -17,7 +18,7 @@
 				return;
 			}
 			// prep. bocik
-			jsbotsk(wp_sk);
+			this.prepareSk(wp_sk);
 			// auto-run
 			wp_sk.cleanup( document.getElementById( 'wpTextbox1' ) );
 			// drób
@@ -25,9 +26,13 @@
 			// auto-diff
 			$('#wpDiff').click();
 		}
-		/**/
-		selectText(nodeSel) {
+	
+		/* Select node (range selection). */
+		selectNode(nodeSel) {
 			var node = document.querySelector(nodeSel);
+			if (!node) {
+				console.warn(logTag, 'node not found', nodeSel);
+			}
 			var selection = window.getSelection();
 			var range = document.createRange();
 			range.selectNodeContents(node);
@@ -35,18 +40,19 @@
 			selection.addRange(range);
 		}
 		/**
-		 * Przygotowanie strony wyszukiwania do masowych edycji.
+		 * Prepare search page for mass-edit.
 		 */
-		jsbotsk_search_prep() {
-			if (!link_prep_done) {
+		prepareSearch() {
+			if (!this.linkPrepDone) {
 				$('.searchResultImage-thumbnail').remove();
-				$('.mw-search-results a').each(function(a){console.log(this.href)
+				$('.mw-search-results a').each(function() {
+					//console.log(this.href)
 					this.href += '?action=edit'
 					this.href = this.href.replace(/\?.+\?/, '?')
 				});
 			}
-			link_prep_done = true;
-			selectText('.mw-search-results-container');
+			this.linkPrepDone = true;
+			this.selectNode('.mw-search-results-container');
 		}
 		/*
 			js-bot
@@ -58,7 +64,7 @@
 			...
 			5. Zkomentuj mw.hook.
 		*/
-		jsbotsk(wp_sk) {
+		prepareSk(wp_sk) {
 			var orig_cleanerWikiVaria = wp_sk.cleanerWikiVaria;
 			var summary = ['[[WP:SK]]'];
 			wp_sk.cleanerWikiVaria = function(str) {
@@ -71,7 +77,7 @@
 					summary.push('odstęp col-begin/break');
 					str = after;
 				} else {
-					console.warn('[jsbot]', 'brak dopasowania')
+					console.warn(logTag, 'brak dopasowania')
 				}
 				/**
 				// old link
@@ -99,9 +105,22 @@
 					wpMinoredit.checked = true;
 					wpWatchthis.checked = false;
 				} else {
-					
+					console.warn(logTag, 'brak zmian');
 				}
 			}
 		}
 	}
+	
+	// bot instance
+	const jsbot = new NuxJsBot();
+	
+	// run when WP:SK is fully ready
+	mw.hook('userjs.wp_sk.redir.done').add(function (wp_sk) {
+		jsbot.run(wp_sk);
+	});
+	
+	// export
+	window.jsbotsk_search_prep = function() {
+		jsbot.prepareSearch();
+	};
 })();
