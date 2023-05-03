@@ -1,3 +1,19 @@
+/**
+ * Simple JS ~bot.
+ * 
+ * (tags: jsbot, botjs, botskjs, js-bot)
+ * 
+ * Procedura:	
+	0. Włącz ładowanie jsbot.
+	1. Zmiana w `prepareSk()` i test.
+	2. [[Specjalna:Uprawnienia/Nux]] (włącz [[Wikipedia:Użytkownicy o ukrytej aktywności]]).
+	3. monobook
+	4. Przygotowanie wyszukiwania (linki do edycji): jsbotsk_search_prep();
+	...
+	X. Zakomentuj ładowanie jsbot i zrewertuj zmiany konta.
+ * 
+ * @see NuxJsBot.js (in varia-linter)
+ */
 /* global mw, $ */
 (function(){
 	var logTag = '[jsbot]';
@@ -50,16 +66,10 @@
 			this.linkPrepDone = true;
 			this.selectNode('.mw-search-results-container');
 		}
-		/*
-			js-bot
-			(tags: jsbot, botjs, botskjs)
-			1. Funkcja i test.
-			2. [[Wikipedia:Użytkownicy o ukrytej aktywności]] -> [[Specjalna:Uprawnienia/Nux]].
-			3. monobook
-			4. Wyszukiwanie na edycję:
-			...
-			5. Zkomentuj mw.hook.
-		*/
+		/**
+		 * Prepare WP:SK for execution (add custom procedures).
+		 * @param {wp_sk} wp_sk 
+		 */
 		prepareSk(wp_sk) {
 			var orig_cleanerWikiVaria = wp_sk.cleanerWikiVaria;
 			var summary = ['[[WP:SK]]'];
