@@ -17,6 +17,30 @@
 		$('#wpDiff').click();
 	});
 	/**/
+	var link_prep_done = false;
+	function selectText(nodeSel) {
+		var node = document.querySelector(nodeSel);
+		var selection = window.getSelection();
+		var range = document.createRange();
+		range.selectNodeContents(node);
+		selection.removeAllRanges();
+		selection.addRange(range);
+	}
+	/**
+	 * Przygotowanie strony wyszukiwania do masowych edycji.
+	 */
+	function jsbotsk_search_prep() {
+		if (!link_prep_done) {
+			$('.searchResultImage-thumbnail').remove();
+			$('.mw-search-results a').each(function(a){console.log(this.href)
+				this.href += '?action=edit'
+				this.href = this.href.replace(/\?.+\?/, '?')
+			});
+		}
+		link_prep_done = true;
+		selectText('.mw-search-results-container');
+	}
+	window.jsbotsk_search_prep = jsbotsk_search_prep;
 	/*
 		js-bot
 		(tags: jsbot, botjs, botskjs)
@@ -24,14 +48,8 @@
 		2. [[Wikipedia:Użytkownicy o ukrytej aktywności]] -> [[Specjalna:Uprawnienia/Nux]].
 		3. monobook
 		4. Wyszukiwanie na edycję:
-		```
-		$('.searchResultImage-thumbnail').remove();
-		$('.mw-search-results a').each(function(a){console.log(this.href)
-			this.href += '?action=edit'
-			this.href = this.href.replace(/\?.+\?/, '?')
-		});
-		5. Revert tymczasowych zmian.
-		```
+		...
+		5. Zkomentuj mw.hook.
 	*/
 	function jsbotsk(wp_sk) {
 		var orig_cleanerWikiVaria = wp_sk.cleanerWikiVaria;
@@ -78,4 +96,5 @@
 			}
 		}
 	}
+
 })();
