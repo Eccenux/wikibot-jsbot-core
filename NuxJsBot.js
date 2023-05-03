@@ -125,10 +125,15 @@
 	const jsbot = new NuxJsBot();
 	
 	// run when WP:SK is fully ready
-	mw.hook('userjs.wp_sk.redir.done').add(function (wp_sk) {
+	mw.hook('userjs.wp_sk.redir.done').add(function (wp_sk, hasRedirs) {
+		console.log(logTag, 'redir done', wp_sk, hasRedirs);
 		jsbot.run(wp_sk);
 	});
-	
+
+	mw.hook('userjs.wp_sk.button_created').add(function (wp_sk) {
+		console.log(logTag, 'button_created', wp_sk);
+	});
+
 	// export
 	window.jsbotsk_search_prep = function() {
 		jsbot.prepareSearch();
