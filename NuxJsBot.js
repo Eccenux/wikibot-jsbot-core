@@ -1,8 +1,20 @@
 /* global mw */
 (function(){
+
 	/**/
-	mw.hook('userjs.wp_sk.ready').add(function (wp_sk) {
+	mw.hook('userjs.wp_sk.redir.done').add(function (wp_sk) {
+		var model = mw.config.get('wgPageContentModel');
+		if (model === "javascript") {
+			return;
+		}
+		// prep. bocik
 		jsbotsk(wp_sk);
+		// auto-run
+		wp_sk.cleanup( document.getElementById( 'wpTextbox1' ) );
+		// drób
+		$('#wpMinoredit').prop('checked', 'checked');
+		// auto-diff
+		$('#wpDiff').click();
 	});
 	/**/
 	/*
