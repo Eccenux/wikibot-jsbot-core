@@ -76,6 +76,7 @@
 		prepareSk(wp_sk) {
 			var orig_cleanerWikiVaria = wp_sk.cleanerWikiVaria;
 			var summary = ['[[WP:SK]]'];
+			var me = this;
 			wp_sk.cleanerWikiVaria = function(str) {
 				var after = '';
 				// orig
@@ -85,8 +86,14 @@
 				if (after !== str) {
 					summary.push('odstęp col-begin/break');
 					str = after;
-				} else {
-					console.warn(logTag, 'brak dopasowania')
+				// } else {
+				// 	console.warn(logTag, 'brak dopasowania')
+				}
+				// col-begin with a list
+				after = me.cleanupColList(str);
+				if (after !== str) {
+					summary.push('poprawa ciągłości, [[WP:Dostępność]]');
+					str = after;
 				}
 				/**
 				// old link
@@ -121,6 +128,31 @@
 				// auto-diff
 				$('#wpDiff').click();
 			}
+		}
+		/**
+		 * Usuwanie col-break łamiących ciągłość listy.
+		 * 
+		 * Przykład poprawek:
+		 * https://pl.wikipedia.org/w/index.php?title=Mistrzostwa_%C5%9Awiata_w_Snookerze_2023&diff=70266096&oldid=70265967
+		 * @param {String} str 
+		 */
+		cleanupColList(str) {
+			// ręcznie dłubana tabela
+			if (str.search(/\|\s*<ol start/) > 0) {
+				// 1 = 1st cell, 2=2nd cell
+				const re = /\{\|[|\s]+((?:\n#.+)+)\n(?:\|\s*\w+[^|]+\||\|)\s*<ol start.+>([\s\S]+?)<\/ol>\s+\|\}/g;
+				const top = '{{Układ wielokolumnowy |szerokość=20em |liczba=2 |skurcz=1 |1=<nowiki />';
+				str = str.replace(re, (a, list1, list2) => {
+					list2 = list2.replace(/\s*<li>\s*/g, '\n# ')
+						.replace(/<\/li>/g, '')
+						.trim()
+					;
+					list1 = list1.trim();
+
+					return `${top}\n${list1}\n${list2}\n}}`
+				});
+			}
+			return str;
 		}
 	}
 	
