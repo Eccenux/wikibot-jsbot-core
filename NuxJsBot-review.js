@@ -36,8 +36,8 @@ class ReviewCheck {
 				let reviewed = this.findReviewed(pages);
 				let rTitles = reviewed.map(r=>r.title);
 				let result = {
-					reviewed: titles.filter(o=>rTitles.indexOf(o.title)>=0),
-					stale: titles.filter(o=>rTitles.indexOf(o.title)<0),
+					reviewed: titles.filter(o=>rTitles.indexOf(o.t)>=0),
+					stale: titles.filter(o=>rTitles.indexOf(o.t)<0),
 				}
 				console.log('done', {rTitles, result});
 				resolve(result);
