@@ -129,6 +129,11 @@
 				$('#wpDiff').click();
 			}
 		}
+		/** Count regexp occurences. */
+		countRe(text, re) {
+			const m = text.match(re);
+			return m ? m.length : 0;
+		}
 		/**
 		 * Usuwanie col-break łamiących ciągłość listy.
 		 * 
@@ -169,8 +174,8 @@
 						.trim()
 					;
 					// make sure content is a list
-					if (content.match(liRe).length !== content.match(lineRe).length) {
-						console.warn(logTag, 'not a list, skipping', content);
+					if (this.countRe(content, liRe) !== this.countRe(content, lineRe)) {
+						console.warn(logTag, 'not a list, skipping\n', content);
 						return a;
 					}
 		
