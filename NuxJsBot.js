@@ -156,14 +156,19 @@
 			if (str.search(/\{\{col-break\}\}[ \n]*\n\*/) > 0) {
 				const re = /\{\{col-begin[^}]*\}\}([\s\S]+?)\{\{col-end\}\}/g;
 				const top = '{{Układ wielokolumnowy |szerokość=20em |liczba=2 |skurcz=0 | 1=<nowiki />';
+				const liRe = /\n\*.+/g;
+				const lineRe = /\n/g;
+				const breaksRe = /\s*\{\{col-break[^}]*\}\}\s*/g;
 				str = str.replace(re, (a, content) => {
-					// check if content is a list
-					if (content.search(/^([ \n]*\n\*.+){2}/) < 0) {
-						return a;
-					}
-					content = content.replace(/\s*\{\{col-break[^}]*\}\}\s*/g, '\n')
+					// remove breaks to get actual content
+					content = content.replace(breaksRe, '\n')
 						.trim()
 					;
+					// make sure content is a list
+					if (content.match(liRe).length !== content.match(lineRe).length) {
+						console.warn(logTag, 'not a list, skipping', content);
+						return a;
+					}
 		
 					return `${top}\n${content}\n}}`
 				});
