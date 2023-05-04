@@ -160,6 +160,10 @@
 				const lineRe = /\n/g;
 				const breaksRe = /\s*\{\{col-break[^}]*\}\}\s*/g;
 				str = str.replace(re, (a, content) => {
+					// break early when no li/lines inside
+					if (content.search(liRe) < 0 || content.search(lineRe) < 0) {
+						return a;
+					}
 					// remove breaks to get actual content
 					content = content.replace(breaksRe, '\n')
 						.trim()
