@@ -152,6 +152,22 @@
 					return `${top}\n${list1}\n${list2}\n}}`
 				});
 			}
+			// bardziej typowa lista pocięta col-break
+			if (str.search(/\{\{col-break\}\}[ \n]*\n\*/) > 0) {
+				const re = /\{\{col-begin[^}]*\}\}([\s\S]+?)\{\{col-end\}\}/g;
+				const top = '{{Układ wielokolumnowy |szerokość=20em |liczba=2 |skurcz=0 | 1=<nowiki />';
+				str = str.replace(re, (a, content) => {
+					// check if content is a list
+					if (content.search(/^([ \n]*\n\*.+){2}/) < 0) {
+						return a;
+					}
+					content = content.replace(/\s*\{\{col-break[^}]*\}\}\s*/g, '\n')
+						.trim()
+					;
+		
+					return `${top}\n${content}\n}}`
+				});
+			}
 			return str;
 		}
 	}
