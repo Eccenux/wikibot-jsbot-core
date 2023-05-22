@@ -18,6 +18,7 @@
  * @see NuxJsBot.js (in varia-linter)
  */
 /* global mw, $ */
+/* global SkTableHide */
 (function(){
 	var logTag = '[jsbot]';
 
@@ -95,6 +96,12 @@
 					summary.push('poprawa ciągłości, [[WP:Dostępność]]');
 					str = after;
 				}
+				// table -> wikiflex
+				after = me.flexColumnTables(str);
+				if (after !== str) {
+					summary.push('wikiflex, [[WP:Dostępność]]');
+					str = after;
+				}
 				/**
 				// col-begin bez break
 				if (str.search(/col-break/i)<0 && str.search(/col-begin/i)>0) {
@@ -142,6 +149,18 @@
 		countRe(text, re) {
 			const m = text.match(re);
 			return m ? m.length : 0;
+		}
+		/** Podmiana pseudo-tabel. */
+		flexColumnTables(str) {
+			// zwijanie
+			var tables = new SkTableHide();
+
+			// [[Wikipedysta:Nux/test_sk_table_hide#Niby_kolumny]]
+			str = str.replace(/\n\{\|\n[|\-\n]*\n\|\s*(<tab<[0-9]+>tab>)\s*\|\s*(<tab<[0-9]+>tab>)\s*\n\|\}/g, '\n<div class="wikiflex">\n$1\n$2\n</div>');
+
+			str = tables.show(str);
+
+			return str;
 		}
 		/**
 		 * Usuwanie col-break łamiących ciągłość listy.
