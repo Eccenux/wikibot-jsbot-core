@@ -39,7 +39,7 @@
 			// prep. bocik
 			this.prepareSk(wp_sk);
 			// auto-run
-			wp_sk.cleanup( document.getElementById( 'wpTextbox1' ) );
+			//wp_sk.cleanup( document.getElementById( 'wpTextbox1' ) );
 		}
 	
 		/* Select node (range selection). */
@@ -81,14 +81,14 @@
 				var after = '';
 				// orig
 				str = orig_cleanerWikiVaria.apply(this, arguments);
-				// col-begin/break
-				after = str.replace(/(\{\{col-begin[^}]*\}\})\s+(\{\{col-break)/g, '$1$2');
+				/**
+				// karboks(y)amid
+				after = str.replace(/karboksami/g, 'karboksyami');
 				if (after !== str) {
-					summary.push('odstęp col-begin/break');
+					summary.push('karboks(y)amid');
 					str = after;
-				// } else {
-				// 	console.warn(logTag, 'brak dopasowania')
 				}
+				/**/
 				// col-begin with a list
 				after = me.cleanupColList(str);
 				if (after !== str) {
