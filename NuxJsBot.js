@@ -163,7 +163,7 @@
 			);
 
 			// j/w ale z col-begin/end
-			str = str.replace(/\n\{\{col-begin\}\}\n\s*(<tab<[0-9]+>tab>)\s*(?:\||\{\{col-(?:break|2)\}\})\s*(<tab<[0-9]+>tab>)\s*\{\{col-end\}\}/g
+			str = str.replace(/\n\{\{col-begin\}\}\n\s*(<tab<[0-9]+>tab>)\s*(?:\||\{\{col-(?:break|2)\}\})\s*(<tab<[0-9]+>tab>)\s*(?:\{\{col-end\}\}|\n\|\})/g
 				, '\n<div class="wikiflex">\n$1\n$2\n</div>'
 			);
 			
