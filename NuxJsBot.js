@@ -40,7 +40,7 @@
 			// prep. bocik
 			this.prepareSk(wp_sk);
 			// auto-run
-			//wp_sk.cleanup( document.getElementById( 'wpTextbox1' ) );
+			wp_sk.cleanup( document.getElementById( 'wpTextbox1' ) );
 		}
 	
 		/* Select node (range selection). */
@@ -102,7 +102,7 @@
 					summary.push('wikiflex, [[WP:Dostępność]]');
 					str = after;
 				}
-				/**
+				/**/
 				// col-begin bez break
 				if (str.search(/col-break/i)<0 && str.search(/col-begin/i)>0) {
 					after = str.replace(/\{\{col-(begin|end)[^}]*\}\}/ig, '');
