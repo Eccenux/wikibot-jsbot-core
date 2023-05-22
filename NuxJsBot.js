@@ -96,6 +96,15 @@
 					str = after;
 				}
 				/**
+				// col-begin bez break
+				if (str.search(/col-break/i)<0 && str.search(/col-begin/i)>0) {
+					after = str.replace(/\{\{col-(begin|end)[^}]*\}\}/ig, '');
+					if (after !== str) {
+						summary.push('samotne col-begin/end');
+						str = after;
+					}
+				}
+				/**
 				// old link
 				summary.push('poprawa linków');
 				str = str.replace(/https?:\/\/web.archive.org\/\w+\/\d+\/(http:\/\/(?:www\.)?itsanhonour\.gov\.au\/honours\/\w+\/.+?aus_award_id=)/g, '$1');
@@ -158,12 +167,12 @@
 				});
 			}
 			// bardziej typowa lista pocięta col-break
-			if (str.search(/\{\{col-break\}\}[ \n]*\n\*/) > 0) {
+			if (str.search(/\{\{col-(break|2)\}\}[ \n]*\n\*/) > 0) {
 				const re = /\{\{col-begin[^}]*\}\}([\s\S]+?)\{\{col-end\}\}/g;
 				const top = '{{Układ wielokolumnowy |szerokość=20em |liczba=2 |skurcz=0 | 1=<nowiki />';
 				const liRe = /\n\*.+/g;
 				const lineRe = /\n/g;
-				const breaksRe = /\s*\{\{col-break[^}]*\}\}\s*/g;
+				const breaksRe = /\s*\{\{col-(break|2)[^}]*\}\}\s*/g;
 				str = str.replace(re, (a, content) => {
 					// break early when no li/lines inside
 					if (content.search(liRe) < 0 || content.search(lineRe) < 0) {
