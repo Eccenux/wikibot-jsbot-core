@@ -23,7 +23,7 @@
 	var logTag = '[jsbot]';
 
 	function imdb(after) {
-		after = after.replace(/\[https?:\/\/www\.imdb\.com\/name\/nm([0-9a-z]+)\/bio[^ \]]*([^\]]*)\]/g, (a, id, text) => {
+		after = after.replace(/\[https?:\/\/www\.imdb\.com\/name\/nm([0-9a-z]+)\/(?:bio)?(?:\?ref[^ ]+)? ([^\]]+)\]/g, (a, id, text) => {
 			text = text.trim()
 				.replace(/https?:\/\/www\.imdb\.com\/[^ ]+/, '') // url
 				.replace(/<<<[0-9]+>>>$/, '') // .replace('<!-- Tytuł wygenerowany przez bota -->', '')
@@ -42,7 +42,7 @@
 		//{{IMDb|...}}, [[IMDb]],
 		//{{IMDb|...}} w bazie [[IMDb]]
 		// – biografia w IMDb
-		after = after.replace(/(\{\{IMDb[^}]+\}\})[,.]? (?:(?:w|na|[\-–—]) )?(?:bazie |biografia w )?(?:\[\[IMDb(?:\|[^\]]+)?\]\]|imdb[\.a-z]*)([,.]?)/ig, (a, imdb, dot) => imdb + dot);
+		after = after.replace(/(\{\{IMDb[^}]+\}\})[,.]? (?:(?:w|na|[\-–—]) )?(?:bazie (?:danych )?|biografia w )?(?:\[\[IMDb(?:\|[^\]]+)?\]\]|imdb[.a-z]*)([,.]?)/ig, (a, imdb, dot) => imdb + dot);
 		after = after.replace(/(\{\{IMDb[^}]+\}\})[,.]? \{\{lang\|en\}\}/g, (a, imdb) => imdb);
 
 		return after;
