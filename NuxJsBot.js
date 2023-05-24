@@ -29,7 +29,7 @@
 				.replace(/<<<[0-9]+>>>$/, '') // .replace('<!-- Tytuł wygenerowany przez bota -->', '')
 				.replace(/\((en|ang\.?|język angielski)\)/, '')
 				.trim()
-				.replace(/ (w|na|[\-–—]) (\w+ )?imdb[\.a-z]*$/i, '')
+				.replace(/ (w|na|[\-–—]) (\w+ )?(imdb|Internet Movie Database)[\.a-z]*$/i, '')
 				.replace(/(^| )imdb[\.a-z]*$/i, '')
 				.replace(/[.,\-–—]$/, '')
 				.trim();
