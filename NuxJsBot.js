@@ -25,6 +25,7 @@
 	function imdb(after) {
 		after = after.replace(/\[https?:\/\/www\.imdb\.com\/name\/nm([0-9a-z]+)\/bio[^ \]]*([^\]]*)\]/g, (a, id, text) => {
 			text = text.trim()
+				.replace(/https?:\/\/www\.imdb\.com\/[^ ]+/, '') // url
 				.replace(/<<<[0-9]+>>>$/, '') // .replace('<!-- Tytuł wygenerowany przez bota -->', '')
 				.replace(/\((en|ang\.?|język angielski)\)/, '')
 				.trim()
