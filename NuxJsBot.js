@@ -22,6 +22,31 @@
 (function(){
 	var logTag = '[jsbot]';
 
+	function imdb(after) {
+		after = after.replace(/\[https?:\/\/www\.imdb\.com\/name\/nm([0-9a-z]+)\/bio[^ \]]*([^\]]+)\]/g, (a, id, text) => {
+			text = text.trim()
+				.replace(/<<<[0-9]+>>>$/, '') // .replace('<!-- Tytuł wygenerowany przez bota -->', '')
+				.replace(/\((en|ang\.?|język angielski)\)/, '')
+				.trim()
+				.replace(/ (w|na|[\-–—]) (\w+ )?imdb[\.a-z]*$/i, '')
+				.replace(/(^| )imdb[\.a-z]*$/i, '')
+				.replace(/[.,\-–—]$/, '')
+				.trim();
+			if (text.length < 3) {
+				text = 'Notka biograficzna';
+			}
+			return `{{IMDb|osoba|${id}|${text}}}`;
+		});
+		after = after.replace(/(\{\{IMDb[^}]+\}\}) \{\{lang\|en\}\}/g, (a, imdb) => imdb);
+		//{{IMDb|...}}, [[IMDb]],
+		//{{IMDb|...}} w bazie [[IMDb]]
+		// – biografia w IMDb
+		after = after.replace(/(\{\{IMDb[^}]+\}\})[,.]? (?:(?:w|na|[\-–—]) )?(?:bazie |biografia w )?(?:\[\[IMDb(?:\|[^\]]+)?\]\]|imdb[\.a-z]*)([,.]?)/ig, (a, imdb, dot) => imdb + dot);
+		after = after.replace(/(\{\{IMDb[^}]+\}\})[,.]? \{\{lang\|en\}\}/g, (a, imdb) => imdb);
+		
+		return after;
+	}
+	
 	class NuxJsBot {
 		constructor() {
 			this.linkPrepDone = false;
@@ -82,14 +107,18 @@
 				var after = '';
 				// orig
 				str = orig_cleanerWikiVaria.apply(this, arguments);
-				/**
-				// karboks(y)amid
-				after = str.replace(/karboksami/g, 'karboksyami');
+				/**/
+				// imdb bio
+				after = imdb(after);
 				if (after !== str) {
-					summary.push('karboks(y)amid');
+					summary.push('imdb bio');
 					str = after;
 				}
-				/**/
+				// col-begin with a list
+				if (after !== str) {
+					summary.push('poprawa ciągłości, [[WP:Dostępność]]');
+					str = after;
+				}
 				// col-begin with a list
 				after = me.cleanupColList(str);
 				if (after !== str) {
@@ -102,8 +131,8 @@
 					summary.push('wikiflex, [[WP:Dostępność]]');
 					str = after;
 				}
-				/**/
-				// col-begin bez break
+				/**
+				// col-begin bez break (unstable!)
 				if (str.search(/col-break/i)<0 && str.search(/col-begin/i)>0) {
 					after = str.replace(/\{\{col-(begin|end)[^}]*\}\}/ig, '');
 					if (after !== str) {
