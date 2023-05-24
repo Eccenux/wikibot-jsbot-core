@@ -43,7 +43,7 @@
 		// – biografia w IMDb
 		after = after.replace(/(\{\{IMDb[^}]+\}\})[,.]? (?:(?:w|na|[\-–—]) )?(?:bazie |biografia w )?(?:\[\[IMDb(?:\|[^\]]+)?\]\]|imdb[\.a-z]*)([,.]?)/ig, (a, imdb, dot) => imdb + dot);
 		after = after.replace(/(\{\{IMDb[^}]+\}\})[,.]? \{\{lang\|en\}\}/g, (a, imdb) => imdb);
-		
+
 		return after;
 	}
 	
@@ -109,14 +109,9 @@
 				str = orig_cleanerWikiVaria.apply(this, arguments);
 				/**/
 				// imdb bio
-				after = imdb(after);
+				after = imdb(str);
 				if (after !== str) {
 					summary.push('imdb bio');
-					str = after;
-				}
-				// col-begin with a list
-				if (after !== str) {
-					summary.push('poprawa ciągłości, [[WP:Dostępność]]');
 					str = after;
 				}
 				// col-begin with a list
