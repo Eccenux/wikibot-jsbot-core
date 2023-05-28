@@ -1,3 +1,6 @@
+var bot = require('./NuxJsBot');
+var imdb = bot.imdb;
+
 /* global imdb */
 function test(text) {
 	// wrap
