@@ -9,7 +9,7 @@ module.exports = {
 		// Gadgets: ES5
 		//"ecmaVersion": 5
 		// User scripts: ES6+
-		"ecmaVersion": 6
+		"ecmaVersion": 10
 	},
 	"rules": {
 		"no-prototype-builtins": "off",
