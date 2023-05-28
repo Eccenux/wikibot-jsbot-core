@@ -6,7 +6,7 @@ Simple JS ~bot based on WP:SK.
 (tags: jsbot, botjs, botskjs, js-bot)
 
 Procedura:	
-0. Włącz ładowanie jsbot.
+0. Włącz/sprawdź ładowanie jsbot.
 1. Nowa funkcja w `prepareSk()` i test.
 2. (temp) [[Specjalna:Uprawnienia/Nux]] (włącz [[Wikipedia:Użytkownicy o ukrytej aktywności]]).
 3. (temp) monobook

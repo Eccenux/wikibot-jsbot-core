@@ -5,18 +5,22 @@
  * (tags: jsbot, botjs, botskjs, js-bot)
  * 
  * Procedura:	
-	0. (temp) Włącz ładowanie jsbot.
-	1. Zmiana w `prepareSk()` i test.
+	0. Włącz/sprawdź ładowanie jsbot.
+	1. Nowa funkcja w `prepareSk()` i test.
 	2. (temp) [[Specjalna:Uprawnienia/Nux]] (włącz [[Wikipedia:Użytkownicy o ukrytej aktywności]]).
 	3. (temp) monobook
-	4. Przygotowanie wyszukiwania (linki do edycji): jsbotsk_search_prep();
-	5. (temp) Wyłączenie obrazków (reguły uBlock):
+	4. Przygotowanie wyszukiwania (linki do bot-edycji):
+		```
+		jsbotsk_search_prep();
+		```
+	5. (temp, opcjonalne) Wyłączenie obrazków (reguły uBlock):
 		upload.wikimedia.org * image block
 		pl.wikipedia.org * image block
 	...
 	X. Powrót tymczasowych zmian.
  * 
- * @see NuxJsBot.js (in varia-linter)
+ * @see https://github.com/Eccenux/wikibot-jsbot-core
+ * @see https://github.com/Eccenux/wikibot-jsbot-runner
  */
 /* global mw, $ */
 /* global SkTableHide */
@@ -52,6 +56,7 @@
 	class NuxJsBot {
 		constructor() {
 			this.linkPrepDone = false;
+			this.botParam = 'js_bot_ed=1';
 		}
 		
 		/**
@@ -67,7 +72,9 @@
 			// prep. bocik
 			this.prepareSk(wp_sk);
 			// auto-run
-			wp_sk.cleanup( document.getElementById( 'wpTextbox1' ) );
+			if (location.search.search(this.botParam)>0) {
+				wp_sk.cleanup( document.getElementById( 'wpTextbox1' ) );
+			}
 		}
 	
 		/* Select node (range selection). */
@@ -88,10 +95,11 @@
 		prepareSearch() {
 			if (!this.linkPrepDone) {
 				$('.searchResultImage-thumbnail').remove();
+				var me = this;
 				$('.mw-search-results a').each(function() {
 					//console.log(this.href)
-					this.href += '?action=edit'
-					this.href = this.href.replace(/\?.+\?/, '?')
+					this.href += '?action=edit&' + me.botParam;
+					this.href = this.href.replace(/\?.+\?/, '?');
 				});
 			}
 			this.linkPrepDone = true;
