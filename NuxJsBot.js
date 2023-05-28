@@ -136,10 +136,10 @@
 				// orig
 				str = orig_cleanerWikiVaria.apply(this, arguments);
 				/**/
-				// imdb bio
+				// szablon imdb
 				after = imdb(str);
 				if (after !== str) {
-					summary.push('imdb bio');
+					summary.push('szablon imdb');
 					str = after;
 				}
 				// col-begin with a list
