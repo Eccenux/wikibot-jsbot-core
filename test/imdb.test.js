@@ -83,4 +83,24 @@ describe('imdb', function () {
 			test(`[http://www.imdb.com/name/nm0471086/bio Marco Kreuzpaintner] [dostęp 2010-05-08]`, expected)
 		});
 	});
+
+	describe('imdb awards', function () {
+		function test(text, expected) {
+			// wrap
+			let result = imdb(text);
+			if (result !== expected) {
+				console.log({text, result, expected});
+			}
+			assert.equal(result, expected);
+		}
+		it('should convert to awards', function () {
+			let expected = `{{IMDb|osoba nagrody|0000040|Stanley Kubrick}}`;
+			test(`[https://www.imdb.com/name/nm0000040/awards Stanley Kubrick]`, expected);
+		});
+		it('should remove w bazie', function () {
+			// remove
+			let expected = `{{IMDb|osoba nagrody|0000134|Nagrody Roberta De Niro}}`;
+			test(`[http://www.imdb.com/name/nm0000134/awards Nagrody Roberta De Niro] w bazie IMDb {{lang|en}}`, expected);
+		});
+	});
 });

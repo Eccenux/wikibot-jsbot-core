@@ -29,7 +29,8 @@
 	var logTag = '[jsbot]';
 
 	function imdb(after) {
-		after = after.replace(/\[https?:\/\/www\.imdb\.com\/name\/nm([0-9a-z]+)\/(?:bio)?(?:\?[^ ]+)? ([^\]]+)\]/g, (a, id, text) => {
+		// inner text cleanup
+		function cleanup(text) {
 			text = text.trim()
 				.replace(/https?:\/\/www\.imdb\.com\/[^ ]+/, '') // url
 				.replace(/<<<[0-9]+>>>$/, '') // .replace('<!-- Tytuł wygenerowany przez bota -->', '')
@@ -39,11 +40,27 @@
 				.replace(/(^| )imdb[\.a-z]*$/i, '')
 				.replace(/[.,\-–—]$/, '')
 				.trim();
+			return text;
+		}
+
+		// biography
+		after = after.replace(/\[https?:\/\/www\.imdb\.com\/name\/nm([0-9a-z]+)\/(?:bio)?(?:\?[^ ]+)? ([^\]]+)\]/g, (a, id, text) => {
+			text = cleanup(text);
 			if (text.length < 3) {
 				text = 'Notka biograficzna';
 			}
 			return `{{IMDb|osoba|${id}|${text}}}`;
 		});
+		// awards
+		after = after.replace(/\[https?:\/\/www\.imdb\.com\/name\/nm([0-9a-z]+)\/awards(?:\?[^ ]+)? ([^\]]+)\]/g, (a, id, text) => {
+			text = cleanup(text);
+			if (text.length < 3) {
+				text = '';
+			}
+			return `{{IMDb|osoba nagrody|${id}|${text}}}`;
+		});
+
+		// stuff after link/template
 		after = after.replace(/(\{\{IMDb[^}]+\}\}) \{\{lang\|en\}\}/g, (a, imdb) => imdb);
 		//{{IMDb|...}}, [[IMDb]],
 		//{{IMDb|...}} w bazie [[IMDb]]
