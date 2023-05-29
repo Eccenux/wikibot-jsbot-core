@@ -36,9 +36,11 @@
 				.replace(/<<<[0-9]+>>>$/, '') // .replace('<!-- Tytuł wygenerowany przez bota -->', '')
 				.replace(/\((en|ang\.?|język angielski)\)/, '')
 				.trim()
-				.replace(/ (w|na|[\-–—]) (\w+ )?(imdb|Internet Movie Database)[\.a-z]*$/i, '')
+				.replace(/ (w|na|[\-–—−]) (\w+ )?(imdb|Internet Movie Database)[\.a-z]*$/i, '')
 				.replace(/(^| )imdb[\.a-z]*$/i, '')
-				.replace(/[.,\-–—]$/, '')
+				.replace(/[.,\-–—−]$/, '')
+				.replace(/^"(.+)"$/, '$1')
+				.replace(/^'(.+)'$/, '$1')
 				.trim();
 			return text;
 		}
@@ -53,7 +55,10 @@
 		});
 		// awards
 		after = after.replace(/\[https?:\/\/www\.imdb\.com\/name\/nm([0-9a-z]+)\/awards(?:\?[^ ]+)? ([^\]]+)\]/g, (a, id, text) => {
-			text = cleanup(text);
+			text = cleanup(text)
+				.replace(/ ([\-–—−]) (awards|nagrody|lista nagród)$/i, '')
+			;
+			console.log(`(${text})`);
 			if (text.length < 3) {
 				text = '';
 			}
@@ -65,7 +70,7 @@
 		//{{IMDb|...}}, [[IMDb]],
 		//{{IMDb|...}} w bazie [[IMDb]]
 		// – biografia w IMDb
-		after = after.replace(/(\{\{IMDb[^}]+\}\})[,.]? (?:(?:w|na|[\-–—]) )?(?:bazie (?:danych )?|biografia w )?(?:\[\[IMDb(?:\|[^\]]+)?\]\]|imdb[.a-z]*)([,.]?)/ig, (a, imdb, dot) => imdb + dot);
+		after = after.replace(/(\{\{IMDb[^}]+\}\})[,.]? (?:(?:w|na|[\-–—−]) )?(?:bazie (?:danych )?|biografia w )?(?:\[\[IMDb(?:\|[^\]]+)?\]\]|imdb[.a-z]*)([,.]?)/ig, (a, imdb, dot) => imdb + dot);
 		after = after.replace(/(\{\{IMDb[^}]+\}\})[,.]? \{\{lang\|en\}\}/g, (a, imdb) => imdb);
 
 		return after;

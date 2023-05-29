@@ -102,5 +102,23 @@ describe('imdb', function () {
 			let expected = `{{IMDb|osoba nagrody|0000134|Nagrody Roberta De Niro}}`;
 			test(`[http://www.imdb.com/name/nm0000134/awards Nagrody Roberta De Niro] w bazie IMDb {{lang|en}}`, expected);
 		});
+		it('should remove awards', function () {
+			// remove
+			let expected = `{{IMDb|osoba nagrody|0122782|Marilyn Burns}}`;
+			test(`[http://www.imdb.com/name/nm0122782/awards?ref_=nm_awd Marilyn Burns − Awards]`, expected);
+			test(`[http://www.imdb.com/name/nm0122782/awards?ref_=nm_awd Marilyn Burns − nagrody]`, expected);
+			test(`[http://www.imdb.com/name/nm0122782/awards?ref_=nm_awd Marilyn Burns − lista nagród]`, expected);
+		});
+		it('should remove quotes', function () {
+			// remove
+			let expected = `{{IMDb|osoba nagrody|0122782|Marilyn Burns}}`;
+			test(`[http://www.imdb.com/name/nm0122782/awards?ref_=nm_awd "Marilyn Burns"]`, expected);
+			test(`[http://www.imdb.com/name/nm0122782/awards?ref_=nm_awd 'Marilyn Burns']`, expected);
+		});
+		it('should keep single quote', function () {
+			// remove
+			test(`[http://www.imdb.com/name/nm0122782/awards?ref_=nm_awd Marilyn Burns']`, `{{IMDb|osoba nagrody|0122782|Marilyn Burns'}}`);
+			test(`[http://www.imdb.com/name/nm0122782/awards?ref_=nm_awd Marilyn Burn's]`, `{{IMDb|osoba nagrody|0122782|Marilyn Burn's}}`);
+		});
 	});
 });
