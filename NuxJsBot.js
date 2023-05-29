@@ -29,6 +29,9 @@
 	var logTag = '[jsbot]';
 
 	function imdb(after) {
+		// redir
+		after = after.replace(/\[\[(?:IMDB|Imdb\.com|The Internet Movie Database|Internet Movie Database)([|\]])/ig, '[[IMDb$1');
+
 		// inner text cleanup
 		function cleanup(text) {
 			text = text.trim()

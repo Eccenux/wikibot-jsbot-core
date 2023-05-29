@@ -68,6 +68,7 @@ describe('imdb', function () {
 			// extra
 			test(`[http://www.imdb.com/name/nm0091906/bio?ref_=nm_ov_bio_sm Nikita Bogosłowski] – biografia w IMDb {{lang|en}}`, expected);
 			test(`[https://www.imdb.com/name/nm0091906/?ref_=nv_sr_1 Nikita Bogosłowski] w bazie danych [[IMDb]]`, expected);
+			test(`[https://www.imdb.com/name/nm0091906/?ref_=nv_sr_1 Nikita Bogosłowski] w bazie danych [[IMDb.com]]`, expected);
 		});
 		it('should remove w bazie i en', function () {
 			let expected = `{{IMDb|osoba|0552222|Duane Martin}}`;
@@ -80,6 +81,7 @@ describe('imdb', function () {
 			let expected = `{{IMDb|osoba|0471086|Marco Kreuzpaintner}} [dostęp 2010-05-08]`;
 			test(`[http://www.imdb.com/name/nm0471086/bio Marco Kreuzpaintner]. [[IMDb|Internet Movie Database]]. {{lang|en}} [dostęp 2010-05-08]`, expected)
 			test(`[http://www.imdb.com/name/nm0471086/bio Marco Kreuzpaintner] [[IMDb|Internet Movie Database]] [dostęp 2010-05-08]`, expected)
+			test(`[http://www.imdb.com/name/nm0471086/bio Marco Kreuzpaintner] [[Internet Movie Database]] [dostęp 2010-05-08]`, expected)
 			test(`[http://www.imdb.com/name/nm0471086/bio Marco Kreuzpaintner] [dostęp 2010-05-08]`, expected)
 		});
 	});
@@ -122,6 +124,21 @@ describe('imdb', function () {
 			// remove
 			test(`[http://www.imdb.com/name/nm0122782/awards?ref_=nm_awd Marilyn Burns']`, `{{IMDb|osoba nagrody|0122782|Marilyn Burns'}}`);
 			test(`[http://www.imdb.com/name/nm0122782/awards?ref_=nm_awd Marilyn Burn's]`, `{{IMDb|osoba nagrody|0122782|Marilyn Burn's}}`);
+		});
+	});
+
+	describe('imdb redir', function () {
+		function test(text, expected) {
+			// wrap
+			let result = imdb(text);
+			if (result !== expected) {
+				console.log({text, result, expected});
+			}
+			assert.equal(result, expected);
+		}
+		it('should convert to awards', function () {
+			test(`[[IMDb.com]]`, `[[IMDb]]`);
+			test(`[[IMDb.com|abc]]`, `[[IMDb|abc]]`);
 		});
 	});
 });
