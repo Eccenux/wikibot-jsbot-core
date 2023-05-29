@@ -36,11 +36,11 @@
 				.replace(/<<<[0-9]+>>>$/, '') // .replace('<!-- Tytuł wygenerowany przez bota -->', '')
 				.replace(/\((en|ang\.?|język angielski)\)/, '')
 				.trim()
+				.replace(/^["„](.+)["”]$/, '$1')
+				.replace(/^'(.+)'$/, '$1')
 				.replace(/ (w|na|[\-–—−]) (\w+ )?(imdb|Internet Movie Database)[\.a-z]*$/i, '')
 				.replace(/(^| )imdb[\.a-z]*$/i, '')
 				.replace(/[.,\-–—−]$/, '')
-				.replace(/^"(.+)"$/, '$1')
-				.replace(/^'(.+)'$/, '$1')
 				.trim();
 			return text;
 		}
@@ -56,7 +56,7 @@
 		// awards
 		after = after.replace(/\[https?:\/\/www\.imdb\.com\/name\/nm([0-9a-z]+)\/awards(?:\?[^ ]+)? ([^\]]+)\]/g, (a, id, text) => {
 			text = cleanup(text)
-				.replace(/ ([\-–—−]) (awards|nagrody|lista nagród)$/i, '')
+				.replace(/ ([\-–—−]) (awards?|nagrody|nagroda|lista nagród)$/i, '')
 			;
 			console.log(`(${text})`);
 			if (text.length < 3) {
