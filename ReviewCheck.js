@@ -38,7 +38,7 @@ class ReviewCheck {
 				let result = {
 					reviewed: titles.filter(o=>rTitles.indexOf(o.t)>=0),
 					stale: titles.filter(o=>rTitles.indexOf(o.t)<0),
-				}
+				};
 				console.log('done', {rTitles, result});
 				resolve(result);
 			} ).fail( () => {

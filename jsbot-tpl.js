@@ -43,8 +43,8 @@
 	});
 
 	// export
-	window.jsbotsk_search_prep = function() {
-		jsbot.prepareSearch();
+	window.jsbotsk_search_prep = function(skipDiff) {
+		jsbot.prepareSearch(skipDiff);
 	};
 })();
 
