@@ -116,7 +116,6 @@ describe('imdb', function () {
 			// remove
 			let expected = `{{IMDb|osoba nagrody|0122782|Marilyn Burns}}`;
 			test(`[http://www.imdb.com/name/nm0122782/awards?ref_=nm_awd "Marilyn Burns"]`, expected);
-			test(`[http://www.imdb.com/name/nm0122782/awards?ref_=nm_awd 'Marilyn Burns']`, expected);
 			test(`[http://www.imdb.com/name/nm0122782/awards?ref_=nm_awd „Marilyn Burns”]`, expected);
 			test(`[http://www.imdb.com/name/nm1488800/awards?ref_=nm_awd "Ti West − Award − IMDb"]. imdb.com. {{lang|en}} [dostęp 2013-12-12]`, `{{IMDb|osoba nagrody|1488800|Ti West}} [dostęp 2013-12-12]`);
 		});
@@ -124,6 +123,22 @@ describe('imdb', function () {
 			// remove
 			test(`[http://www.imdb.com/name/nm0122782/awards?ref_=nm_awd Marilyn Burns']`, `{{IMDb|osoba nagrody|0122782|Marilyn Burns'}}`);
 			test(`[http://www.imdb.com/name/nm0122782/awards?ref_=nm_awd Marilyn Burn's]`, `{{IMDb|osoba nagrody|0122782|Marilyn Burn's}}`);
+			test(`[http://www.imdb.com/name/nm0122782/awards?ref_=nm_awd ''Marilyn Burns'']`, `{{IMDb|osoba nagrody|0122782|''Marilyn Burns''}}`);
+		});
+	});
+
+	describe('imdb title awards', function () {
+		function test(text, expected) {
+			// wrap
+			let result = imdb(text);
+			if (result !== expected) {
+				console.log({text, result, expected});
+			}
+			assert.equal(result, expected);
+		}
+		it('should convert to awards', function () {
+			let expected = `{{IMDb|tytuł nagrody|0914387|Układy (Damages)}}`;
+			test(`[https://www.imdb.com/title/tt0914387/awards Układy (Damages)]`, expected);
 		});
 	});
 

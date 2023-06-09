@@ -40,7 +40,6 @@
 				.replace(/\((en|ang\.?|język angielski)\)/, '')
 				.trim()
 				.replace(/^["„](.+)["”]$/, '$1')
-				.replace(/^'(.+)'$/, '$1')
 				.replace(/ (w|na|[\-–—−]) (\w+ )?(imdb|Internet Movie Database)[\.a-z]*$/i, '')
 				.replace(/(^| )imdb[\.a-z]*$/i, '')
 				.replace(/[.,\-–—−]$/, '')
@@ -66,6 +65,17 @@
 				text = '';
 			}
 			return `{{IMDb|osoba nagrody|${id}|${text}}}`;
+		});
+		// title awards
+		after = after.replace(/\[https?:\/\/www\.imdb\.com\/title\/tt([0-9a-z]+)\/awards\/?(?:\?[^ ]+)? ([^\]]+)\]/g, (a, id, text) => {
+			text = cleanup(text)
+				.replace(/ ([\-–—−]) (awards?|nagrody|nagroda|lista nagród)$/i, '')
+			;
+			console.log(`(${text})`);
+			if (text.length < 3) {
+				text = 'lista nagród filmu';
+			}
+			return `{{IMDb|tytuł nagrody|${id}|${text}}}`;
 		});
 
 		// stuff after link/template
