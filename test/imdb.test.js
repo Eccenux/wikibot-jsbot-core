@@ -142,6 +142,58 @@ describe('imdb', function () {
 		});
 	});
 
+	describe('imdb title soundtrack', function () {
+		function test(text, expected) {
+			// wrap
+			let result = imdb(text);
+			if (result !== expected) {
+				console.log({text, result, expected});
+			}
+			assert.equal(result, expected);
+		}
+		it('should convert to tpl', function () {
+			let expected = `{{IMDb|soundtrack|0094582|serialu ''Cudowne lata''}}`;
+			test(`[https://www.imdb.com/title/tt0094582/soundtrack soundtrack serialu ''Cudowne lata'']`, expected);
+		});
+		it('should convert empty to tpl', function () {
+			let expected = `{{IMDb|soundtrack|0172495|filmu}}`;
+			test(`[https://www.imdb.com/title/tt0172495/soundtrack]`, expected);
+			test(`[https://www.imdb.com/title/tt0172495/soundtrack/]`, expected);
+			test(`[https://www.imdb.com/title/tt0172495/soundtrack?ref=123]`, expected);
+			test(`[https://www.imdb.com/title/tt0172495/soundtrack/?ref=123]`, expected);
+		});
+	});
+	describe('imdb title', function () {
+		function test(text, expected) {
+			// wrap
+			let result = imdb(text);
+			if (result !== expected) {
+				console.log({text, result, expected});
+			}
+			assert.equal(result, expected);
+		}
+		it('should convert to tpl', function () {
+			let expected = `{{IMDb|tytuł|0172495|Gladiator}}`;
+			test(`[https://www.imdb.com/title/tt0172495/ Gladiator]`, expected);
+			test(`[https://www.imdb.com/title/tt0172495 Gladiator]`, expected);
+			test(`[https://www.imdb.com/title/tt0172495/?ref=123 Gladiator]`, expected);
+			test(`[https://www.imdb.com/title/tt0172495?ref=123 Gladiator]`, expected);
+		});
+		it('should convert empty to tpl', function () {
+			let expected = `{{IMDb|tytuł|0172495|Film}}`;
+			test(`[https://www.imdb.com/title/tt0172495/]`, expected);
+			test(`[https://www.imdb.com/title/tt0172495]`, expected);
+			test(`[https://www.imdb.com/title/tt0172495?ref=123]`, expected);
+			test(`[https://www.imdb.com/title/tt0172495/?ref=123]`, expected);
+		});
+		it('should not convert to tpl', function () {
+			let wikitext = `[https://www.imdb.com/title/tt0172495/abc Gladiator]`;
+			let expected = wikitext;
+			test(wikitext, expected);
+		});
+	});
+
+
 	describe('imdb redir', function () {
 		function test(text, expected) {
 			// wrap

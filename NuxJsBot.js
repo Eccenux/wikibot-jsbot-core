@@ -77,6 +77,28 @@
 			}
 			return `{{IMDb|tytuł nagrody|${id}|${text}}}`;
 		});
+		// title soundtrack
+		after = after.replace(/\[https?:\/\/www\.imdb\.com\/title\/tt([0-9a-z]+)\/soundtrack\/?(?:\?[^ ]+)?( (?:[^\]]+)|)\]/g, (a, id, text) => {
+			text = cleanup(text)
+				.replace(/ ([\-–—−]) (soundtrack|[Śś]cieżka dźwiękowa)$/i, '')
+				.replace(/^(soundtrack|[Śś]cieżka dźwiękowa do)/i, '')
+				.trim()
+			;
+			console.log(`(${text})`);
+			if (text.length < 3) {
+				text = 'filmu';
+			}
+			return `{{IMDb|soundtrack|${id}|${text}}}`;
+		});
+		// title
+		after = after.replace(/\[https?:\/\/www\.imdb\.com\/title\/tt([0-9a-z]+)\/?(?:\?[^ ]+)?( (?:[^\]]+)|)\]/g, (a, id, text) => {
+			text = cleanup(text);
+			console.log(`(${text})`);
+			if (text.length < 3) {
+				text = 'Film';
+			}
+			return `{{IMDb|tytuł|${id}|${text}}}`;
+		});
 
 		// stuff after link/template
 		after = after.replace(/(\{\{IMDb[^}]+\}\}) \{\{lang\|en\}\}/g, (a, imdb) => imdb);
