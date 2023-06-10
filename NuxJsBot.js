@@ -180,12 +180,12 @@
 				// orig
 				str = orig_cleanerWikiVaria.apply(this, arguments);
 				/**/
-				// szablon imdb
-				after = imdb(str);
-				if (after !== str) {
-					summary.push('szablon imdb');
-					str = after;
-				}
+				// // szablon imdb
+				// after = imdb(str);
+				// if (after !== str) {
+				// 	summary.push('szablon imdb');
+				// 	str = after;
+				// }
 				// col-begin with a list
 				after = me.cleanupColList(str);
 				if (after !== str) {
