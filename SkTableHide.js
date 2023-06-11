@@ -1,3 +1,4 @@
+
 /**
  * Hide tables off from the string.
  */
@@ -17,25 +18,8 @@ var SkTableHide = class {
 		var indexes = this.findAll(str, '\n{|');
 		console.log({indexes});
 		if (indexes.length) {
-			const endTag = '\n|}';
-			const endLen = endTag.length;
 			// licząc od ostatniego zamień tabele na zastępniki
-			for (let i = indexes.length - 1; i >= 0; i--) {
-				const start = indexes[i];
-				let end = str.indexOf(endTag, start);
-				if (end < 0) {
-					console.error('Unclosed table found!', {start, text:str.substring(start, start+30) + '...'});
-					continue;
-				}
-				// dopisanie do tablicy zawartości
-				end += endLen;
-				this.t_i++;
-				this.tags[this.t_i] = str.substring(start, end);
-				// zwiń ostatnią tabelę (na razie nie patrz czy to wikitable)
-				str = str.substring(0,start)+"<<<"+this.t_i+">>>"+str.substring(end);
-
-				console.log({i, str});
-			}
+			str = this.hideTables(indexes, str);
 			// potem muszę spr. czy to wikitable
 			// muszę rozwiąznąć tabele bez klasy wikitable (ale tylko do momentu aż trafię na wikitabel)
 			console.log({tags:this.tags});
@@ -50,6 +34,36 @@ var SkTableHide = class {
 		// 	this.tags[this.t_i] = a;
 		// });
 
+		return str;
+	}
+
+	/**
+	 * Hide tables given start indexes.
+	 * 
+	 * @param {Array} indexes Start indexes.
+	 * @param {String} str Input.
+	 * @returns 
+	 */
+	hideTables(indexes, str) {
+		const endTag = '\n|}';
+		const endLen = endTag.length;
+		// licząc od ostatniego zamień tabele na zastępniki
+		for (let i = indexes.length - 1; i >= 0; i--) {
+			const start = indexes[i];
+			let end = str.indexOf(endTag, start);
+			if (end < 0) {
+				console.error('Unclosed table found!', { start, text: str.substring(start, start + 30) + '...' });
+				continue;
+			}
+			// dopisanie do tablicy zawartości
+			end += endLen;
+			this.t_i++;
+			this.tags[this.t_i] = str.substring(start, end);
+			// zwiń ostatnią tabelę (na razie nie patrz czy to wikitable)
+			str = str.substring(0, start) + "<<<" + this.t_i + ">>>" + str.substring(end);
+
+			console.log({ i, str });
+		}
 		return str;
 	}
 
