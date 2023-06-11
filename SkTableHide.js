@@ -14,26 +14,31 @@ var SkTableHide = class {
 		this.tags = [];
 
 		// wyszukaj początki tabel
-		var indexes = tables.findAll(str, '\n{|');
+		var indexes = this.findAll(str, '\n{|');
+		console.log({indexes});
 		if (indexes.length) {
+			const endTag = '\n|}';
+			const endLen = endTag.length;
 			// licząc od ostatniego zamień tabele na zastępniki
-			for (let i = indexes.length - 1; i > 0; i--) {
+			for (let i = indexes.length - 1; i >= 0; i--) {
 				const start = indexes[i];
-				const end = str.indexOf('\n|}', start);
+				let end = str.indexOf(endTag, start);
 				if (end < 0) {
 					console.error('Unclosed table found!', {start, text:str.substring(start, start+30) + '...'});
 					continue;
 				}
 				// dopisanie do tablicy zawartości
+				end += endLen;
+				this.t_i++;
 				this.tags[this.t_i] = str.substring(start, end);
 				// zwiń ostatnią tabelę (na razie nie patrz czy to wikitable)
 				str = str.substring(0,start)+"<<<"+this.t_i+">>>"+str.substring(end);
 
 				console.log({i, str});
-				this.t_i++;
 			}
 			// potem muszę spr. czy to wikitable
 			// muszę rozwiąznąć tabele bez klasy wikitable (ale tylko do momentu aż trafię na wikitabel)
+			console.log({tags:this.tags});
 		}
 		
 		// // [XOR] potnij wg początku i końca tabel
@@ -89,29 +94,19 @@ var res;
 res = tables.findAll('abcabcaaaba', 'a');
 console.log(res);
 
-// test indexes tab
-res = tables.findAll(`
-{|
-{|
-| abc
-|}
-|
-{|
-| def
-|}
-|}
-`, '\n{|');
-console.log(res);
-
+// test hide
 res = tables.hide(`
+before
 {|
-{|
+|
+{| class="wikitable"
 | abc
 |}
 |
-{|
+{| class="wikitable"
 | def
 |}
 |}
+after
 `);
 console.log(res);
