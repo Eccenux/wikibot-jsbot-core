@@ -16,23 +16,13 @@ var SkTableHide = class {
 
 		// wyszukaj początki tabel
 		var indexes = this.findAll(str, '\n{|');
-		console.log({indexes});
 		if (indexes.length) {
 			// licząc od ostatniego zamień tabele na zastępniki
 			str = this.hideTables(indexes, str);
 			// potem muszę spr. czy to wikitable
 			// muszę rozwiąznąć tabele bez klasy wikitable (ale tylko do momentu aż trafię na wikitabel)
-			console.log({tags:this.tags});
+			str = this.showIf(str, (text) => text.search(/^\{\|.+class.+wikitable/) < 0);
 		}
-		
-		// // [XOR] potnij wg początku i końca tabel
-		// var re = /(\n\{\|)/;
-
-		// // [XOR] naiwna (uproszczona) podmiana
-		// str = str.replace(/(\{\| class="wikitable"[\s\S]+?\n\|\})/g, (a) => {
-		// 	this.t_i++;
-		// 	this.tags[this.t_i] = a;
-		// });
 
 		return str;
 	}
@@ -61,8 +51,6 @@ var SkTableHide = class {
 			this.tags[this.t_i] = str.substring(start, end);
 			// zwiń ostatnią tabelę (na razie nie patrz czy to wikitable)
 			str = str.substring(0, start) + "<tab<" + this.t_i + ">tab>" + str.substring(end);
-
-			console.log({ i, str });
 		}
 		return str;
 	}
@@ -82,11 +70,9 @@ var SkTableHide = class {
 			str = str.replace(tagRe, (a, ti) => {
 				let text = this.tags[ti];
 				if (cond(text, ti)) {
-					console.log('cond true', {text, ti})
 					replaced++;
 					return text;
 				} else {
-					console.log('cond false', {text, ti})
 					return a;
 				}
 			});
