@@ -1,3 +1,4 @@
+/* global module */
 
 /**
  * Hide tables off from the string.
@@ -127,4 +128,9 @@ var SkTableHide = class {
 		}
 		return indexes;
 	}
+}
+
+// export
+if (typeof module === 'object' && module.exports) {
+	module.exports.SkTableHide = SkTableHide;
 }
