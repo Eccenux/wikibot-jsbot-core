@@ -3,6 +3,18 @@
  * Hide tables off from the string.
  */
 var SkTableHide = class {
+	/**
+	 * Init.
+	 * @param {Function} cond Bool function (true => keep table when hidding).
+	 */
+	constructor(cond) {
+		// defaults to only hide wikitables
+		// (note that plain tables inside wikitables will still be hidden)
+		if (typeof cond !== 'function') {
+			cond = (text) => text.search(/^\{\|.+class.+wikitable/) < 0;
+		}
+		this.cond = cond;
+	}
 	hide(str) {
 		// porządkowanie nowych wierszy (normalnie samo sk to robi)
 		str = str.replace(/\r\n/g, '\n');
@@ -21,7 +33,7 @@ var SkTableHide = class {
 			str = this.hideTables(indexes, str);
 			// potem muszę spr. czy to wikitable
 			// muszę rozwiąznąć tabele bez klasy wikitable (ale tylko do momentu aż trafię na wikitabel)
-			str = this.showIf(str, (text) => text.search(/^\{\|.+class.+wikitable/) < 0);
+			str = this.showIf(str, this.cond);
 		}
 
 		return str;
