@@ -49,7 +49,7 @@ var SkTableHide = class {
 		const endLen = endTag.length;
 		// licząc od ostatniego zamień tabele na zastępniki
 		for (let i = indexes.length - 1; i >= 0; i--) {
-			const start = indexes[i];
+			let start = indexes[i] + 1;	// skip initial new line
 			let end = str.indexOf(endTag, start);
 			if (end < 0) {
 				console.error('Unclosed table found!', { start, text: str.substring(start, start + 30) + '...' });
@@ -60,7 +60,7 @@ var SkTableHide = class {
 			this.t_i++;
 			this.tags[this.t_i] = str.substring(start, end);
 			// zwiń ostatnią tabelę (na razie nie patrz czy to wikitable)
-			str = str.substring(0, start) + "<<<" + this.t_i + ">>>" + str.substring(end);
+			str = str.substring(0, start) + "<tab<" + this.t_i + ">tab>" + str.substring(end);
 
 			console.log({ i, str });
 		}
@@ -71,15 +71,15 @@ var SkTableHide = class {
 		var max_depth = 10;
 		// restore
 		for (var i = 0; i < max_depth; i++) {
-			str = str.replace(/<tab<([0-9]+)>tab>/g, (a, i) => {
-				return this.tags[i];
+			str = str.replace(/<tab<([0-9]+)>tab>/g, (a, ti) => {
+				return this.tags[ti];
 			});
 			if (str.search(/<tab<([0-9]+)>tab>/) == -1) {
 				break;
 			}
 		}
 		// odescapowanie nowikowe
-		str = str.replace(/<tab<#(#*[0-9]+)>tab>/g, '<tab<$1>>>');
+		str = str.replace(/<tab<#(#*[0-9]+)>tab>/g, '<tab<$1>tab>');
 
 		return str;
 	}
@@ -109,7 +109,7 @@ res = tables.findAll('abcabcaaaba', 'a');
 console.log(res);
 
 // test hide
-res = tables.hide(`
+var str = `
 before
 {|
 |
@@ -122,5 +122,14 @@ before
 |}
 |}
 after
-`);
+`;
+res = tables.hide(str);
 console.log(res);
+// test undo
+res = tables.show(res);
+console.log(res);
+if (res === str) {
+	console.log('OK :)');
+} else {
+	console.error('Not the same!');
+}
