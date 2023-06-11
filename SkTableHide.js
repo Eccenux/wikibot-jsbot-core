@@ -155,16 +155,23 @@ before
 after
 `;
 res = tables.hide(str);
-console.log(res);
+console.log('hide', res);
 // test undo
-res = tables.show(res);
-console.log(res);
-if (res === str) {
+var resShow = tables.show(res);
+console.log('resShow', resShow);
+if (resShow === str) {
 	console.log('OK :)');
 } else {
-	console.error('Not the same!');
+	console.error('Not the same!', {resShow, str});
 }
 
 // test conditional show
-res = tables.showIf(res, (text) => text.search(/^\{\|.+class.+wikitable/) < 0);
-console.log(res);
+var resPartial = tables.showIf(res, (text) => text.search(/^\{\|.+class.+wikitable/) < 0);
+console.log('resPartial', resPartial);
+var resFull = tables.show(resPartial);
+console.log('resFull', resFull);
+if (resFull === str) {
+	console.log('OK :)');
+} else {
+	console.error('Not the same!', {resFull, str});
+}
