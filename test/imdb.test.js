@@ -1,6 +1,6 @@
 /* global require, describe, it */
 const { assert } = require('chai');
-const bot = require('../NuxJsBot');
+const bot = require('../imdb');
 const imdb = bot.imdb;
 // const chai = require('chai');
 // const assert = chai.assert;
