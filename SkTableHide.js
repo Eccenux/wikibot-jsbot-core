@@ -42,7 +42,7 @@ var SkTableHide = class {
 	 * 
 	 * @param {Array} indexes Start indexes.
 	 * @param {String} str Input.
-	 * @returns 
+	 * @returns Str with hidden tables (replaced with a marker).
 	 */
 	hideTables(indexes, str) {
 		const endTag = '\n|}';
@@ -67,14 +67,45 @@ var SkTableHide = class {
 		return str;
 	}
 
-	show(str) {
+	/**
+	 * Show when condition is met.
+	 * @param {String} str Transformed string.
+	 * @param {Function} cond Bool function (true => show).
+	 * @returns Partially reverted.
+	 */
+	showIf(str, cond) {
 		var max_depth = 10;
+		var tagRe = /<tab<([0-9]+)>tab>/g;
 		// restore
 		for (var i = 0; i < max_depth; i++) {
-			str = str.replace(/<tab<([0-9]+)>tab>/g, (a, ti) => {
+			var replaced = 0;
+			str = str.replace(tagRe, (a, ti) => {
+				let text = this.tags[ti];
+				if (cond(text, ti)) {
+					console.log('cond true', {text, ti})
+					replaced++;
+					return text;
+				} else {
+					console.log('cond false', {text, ti})
+					return a;
+				}
+			});
+			if (!replaced || str.search(tagRe) == -1) {
+				break;
+			}
+		}
+		return str;
+	}
+
+	show(str) {
+		var max_depth = 10;
+		var tagRe = /<tab<([0-9]+)>tab>/g;
+		// restore
+		for (var i = 0; i < max_depth; i++) {
+			str = str.replace(tagRe, (a, ti) => {
 				return this.tags[ti];
 			});
-			if (str.search(/<tab<([0-9]+)>tab>/) == -1) {
+			if (str.search(tagRe) == -1) {
 				break;
 			}
 		}
@@ -133,3 +164,7 @@ if (res === str) {
 } else {
 	console.error('Not the same!');
 }
+
+// test conditional show
+res = tables.showIf(res, (text) => text.search(/^\{\|.+class.+wikitable/) < 0);
+console.log(res);
