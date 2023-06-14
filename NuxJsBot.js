@@ -92,6 +92,27 @@
 			var orig_cleanerWikiVaria = wp_sk.cleanerWikiVaria;
 			var summary = ['[[WP:SK]]'];
 			var me = this;
+
+			// usuń przestarzałe wpisy
+			wp_sk.cleanerMagicLinks = function (str)
+			{
+				// zbieranie
+				str = wp_sk.cat.gather(str);
+				str = wp_sk.iWiki.gather(str);
+				str = wp_sk.iWikiFA.gather(str);
+				str = wp_sk.iWikiGA.gather(str);
+				str = wp_sk.iWikiFL.gather(str);
+			
+				// usuwanie pozostawionych przy zbieraniu i innych wielokrotnych, pustych wierszy
+				str = str.replace(/[\n]{3,}/g, '\n\n');
+			
+				// wstawienie na koniec (call not copy to have "this")
+				str = str.replace(/\s*$/, function(a) {return wp_sk.cat.output(a)});
+			
+				return str;
+			};
+
+			// dodatki do procesu SK (po zwinięciu nowiki, komentarzy itp)
 			wp_sk.cleanerWikiVaria = function(str) {
 				var after = '';
 				// orig
