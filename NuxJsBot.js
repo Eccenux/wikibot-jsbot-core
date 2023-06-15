@@ -98,11 +98,16 @@
 			{
 				// zbieranie
 				str = wp_sk.cat.gather(str);
+				let before = str;
 				str = wp_sk.iWiki.gather(str);
 				str = wp_sk.iWikiFA.gather(str);
 				str = wp_sk.iWikiGA.gather(str);
 				str = wp_sk.iWikiFL.gather(str);
-			
+
+				if (before !== str) {
+					summary.push('stare interwiki');
+				}
+				
 				// usuwanie pozostawionych przy zbieraniu i innych wielokrotnych, pustych wierszy
 				str = str.replace(/[\n]{3,}/g, '\n\n');
 			
