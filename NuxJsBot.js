@@ -94,15 +94,12 @@
 			var me = this;
 
 			// usuń przestarzałe wpisy
-			wp_sk.cleanerMagicLinks = function (str)
+			wp_sk.cleanerMagicLinks_off = function (str)
 			{
 				// zbieranie
 				str = wp_sk.cat.gather(str);
 				let before = str;
 				str = wp_sk.iWiki.gather(str);
-				str = wp_sk.iWikiFA.gather(str);
-				str = wp_sk.iWikiGA.gather(str);
-				str = wp_sk.iWikiFL.gather(str);
 
 				if (before !== str) {
 					summary.push('stare interwiki');
