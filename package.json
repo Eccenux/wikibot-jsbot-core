@@ -1,9 +1,16 @@
 {
 	"name": "wikibot-jsbot-core",
 	"type": "commonjs",
+	"scripts": {
+		"test": "mocha",
+		"build": "browserify main.js -o jsbot.js",
+		"deploy": "node wikiploy.js",
+		"deploy:full": "npm run build && npm run wikiploy"
+	},
 	"devDependencies": {
-		"eslint": "8.x",
+		"browserify": "17.x",
 		"chai": "4.x",
+		"eslint": "8.x",
 		"mocha": "10.x"
 	}
 }

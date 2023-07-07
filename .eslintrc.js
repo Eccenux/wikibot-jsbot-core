@@ -5,6 +5,11 @@ module.exports = {
 		"node": true,
 		//"es2020": true
 	},
+	"globals": {
+		"$": true,
+		"mw": true,
+	},
+	"main": "main.js",
 	"extends": "eslint:recommended",
 	"parserOptions": {
 		// Gadgets: ES5

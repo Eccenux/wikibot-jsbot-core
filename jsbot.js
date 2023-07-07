@@ -1,3 +1,4 @@
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 /* eslint-disable no-useless-escape */
 /**
  * Simple JS ~bot.
@@ -268,3 +269,289 @@ if (typeof module === 'object' && module.exports) {
 	module.exports.logTag = logTag;
 }
 
+
+},{"./SkTableHide":3}],2:[function(require,module,exports){
+/* global mw, Promise */
+
+/**
+ * Check if pages are reviewed.
+ */
+class ReviewCheck {
+
+	/**
+	 * Check pages.
+	 * @param {NodeList} links Page links to check.
+	 * @returns {Promise}
+	 */
+	check(links) {
+		let titles = this.extractTitles(links);
+		let result = new Promise((resolve, reject) => {
+			this.checkReviewed(titles).then(resolve, reject);
+		});
+		return result;
+	}
+	
+	/**
+	 * Check reviewed.
+	 * @param {Array} titles {t:title, a:node}
+	 * @returns {Promise}
+	 */
+	checkReviewed(titles) {
+		let result = new Promise((resolve, reject) => {
+			const api = new mw.Api();
+			api.get( {
+				action: 'query',
+				prop: 'flagged',
+				titles: titles.map(o=>o.t),
+			} ).done( ( data ) => {
+				let pages = Object.values(data.query.pages);
+				console.log('done', pages);
+				let reviewed = this.findReviewed(pages);
+				let rTitles = reviewed.map(r=>r.title);
+				let result = {
+					reviewed: titles.filter(o=>rTitles.indexOf(o.t)>=0),
+					stale: titles.filter(o=>rTitles.indexOf(o.t)<0),
+				};
+				console.log('done', {rTitles, result});
+				resolve(result);
+			} ).fail( () => {
+				console.error('failed to get reviewd data');
+				reject();
+			} );
+		});
+		return result;
+	}
+
+	/**
+	 * Find reviewd pages in the set.
+	 * 
+	 * prop=flagged spec:
+	 * https://www.mediawiki.org/wiki/Extension:FlaggedRevs#prop=flagged
+	 * 
+	 * @param {Array} pages Array of objects that are returned by a query with prop=flagged.
+	 * @returns {Array} Filtered array of page objects.
+	 */
+	findReviewed(pages) {
+		return pages.filter(page => {
+			// was reviewed at all
+			if ('flagged' in page) {
+				// doesn't have pending changes
+				if (!('pending_since' in page.flagged)) {
+					return true;
+				}
+			}
+			return false;
+		});
+	}
+
+	/**
+	 * Extract titles from node.
+	 * 
+	 * Skips non-article pages.
+	 * 
+	 * @param {NodeList} links Page links to check.
+	 * @returns {Array} {t:title, a:a}
+	 */
+	extractTitles(links) {
+		let titles = [];
+		for (const a of links) {
+			let title = this.extractTitle(a);
+			if (title && title.length) {
+				titles.push({t:title, a:a});
+			}
+		}
+		return titles;
+	}
+
+	/**
+	 * Extract article title from node.
+	 * 
+	 * Skips non-article pages.
+	 * 
+	 * @param {Node} a 
+	 */
+	extractTitle(a) {
+		const u = new URL(a.href);
+		let title = decodeURIComponent(u.pathname.replace(/\/wiki\//, ''));
+		const mwT = mw.Title.newFromText(title);
+		if (mwT.namespace != 0) {
+			return '';
+		}
+		return mwT.getPrefixedText();
+	}
+}
+
+/*
+// mark unreviewed
+var reviewCheck = new ReviewCheck();
+var links = document.querySelectorAll('.mw-search-results a');
+reviewCheck.check(links).then((result) => {
+	result.stale.forEach(o => {
+		o.a.style.cssText = 'background:yellow;';
+	});	
+});
+*/
+
+// export
+if (typeof module === 'object' && module.exports) {
+	module.exports.ReviewCheck = ReviewCheck;
+}
+
+},{}],3:[function(require,module,exports){
+/**
+ * Hide tables off from the string.
+ */
+var SkTableHide = class {
+	/**
+	 * Init.
+	 * @param {Function} cond Bool function (true => keep table when hidding).
+	 */
+	constructor(cond) {
+		// defaults to only hide wikitables
+		// (note that plain tables inside wikitables will still be hidden)
+		if (typeof cond !== 'function') {
+			cond = (text) => text.search(/^\{\|.*class.+wikitable/) < 0;
+		}
+		this.cond = cond;
+	}
+	hide(str) {
+		// porządkowanie nowych wierszy (normalnie samo sk to robi)
+		str = str.replace(/\r\n/g, '\n');
+
+		// escapowanie przed tabelkowe
+		str = str.replace(/<tab<(#*[0-9]+)>tab>/g, '<tab<#$1>tab>');
+
+		// reset
+		this.t_i = -1;
+		this.tags = [];
+
+		// wyszukaj początki tabel
+		var indexes = this.findAll(str, '\n{|');
+		if (indexes.length) {
+			// licząc od ostatniego zamień tabele na zastępniki
+			str = this.hideTables(indexes, str);
+			// potem muszę spr. czy to wikitable
+			// muszę rozwiąznąć tabele bez klasy wikitable (ale tylko do momentu aż trafię na wikitabel)
+			str = this.showIf(str, this.cond);
+		}
+
+		return str;
+	}
+
+	/**
+	 * Hide tables given start indexes.
+	 * 
+	 * @param {Array} indexes Start indexes.
+	 * @param {String} str Input.
+	 * @returns Str with hidden tables (replaced with a marker).
+	 */
+	hideTables(indexes, str) {
+		const endTag = '\n|}';
+		const endLen = endTag.length;
+		// licząc od ostatniego zamień tabele na zastępniki
+		for (let i = indexes.length - 1; i >= 0; i--) {
+			let start = indexes[i] + 1;	// skip initial new line
+			let end = str.indexOf(endTag, start);
+			if (end < 0) {
+				console.error('Unclosed table found!', { start, text: str.substring(start, start + 30) + '...' });
+				continue;
+			}
+			// dopisanie do tablicy zawartości
+			end += endLen;
+			this.t_i++;
+			this.tags[this.t_i] = str.substring(start, end);
+			// zwiń ostatnią tabelę (na razie nie patrz czy to wikitable)
+			str = str.substring(0, start) + "<tab<" + this.t_i + ">tab>" + str.substring(end);
+		}
+		return str;
+	}
+
+	/**
+	 * Show when condition is met.
+	 * @param {String} str Transformed string.
+	 * @param {Function} cond Bool function (true => show).
+	 * @returns Partially reverted.
+	 */
+	showIf(str, cond) {
+		var max_depth = 10;
+		var tagRe = /<tab<([0-9]+)>tab>/g;
+		// restore
+		for (var i = 0; i < max_depth; i++) {
+			var replaced = 0;
+			str = str.replace(tagRe, (a, ti) => {
+				let text = this.tags[ti];
+				if (cond(text, ti)) {
+					replaced++;
+					return text;
+				} else {
+					return a;
+				}
+			});
+			if (!replaced || str.search(tagRe) == -1) {
+				break;
+			}
+		}
+		return str;
+	}
+
+	show(str) {
+		var max_depth = 10;
+		var tagRe = /<tab<([0-9]+)>tab>/g;
+		// restore
+		for (var i = 0; i < max_depth; i++) {
+			str = str.replace(tagRe, (a, ti) => {
+				return this.tags[ti];
+			});
+			if (str.search(tagRe) == -1) {
+				break;
+			}
+		}
+		// odescapowanie nowikowe
+		str = str.replace(/<tab<#(#*[0-9]+)>tab>/g, '<tab<$1>tab>');
+
+		return str;
+	}
+
+	/**
+	 * Find all needle indexes in hay.
+	 * @param {String} hay Search in.
+	 * @param {String} needle What to search for.
+	 * @returns 
+	 */
+	findAll(hay, needle) {
+		var indexes = [];
+		var i = -1;
+		while ((i = hay.indexOf(needle, i + 1)) >= 0) {
+			indexes.push(i);
+		}
+		return indexes;
+	}
+}
+
+// export
+if (typeof module === 'object' && module.exports) {
+	module.exports.SkTableHide = SkTableHide;
+}
+
+},{}],4:[function(require,module,exports){
+const { NuxJsBot, logTag } = require("./NuxJsBot");
+
+// bot instance
+const jsbot = new NuxJsBot();
+
+// run when WP:SK is fully ready
+mw.hook('userjs.wp_sk.redir.done').add(function (wp_sk, hasRedirs) {
+	console.log(logTag, 'redir done', wp_sk, hasRedirs);
+	jsbot.run(wp_sk);
+});
+
+// export
+window.jsbotsk_search_prep = function(skipDiff) {
+	jsbot.prepareSearch(skipDiff);
+};
+
+// extra
+const { ReviewCheck } = require("./ReviewCheck");
+window.ReviewCheck = ReviewCheck;
+
+},{"./NuxJsBot":1,"./ReviewCheck":2}]},{},[4]);
