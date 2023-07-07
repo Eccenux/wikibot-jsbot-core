@@ -45,10 +45,10 @@
 			if (model === "javascript") {
 				return;
 			}
-			// prep. bocik
-			this.prepareSk(wp_sk);
-			// auto-run
 			if (location.search.search(this.botParam)>0) {
+				// prep. bocik
+				this.prepareSk(wp_sk);
+				// auto-run
 				wp_sk.cleanup( document.getElementById( 'wpTextbox1' ) );
 			}
 		}
