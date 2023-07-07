@@ -4,8 +4,8 @@
 	"scripts": {
 		"test": "mocha",
 		"build": "browserify src/main.js -o jsbot.js",
-		"deploy": "node wikiploy.js",
-		"deploy:full": "npm run build && npm run wikiploy"
+		"deploy": "node wikiploy.mjs",
+		"rollout": "npm run build && npm run deploy"
 	},
 	"devDependencies": {
 		"browserify": "17.x",
