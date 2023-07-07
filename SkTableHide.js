@@ -12,7 +12,7 @@ var SkTableHide = class {
 		// defaults to only hide wikitables
 		// (note that plain tables inside wikitables will still be hidden)
 		if (typeof cond !== 'function') {
-			cond = (text) => text.search(/^\{\|.+class.+wikitable/) < 0;
+			cond = (text) => text.search(/^\{\|.*class.+wikitable/) < 0;
 		}
 		this.cond = cond;
 	}
