@@ -1,5 +1,3 @@
-/* global module */
-
 /**
  * Hide tables off from the string.
  */

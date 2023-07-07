@@ -1,5 +1,5 @@
 /* eslint-disable array-bracket-newline */
-/* global require, describe, it */
+/* global describe, it */
 const { assert } = require('chai');
 const bot = require('../SkTableHide');
 const SkTableHide = bot.SkTableHide;

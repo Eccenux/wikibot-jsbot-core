@@ -24,7 +24,6 @@
  */
 /* global mw, $ */
 /* global SkTableHide */
-/* global module */
 (function(){
 	var logTag = '[jsbot]';
 

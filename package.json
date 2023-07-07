@@ -1,6 +1,9 @@
 {
-  "devDependencies": {
-    "chai": "^4.3.7",
-    "mocha": "^10.2.0"
-  }
+	"name": "wikibot-jsbot-core",
+	"type": "commonjs",
+	"devDependencies": {
+		"eslint": "8.x",
+		"chai": "4.x",
+		"mocha": "10.x"
+	}
 }

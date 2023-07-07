@@ -118,3 +118,8 @@ reviewCheck.check(links).then((result) => {
 	});	
 });
 */
+
+// export
+if (typeof module === 'object' && module.exports) {
+	module.exports.ReviewCheck = ReviewCheck;
+}
