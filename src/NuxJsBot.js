@@ -145,11 +145,16 @@ class NuxJsBot {
 					str = after;
 				}
 			}
-			/**
+			/**/
 			// old link
-			summary.push('poprawa linków');
-			str = str.replace(/https?:\/\/web.archive.org\/\w+\/\d+\/(http:\/\/(?:www\.)?itsanhonour\.gov\.au\/honours\/\w+\/.+?aus_award_id=)/g, '$1');
-			str = str.replace(/([^/])http:\/\/(?:www\.)?itsanhonour\.gov\.au\/honours\/\w+\/.+?aus_award_id=([0-9]+)[&\w=]+/g, '$1https://honours.pmc.gov.au/honours/awards/$2');
+			after = str
+				.replace(/\[\[Adam Przybylski(\||\]\])/g, '[[Adam Przybylski (1896–1945)$1')
+				.replaceAll('[[Adam Przybylski (1896–1945)]]', '[[Adam Przybylski (1896–1945)|Adam Przybylski]]')
+			;
+			if (after !== str) {
+				summary.push('Przybylski link [[WP:ZDBOT]]');
+				str = after;
+			}
 			/**
 			// skróty w wydaniu
 			summary.push('int.');

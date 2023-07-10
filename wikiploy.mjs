@@ -7,7 +7,7 @@ const ployBot = new Wikiploy();
 
 // custom summary
 ployBot.summary = () => {
-	return 'v2.0.0: browserify + wikiploy';
+	return 'v2.1.0: przybylski link';
 }
 
 (async () => {
