@@ -148,7 +148,7 @@ class NuxJsBot {
 			/**/
 			// old link
 			after = str
-				.replace(/autor link = Adam Przybylski *(\|)/g, 'autor link = Adam Przybylski (1896–1945)$1')
+				.replace(/autor link *= *Adam Przybylski *(\|)/g, 'autor link = Adam Przybylski (1896–1945)$1')
 				// .replace(/\[\[Adam Przybylski(\||\]\])/g, '[[Adam Przybylski (1896–1945)$1')
 				// .replaceAll('[[Adam Przybylski (1896–1945)]]', '[[Adam Przybylski (1896–1945)|Adam Przybylski]]')
 			;
