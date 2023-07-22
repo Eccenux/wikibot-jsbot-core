@@ -91,27 +91,6 @@ class NuxJsBot {
 		var summary = ['[[WP:SK]]'];
 		var me = this;
 
-		// usuń przestarzałe wpisy
-		wp_sk.cleanerMagicLinks_off = function (str)
-		{
-			// zbieranie
-			str = wp_sk.cat.gather(str);
-			let before = str;
-			str = wp_sk.iWiki.gather(str);
-
-			if (before !== str) {
-				summary.push('stare interwiki');
-			}
-			
-			// usuwanie pozostawionych przy zbieraniu i innych wielokrotnych, pustych wierszy
-			str = str.replace(/[\n]{3,}/g, '\n\n');
-		
-			// wstawienie na koniec (call not copy to have "this")
-			str = str.replace(/\s*$/, function(a) {return wp_sk.cat.output(a)});
-		
-			return str;
-		};
-
 		// dodatki do procesu SK (po zwinięciu nowiki, komentarzy itp)
 		wp_sk.cleanerWikiVaria = function(str) {
 			var after = '';

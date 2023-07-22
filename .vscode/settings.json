@@ -1,4 +1,7 @@
 {
     "editor.detectIndentation": false,
-    "editor.insertSpaces": false
+    "editor.insertSpaces": false,
+	"search.exclude": {
+		"package-lock.json": true
+	}
 }
