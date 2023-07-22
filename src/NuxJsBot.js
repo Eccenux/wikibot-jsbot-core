@@ -132,7 +132,7 @@ class NuxJsBot {
 				.replaceAll('[[Morningside Arena|', '[[Leicester Arena|')
 			;
 			if (after !== str) {
-				summary.push('Leicester Arena');
+				summary.push('popr. linka: Leicester Arena');
 				str = after;
 			}
 			/**
