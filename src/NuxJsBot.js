@@ -127,12 +127,12 @@ class NuxJsBot {
 			/**/
 			// old link
 			after = str
-				.replace(/autor link *= *Adam Przybylski *(\|)/g, 'autor link = Adam Przybylski (1896–1945)$1')
-				// .replace(/\[\[Adam Przybylski(\||\]\])/g, '[[Adam Przybylski (1896–1945)$1')
-				// .replaceAll('[[Adam Przybylski (1896–1945)]]', '[[Adam Przybylski (1896–1945)|Adam Przybylski]]')
+				// .replace(/autor link *= *Adam Przybylski *(\|)/g, 'autor link = Adam Przybylski (1896–1945)$1')
+				.replaceAll('[[Morningside Arena]]', '[[Leicester Arena]]')
+				.replaceAll('[[Morningside Arena|', '[[Leicester Arena|')
 			;
 			if (after !== str) {
-				summary.push('Przybylski link [[WP:ZDBOT]]');
+				summary.push('Leicester Arena');
 				str = after;
 			}
 			/**
