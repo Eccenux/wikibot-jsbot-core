@@ -8,7 +8,7 @@ const ployBot = new WikiployLite(botpass);
 
 // custom summary
 ployBot.summary = () => {
-	return 'v2.1.0: przybylski link';
+	return 'v2.1.0: link';
 }
 
 (async () => {

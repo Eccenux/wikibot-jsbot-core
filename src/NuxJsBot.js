@@ -128,11 +128,11 @@ class NuxJsBot {
 			// old link
 			after = str
 				// .replace(/autor link *= *Adam Przybylski *(\|)/g, 'autor link = Adam Przybylski (1896–1945)$1')
-				.replaceAll('[[Morningside Arena]]', '[[Leicester Arena]]')
-				.replaceAll('[[Morningside Arena|', '[[Leicester Arena|')
+				.replaceAll('[[John Fowler]]', '[[John Fowler (wynalazca)|John Fowler]]')
+				.replaceAll('[[John Fowler|', '[[John Fowler (wynalazca)|')
 			;
 			if (after !== str) {
-				summary.push('popr. linka: Leicester Arena');
+				summary.push('popr. linka: John Fowler');
 				str = after;
 			}
 			/**
@@ -158,7 +158,7 @@ class NuxJsBot {
 				// drób
 				document.getElementById('wpMinoredit').checked = true;
 				// don't watch
-				document.getElementById('wpWatchthis').checked = false;
+				// document.getElementById('wpWatchthis').checked = false;
 			} else {
 				console.warn(logTag, 'brak zmian');
 			}
