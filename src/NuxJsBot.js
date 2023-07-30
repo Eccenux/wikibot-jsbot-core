@@ -138,8 +138,8 @@ class NuxJsBot {
 			/**/
 			// 2*hiero
 			after = str
-				.replace(/:hiero[ \t]*=[ \t]*\<hiero>.{1,30}\<\/hiero>[ \t]*\<hiero>/g
-					, (a) => a.replace(/<\/hiero>[ \t]*\<hiero>/, ' ')
+				.replace(/:hiero[ \t]*=[ \t]*\<hiero>.{1,30}\<\/hiero>[ \t]*\<hiero>[^|}]+/g
+					, (a) => a.replace(/<\/hiero>[ \t]*\<hiero>/g, ' ')
 				);
 			;
 			if (after !== str) {
