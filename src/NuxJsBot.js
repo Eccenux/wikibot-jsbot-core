@@ -124,7 +124,7 @@ class NuxJsBot {
 					str = after;
 				}
 			}
-			/**/
+			/**
 			// old link
 			after = str
 				// .replace(/autor link *= *Adam Przybylski *(\|)/g, 'autor link = Adam Przybylski (1896–1945)$1')
@@ -133,6 +133,17 @@ class NuxJsBot {
 			;
 			if (after !== str) {
 				summary.push('popr. linka: John Fowler');
+				str = after;
+			}
+			/**/
+			// 2*hiero
+			after = str
+				.replace(/:hiero[ \t]*=[ \t]*\<hiero>.{1,30}\<\/hiero>[ \t]*\<hiero>/g
+					, (a) => a.replace(/<\/hiero>[ \t]*\<hiero>/, ' ')
+				);
+			;
+			if (after !== str) {
+				summary.push('2*hiero [[WP:ZDBOT]]');
 				str = after;
 			}
 			/**
