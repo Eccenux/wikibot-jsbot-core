@@ -1,0 +1,74 @@
+/**
+ * Default sort dla biografii.
+ */
+function defaultSort(str) {
+	let title = mw.config.get('wgPageName');
+	let result = _defaultSort(title, str);
+	if (result === false) {
+		console.warn('defaultSort: skipping');
+		return str;
+	}
+	return result;
+}
+
+/**
+ * Default sort for testing.
+ * @private
+ * @param {String} str Article wikitext.
+ * @param {String} title Page title.
+ * @returns 
+ */
+function _defaultSort(title, str) {
+	// {first, last};
+	let name = getName(title);
+	if (!name) {
+		console.warn('not a name');
+		return false;
+	}
+
+	// check content
+	if (str.indexOf('{{SORTUJ:') >= 0) {
+		console.warn('has SORTUJ');
+		return false;
+	}
+
+	// is bio? / has cat(s)
+	if (str.search(/Kategoria:(Urodzeni|Zmarli|Ludzie)/) < 0) {
+		console.warn('not a bio');
+		return false;
+	}
+
+	let after = str;
+	after = after.replace(/\n\[\[Kategoria:/, (a) => {
+		console.log('defaultSort: replace', name);
+		return `\n{{SORTUJ:${name.last}, ${name.first}}}${a}`;
+	});
+	return after;
+}
+
+/**
+ * Name.
+ * @param {String} title Page title.
+ * @returns {first, last}
+ */
+function getName(title) {
+	let name = false;
+	title.replace(/^((\S)\S+) ((\S)\S+)$/, (a, first, letter1, last, letter2) => {
+		let isName = 
+			letter1.toLocaleUpperCase() === letter1
+			&& letter2.toLocaleUpperCase() === letter2
+		;
+		if (!isName) {
+			return;
+		}
+		name = {first, last};
+	});
+	return name;
+}
+
+// export
+if (typeof module === 'object' && module.exports) {
+	module.exports.defaultSort = defaultSort;
+	module.exports._defaultSort = _defaultSort;	// testing
+	module.exports.getName = getName;
+}

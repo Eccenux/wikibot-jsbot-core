@@ -24,6 +24,7 @@
  */
 
 const { SkTableHide } = require("./SkTableHide");
+const bioSort = require('./bioSort');
 var logTag = '[jsbot]';
 
 class NuxJsBot {
@@ -113,6 +114,12 @@ class NuxJsBot {
 			after = me.flexColumnTables(str);
 			if (after !== str) {
 				summary.push('wikiflex, [[WP:Dostępność]]');
+				str = after;
+			}
+			// bio art
+			after = bioSort.defaultSort(str);
+			if (after !== str) {
+				summary.push('sortowanie kat.');
 				str = after;
 			}
 			/**
