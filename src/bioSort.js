@@ -2,7 +2,7 @@
  * Default sort dla biografii.
  */
 function defaultSort(str) {
-	let title = mw.config.get('wgPageName');
+	let title = mw.config.get('wgTitle');
 	let result = _defaultSort(title, str);
 	if (result === false) {
 		console.warn('defaultSort: skipping');
