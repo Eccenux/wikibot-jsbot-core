@@ -53,10 +53,24 @@ function _defaultSort(title, str) {
  */
 function getName(title) {
 	let name = false;
+	title = title.replace(/ \(.+\)$/, '').trim();	// strip addons
 	title.replace(/^((\S)\S+) ((\S)\S+)$/, (a, first, letter1, last, letter2) => {
 		let isName = 
 			letter1.toLocaleUpperCase() === letter1
 			&& letter2.toLocaleUpperCase() === letter2
+			&& last.toLocaleUpperCase() !== last	// not all UPPER
+		;
+		if (!isName) {
+			return;
+		}
+		name = {first, last};
+	});
+	title.replace(/^((\S)\S+ ((\S)\S+)) ((\S)\S+)$/, (a, first, letter1, second, letter2, last, letterN) => {
+		let isName = 
+			letter1.toLocaleUpperCase() === letter1
+			&& letter2.toLocaleUpperCase() === letter2
+			&& letterN.toLocaleUpperCase() === letterN
+			&& second.toLocaleUpperCase() !== second	// not all UPPER
 		;
 		if (!isName) {
 			return;

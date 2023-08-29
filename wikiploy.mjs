@@ -8,7 +8,7 @@ const ployBot = new WikiployLite(botpass);
 
 // custom summary
 ployBot.summary = () => {
-	return 'v2.2.1: bioSort fix';
+	return 'v2.2.2: bioSort dodatki i imiona';
 }
 
 (async () => {

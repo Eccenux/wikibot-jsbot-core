@@ -11,13 +11,26 @@ describe('bioSort', function () {
 			let result;
 			result = bioSort.getName('Zenon Życzeniowy');
 			assert.hasAllKeys(result, ['first', 'last']);
+			
 			result = bioSort.getName('Żanet Źródlana-Ślęzak');
 			assert.hasAllKeys(result, ['first', 'last']);
 			assert.equal(result.last, 'Źródlana-Ślęzak');
+
+			result = bioSort.getName('Klementyna Anna Świca');
+			assert.hasAllKeys(result, ['first', 'last']);
+			assert.equal(result.first, 'Klementyna Anna');
+			assert.equal(result.last, 'Świca');
+
+			result = bioSort.getName('Igor Kopyłow (naukowiec)');
+			assert.hasAllKeys(result, ['first', 'last']);
+			assert.equal(result.first, 'Igor');
+			assert.equal(result.last, 'Kopyłow');
 		});
 		it('should skip non-name', function () {
 			let result;
 			result = bioSort.getName('Karolina II Sobieska');
+			assert.equal(result, false);
+			result = bioSort.getName('Franc IV');
 			assert.equal(result, false);
 			result = bioSort.getName('Pociąg towarowy');
 			assert.equal(result, false);
