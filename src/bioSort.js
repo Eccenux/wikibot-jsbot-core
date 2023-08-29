@@ -38,6 +38,12 @@ function _defaultSort(title, str) {
 		return false;
 	}
 
+	// ~azjatyckie nazwiska
+	if (str.search(/chińskie|Chińska|Chinach|Nihongo/i) >= 0) {
+		console.warn('azjatyckie');
+		return false;
+	}
+
 	let after = str;
 	after = after.replace(/\n\[\[Kategoria:/, (a) => {
 		console.log('defaultSort: replace', name);
