@@ -3,3 +3,4 @@
 temp.*
 /jsbot.js
 bot.config.mjs
+*.temp.*
