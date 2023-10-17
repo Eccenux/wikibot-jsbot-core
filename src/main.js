@@ -14,6 +14,13 @@ window.jsbotsk_search_prep = function(skipDiff) {
 	jsbot.prepareSearch(skipDiff);
 };
 
+// bio sort
+const bioSortPrep = require('./bioSortPrep');
+window.jsbotsk_biosort_prep = function(skipDiff) {
+	bioSortPrep.prepareSearch();
+	jsbot.prepareSearch(skipDiff);
+};
+
 // extra
 const { ReviewCheck } = require("./ReviewCheck");
 window.ReviewCheck = ReviewCheck;

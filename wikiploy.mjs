@@ -8,7 +8,7 @@ const ployBot = new WikiployLite(botpass);
 
 // custom summary
 ployBot.summary = () => {
-	return 'v2.2.2: bioSort chin';
+	return 'v2.2.3: bioSort chin';
 }
 
 (async () => {
