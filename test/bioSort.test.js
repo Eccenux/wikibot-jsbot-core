@@ -72,5 +72,29 @@ describe('bioSort', function () {
 			result = bioSort._defaultSort('Zenon Życzeniowy', 'Mało Niczego. [[Kategoria:Abc]]');
 			assert.equal(result, false);
 		});
+		it('should add category', function () {
+			let result, year;
+			function art(data) {
+				return `{{Artysta infobox
+					|  pseudonim            = Gal
+					|  grafika              = 
+					|  opis grafiki         = 
+					|  data urodzenia       = ${data}
+					|  miejsce urodzenia    = 
+				   }}
+				   [[Kategoria:Koptyko]]
+			   `.replace(/\n\t+/g, '\n');
+			}
+
+			result = bioSort._defaultSort('Zenon Życzeniowy', art(''));
+			assert.equal(result, false, 'no year, no cat');
+			
+			year = '1234';
+			result = bioSort._defaultSort('Zenon Życzeniowy', art(year));
+			assert.isTrue(result.indexOf('Kategoria:Urodzeni w ' + year) > 0, result);
+
+			result = bioSort._defaultSort('Zenon Życzeniowy', art(`[[${year}]]`));
+			assert.isTrue(result.indexOf('Kategoria:Urodzeni w ' + year) > 0, result);
+		});
 	});
 });
