@@ -34,8 +34,17 @@ function _defaultSort(title, str) {
 
 	// is bio? / has cat(s)
 	if (str.search(/Kategoria:(Urodzeni|Zmarli|Ludzie)/) < 0) {
-		console.warn('not a bio');
-		return false;
+		// add birth cat. from infobox
+		const paramRe = /\|\s*data urodzenia\s*=\s*([0-9]+)/;
+		const match = str.match(paramRe);
+		if (match && match[1]) {
+			const year = match[1];
+			const category = `[[Kategoria:Urodzeni w ${year}]]`;
+			str += '\n' + category;
+		} else {
+			console.warn('not a bio');
+			return false;
+		}
 	}
 
 	// ~azjatyckie nazwiska
