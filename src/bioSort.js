@@ -12,6 +12,22 @@ function defaultSort(str) {
 }
 
 /**
+ * Automatic cat. from infobox.
+ * @returns categories array
+ */
+function _autoCat(str) {
+	// Add birth cat. from infobox
+	const paramRe = /\|\s*data urodzenia\s*=\s*\[*([0-9]+)/;
+	const match = str.match(paramRe);
+	const categories = [];
+	if (match && match[1]) {
+		const year = match[1];
+		categories.push(`[[Kategoria:Urodzeni w ${year}]]`);
+	}
+	return categories;
+}
+
+/**
  * Default sort for testing.
  * @private
  * @param {String} str Article wikitext.
@@ -34,13 +50,9 @@ function _defaultSort(title, str) {
 
 	// is bio? / has cat(s)
 	if (str.search(/Kategoria:(Urodzeni|Zmarli|Ludzie)/) < 0) {
-		// add birth cat. from infobox
-		const paramRe = /\|\s*data urodzenia\s*=\s*\[*([0-9]+)/;
-		const match = str.match(paramRe);
-		if (match && match[1]) {
-			const year = match[1];
-			const category = `[[Kategoria:Urodzeni w ${year}]]`;
-			str += '\n' + category;
+		const categories = _autoCat(str);
+		if (categories.length) {
+			str += '\n' + categories.join('\n');
 		} else {
 			console.warn('not a bio');
 			return false;

@@ -72,19 +72,22 @@ describe('bioSort', function () {
 			result = bioSort._defaultSort('Zenon Życzeniowy', 'Mało Niczego. [[Kategoria:Abc]]');
 			assert.equal(result, false);
 		});
-		it('should add category', function () {
+
+		function art(birth='', death='') {
+			return `{{Artysta infobox
+				|  pseudonim            = Gal
+				|  grafika              = 
+				|  opis grafiki         = 
+				|  data urodzenia       = ${birth}
+				|  data śmierci         = ${death}
+				|  miejsce urodzenia    = 
+			   }}
+			   [[Kategoria:Koptyko]]
+		   `.replace(/\n\t+/g, '\n');
+		}
+
+		it('should add birth category from year', function () {
 			let result, year;
-			function art(data) {
-				return `{{Artysta infobox
-					|  pseudonim            = Gal
-					|  grafika              = 
-					|  opis grafiki         = 
-					|  data urodzenia       = ${data}
-					|  miejsce urodzenia    = 
-				   }}
-				   [[Kategoria:Koptyko]]
-			   `.replace(/\n\t+/g, '\n');
-			}
 
 			result = bioSort._defaultSort('Zenon Życzeniowy', art(''));
 			assert.equal(result, false, 'no year, no cat');
@@ -95,6 +98,35 @@ describe('bioSort', function () {
 
 			result = bioSort._defaultSort('Zenon Życzeniowy', art(`[[${year}]]`));
 			assert.isTrue(result.indexOf('Kategoria:Urodzeni w ' + year) > 0, result);
+		});
+		it('should add birth category from date', function () {
+			let result, year;
+			year = '1234';
+			result = bioSort._defaultSort('Zenon Życzeniowy', art(`[[21 lutego]] [[${year}]]`));
+			assert.isTrue(result.indexOf('Kategoria:Urodzeni w ' + year) > 0, result);
+			result = bioSort._defaultSort('Zenon Życzeniowy', art(`21 lutego [[${year}]]`));
+			assert.isTrue(result.indexOf('Kategoria:Urodzeni w ' + year) > 0, result);
+			result = bioSort._defaultSort('Zenon Życzeniowy', art(`21 lutego ${year}`));
+			assert.isTrue(result.indexOf('Kategoria:Urodzeni w ' + year) > 0, result);
+		});
+
+		it('should add death category', function () {
+			let result, year;
+
+			result = bioSort._defaultSort('Zenon Życzeniowy', art(''));
+			assert.equal(result, false, 'no year, no cat');
+			
+			year = '1234';
+			result = bioSort._defaultSort('Zenon Życzeniowy', art('', year));
+			assert.isTrue(result.indexOf('Kategoria:Zmarli w ' + year) > 0, result);
+
+			result = bioSort._defaultSort('Zenon Życzeniowy', art('', `[[${year}]]`));
+			assert.isTrue(result.indexOf('Kategoria:Zmarli w ' + year) > 0, result);
+
+			birthYear = '1321';
+			result = bioSort._defaultSort('Zenon Życzeniowy', art(birthYear, `[[17 października]] [[${year}]]`));
+			assert.isTrue(result.indexOf('Kategoria:Zmarli w ' + year) > 0, result);
+			assert.isTrue(result.indexOf('Kategoria:Urodzeni w ' + birthYear) > 0, result);
 		});
 	});
 });
