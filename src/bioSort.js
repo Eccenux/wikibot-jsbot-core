@@ -12,18 +12,38 @@ function defaultSort(str) {
 }
 
 /**
+ * Date string to year.
+ * @param {String} date Date string from infobox.
+ */
+function _dateToYear(date) {
+	let year;
+	// [[1234]]
+	year = /\[\[(?<year>[0-9]{3,}\]\])/.exec(date)?.groups?.year;
+	if (year) return year;
+	// 12 paź 1234
+	year = /[0-9]{1,2} [a-z]\S+ (?<year>[0-9]+)/.exec(date)?.groups?.year;
+	if (year) return year;
+	// 1234
+	if (date.trim().search(/^[0-9]+$/) === 0) {
+		return date;
+	}
+	return year
+}
+
+/**
  * Automatic cat. from infobox.
  * @returns categories array
  */
 function _autoCat(str) {
-	// Add birth cat. from infobox
-	const paramRe = /\|\s*data urodzenia\s*=\s*\[*([0-9]+)/;
-	const match = str.match(paramRe);
 	const categories = [];
-	if (match && match[1]) {
-		const year = match[1];
-		categories.push(`[[Kategoria:Urodzeni w ${year}]]`);
-	}
+	// Add birth/death cat. from infobox
+	str.replace(/\|\s*data (?<type>urodzenia|śmierci)[ \t]*=[ \t]*(?<value>[^\r\n]*[0-9].*)/g, (a, type, value) => {
+		const year = _dateToYear(value);
+		if (year) {
+			const prefix = (type === 'urodzenia') ? 'Urodzeni' : 'Zmarli';
+			categories.push(`[[Kategoria:${prefix} w ${year}]]`);
+		}
+	});
 	return categories;
 }
 

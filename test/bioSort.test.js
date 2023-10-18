@@ -122,7 +122,11 @@ describe('bioSort', function () {
 
 			result = bioSort._defaultSort('Zenon Życzeniowy', art('', `[[${year}]]`));
 			assert.isTrue(result.indexOf('Kategoria:Zmarli w ' + year) > 0, result);
-
+		});
+		
+		it('should add all categories', function () {
+			let result, year;
+			year = '1234';
 			birthYear = '1321';
 			result = bioSort._defaultSort('Zenon Życzeniowy', art(birthYear, `[[17 października]] [[${year}]]`));
 			assert.isTrue(result.indexOf('Kategoria:Zmarli w ' + year) > 0, result);
