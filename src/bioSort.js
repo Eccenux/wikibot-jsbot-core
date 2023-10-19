@@ -18,7 +18,7 @@ function defaultSort(str) {
 function _dateToYear(date) {
 	let year;
 	// [[1234]]
-	year = /\[\[(?<year>[0-9]{3,}\]\])/.exec(date)?.groups?.year;
+	year = /\[\[(?<year>[0-9]{3,})\]\]/.exec(date)?.groups?.year;
 	if (year) return year;
 	// 12 paź 1234
 	year = /[0-9]{1,2} [a-z]\S+ (?<year>[0-9]+)/.exec(date)?.groups?.year;
@@ -131,5 +131,6 @@ function getName(title) {
 if (typeof module === 'object' && module.exports) {
 	module.exports.defaultSort = defaultSort;
 	module.exports._defaultSort = _defaultSort;	// testing
+	module.exports._dateToYear = _dateToYear;	// testing
 	module.exports.getName = getName;
 }

@@ -1,6 +1,7 @@
 /* global require, describe, it */
 const { assert } = require('chai');
 const bioSort = require('../src/bioSort');
+const { describe } = require('mocha');
 // const chai = require('chai');
 // const assert = chai.assert;
 
@@ -123,7 +124,7 @@ describe('bioSort', function () {
 			result = bioSort._defaultSort('Zenon Życzeniowy', art('', `[[${year}]]`));
 			assert.isTrue(result.indexOf('Kategoria:Zmarli w ' + year) > 0, result);
 		});
-		
+
 		it('should add all categories', function () {
 			let result, year;
 			year = '1234';
@@ -131,6 +132,25 @@ describe('bioSort', function () {
 			result = bioSort._defaultSort('Zenon Życzeniowy', art(birthYear, `[[17 października]] [[${year}]]`));
 			assert.isTrue(result.indexOf('Kategoria:Zmarli w ' + year) > 0, result);
 			assert.isTrue(result.indexOf('Kategoria:Urodzeni w ' + birthYear) > 0, result);
+		});
+	});
+
+	describe('_dateToYear', function () {
+		const dateToYear = bioSort._dateToYear;
+		it('should parse year', function () {
+			assert.equal(dateToYear('1234'), 1234);
+			assert.equal(dateToYear('123'), 123);
+			assert.equal(dateToYear('12'), 12);
+		});
+		it('should parse links', function () {
+			assert.equal(dateToYear('[[1234]]'), 1234);
+			assert.equal(dateToYear(' [[1234]] '), 1234);
+		});
+		it('should parse full date', function () {
+			assert.equal(dateToYear('12 lutego [[1234]]'), 1234);
+			assert.equal(dateToYear('[[12 lutego]] [[1234]] '), 1234);
+			assert.equal(dateToYear('[[1 października]] [[1234]] '), 1234);
+			assert.equal(dateToYear('[[31 września]] [[1234]] '), 1234);
 		});
 	});
 });
