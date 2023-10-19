@@ -50,5 +50,22 @@ describe('bioSortPrep', () => {
 			result = checkTitle(title);
 			assert.equal(result, true);
 		});
+
+		it('powinno negatywnie rozpoznać przydomki', () => {
+			let title;
+			let result;
+			let expected = false;
+			title = "Zenon z Akwinu";
+			result = checkTitle(title);
+			assert.equal(result, expected);
+
+			title = "Mistrz Ołtarza z Krainburga";
+			result = checkTitle(title);
+			assert.equal(result, expected);
+
+			title = "Mistrz Tryptyku Morrisona";
+			result = checkTitle(title);
+			assert.equal(result, expected);
+		});
 	});
 });

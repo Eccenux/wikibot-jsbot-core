@@ -29,6 +29,17 @@ function checkTitle(rawTitle) {
 	if (title.search(/ /) < 0) {
 		return false;
 	}
+
+	// Zenon z Akwinu jest zły.
+	if (title.search(/ \w /) >= 0) {
+		return false;
+	}
+
+	// Mistrz jest zły.
+	if (title.startsWith('Mistrz')) {
+		return false;
+	}
+
 	return true;
 }
 
