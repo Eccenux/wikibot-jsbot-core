@@ -30,8 +30,8 @@ function checkTitle(rawTitle) {
 		return false;
 	}
 
-	// Zenon z Akwinu jest zły.
-	if (title.search(/ \w /) >= 0) {
+	// Zenon z Akwinu / ze Scytu jest zły.
+	if (title.search(/ [a-z]{1,2} /) >= 0) {
 		return false;
 	}
 
