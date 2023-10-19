@@ -15,6 +15,7 @@ ployBot.summary = () => {
 	const configs = [];
 	configs.push(new DeployConfig({
 		src: 'jsbot.js',
+		nowiki: true,
 	}));
 	await ployBot.deploy(configs);
 })().catch(err => {
