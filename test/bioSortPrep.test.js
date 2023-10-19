@@ -59,6 +59,10 @@ describe('bioSortPrep', () => {
 			result = checkTitle(title);
 			assert.equal(result, expected);
 
+			title = "Jan ze Scytu";
+			result = checkTitle(title);
+			assert.equal(result, expected);
+
 			title = "Mistrz Ołtarza z Krainburga";
 			result = checkTitle(title);
 			assert.equal(result, expected);
