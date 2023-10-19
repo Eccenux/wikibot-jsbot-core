@@ -73,7 +73,7 @@ function _defaultSort(title, str) {
 		const categories = _autoCat(str);
 		if (categories.length) {
 			str += '\n' + categories.join('\n');
-		} else {
+		} else if (str.search(/\|\s*data urodzenia\s*=/) < 0) {
 			console.warn('not a bio');
 			return false;
 		}

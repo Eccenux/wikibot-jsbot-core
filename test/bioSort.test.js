@@ -89,10 +89,6 @@ describe('bioSort', function () {
 
 		it('should add birth category from year', function () {
 			let result, year;
-
-			result = bioSort._defaultSort('Zenon Życzeniowy', art(''));
-			assert.equal(result, false, 'no year, no cat');
-			
 			year = '1234';
 			result = bioSort._defaultSort('Zenon Życzeniowy', art(year));
 			assert.isTrue(result.indexOf('Kategoria:Urodzeni w ' + year) > 0, result);
@@ -113,10 +109,6 @@ describe('bioSort', function () {
 
 		it('should add death category', function () {
 			let result, year;
-
-			result = bioSort._defaultSort('Zenon Życzeniowy', art(''));
-			assert.equal(result, false, 'no year, no cat');
-			
 			year = '1234';
 			result = bioSort._defaultSort('Zenon Życzeniowy', art('', year));
 			assert.isTrue(result.indexOf('Kategoria:Zmarli w ' + year) > 0, result);
