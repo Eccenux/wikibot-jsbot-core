@@ -65,7 +65,10 @@ class FixDetector {
 	 * @param {String} text Article text (wikicode).
 	 */
 	detect(text) {
-		const results = this.detectors.map(detector => FixResult.make(text, detector));
+		const results = this.detectors
+			.map(detector => FixResult.make(text, detector))
+			.filter(r=>r instanceof FixResult)
+		;
 		return results;
 	}
 }

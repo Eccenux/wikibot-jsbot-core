@@ -37,4 +37,13 @@ describe('FixDetector', () => {
 		assert.strictEqual(results[0].title, 'Dash Count');
 		assert.strictEqual(results[0].count, expected);
 	});
+
+	it('should only return successfull detector', () => {
+		detector.addDetector(/potent/, 'Potent Detector');
+		detector.addDetector(/potent2/, 'Potent2 Detector');
+		const text = 'This text contains the word "potential" and "potent".';
+		const results = detector.detect(text);
+		assert.strictEqual(results.length, 1);
+		assert.strictEqual(results[0].title, 'Potent Detector');
+	});
 });
