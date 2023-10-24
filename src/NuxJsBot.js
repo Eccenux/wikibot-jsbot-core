@@ -25,6 +25,7 @@
 
 const { SkTableHide } = require("./SkTableHide");
 const bioSort = require('./bioSort');
+const { Fixabilly } = require("./Fixabilly/Fixabilly");
 var logTag = '[jsbot]';
 
 class NuxJsBot {
@@ -185,6 +186,11 @@ class NuxJsBot {
 			if (location.search.search(this.skipDiffParam) < 0) {
 				$('#wpDiff').click();
 			}
+
+			// Fixabilly integration
+			const fixabilly = new Fixabilly();
+			const input = document.getElementById('wpTextbox1');
+			fixabilly.detect(input.value);
 		}
 	}
 	/** Count regexp occurences. */
