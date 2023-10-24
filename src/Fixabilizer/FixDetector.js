@@ -44,7 +44,7 @@ class FixResult {
 /**
  * Detect potential fixes.
  */
-export default class FixDetector {
+class FixDetector {
 	constructor() {
 		this.detectors = [];
 	}
@@ -68,4 +68,9 @@ export default class FixDetector {
 		const results = this.detectors.map(detector => FixResult.make(text, detector));
 		return results;
 	}
+}
+
+// export
+if (typeof module === 'object' && module.exports) {
+	module.exports.FixDetector = FixDetector;
 }
