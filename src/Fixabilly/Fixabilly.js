@@ -29,13 +29,17 @@ class Fixabilly {
 
 	/** Show res. */
 	render(results) {
+		if (!results.length) {
+			return false;
+		}
 		const info = results.map(r=>`${r.title} (${r.count})`).join(', ');
 		document.querySelector('.editOptions').insertAdjacentHTML('afterbegin', `<div style="
 			border: 1px solid black;
 			background: gold;
 			padding: .2em .5em;
 			margin-bottom: .5em;
-		">Potencjał zmian: ${info}.</div>`)
+		">Potencjał zmian: ${info}.</div>`);
+		return true;
 	}
 }
 
