@@ -1,7 +1,7 @@
 const { assert } = require('chai');
 const { describe } = require('mocha');
 
-const { FixDetector } = require('../src/Fixabilizer/FixDetector');
+const { FixDetector } = require('../src/Fixabilly/FixDetector');
 
 describe('FixDetector', () => {
 	let detector;
