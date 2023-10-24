@@ -1,17 +1,17 @@
 /** Detector definition. */
 class Detector {
 	constructor(detector, title) {
-		this.detector = ()=>false;
+		this.countMatches = ()=>false;
 		// detector types
 		if (detector instanceof RegExp) {
 			const regex = new RegExp(detector, 'g');
-			this.detector = (text) => {
+			this.countMatches = (text) => {
 				const matchCount = (text.match(regex) || []).length;
 				return matchCount;
 			}
 		}
 		else if (detector instanceof Function) {
-			this.detector = detector;
+			this.countMatches = detector;
 		}
 		else {
 			console.warn('Unknow detector type');
@@ -33,7 +33,7 @@ class FixResult {
 	 * @param {Detector} detector .
 	 */
 	static make(text, detector) {
-		const count = detector.detector(text);
+		const count = detector.countMatches(text);
 		if (count) {
 			return new FixResult(detector, count);
 		}
@@ -52,7 +52,7 @@ export default class FixDetector {
 	/**
 	 * Add a new fix detector.
 	 * @param {RegExp|Function} detector Detection regexp or a function working on text
-	 * 	(function should return match count).
+	 * 	(the function should return a number of detected matches or a potential strength).
 	 * @param {String} title Short info.
 	 */
 	addDetector(detector, title) {
@@ -65,7 +65,7 @@ export default class FixDetector {
 	 * @param {String} text Article text (wikicode).
 	 */
 	detect(text) {
-		const results = this.detectors.map(detector => FixResult.make(detector));
+		const results = this.detectors.map(detector => FixResult.make(text, detector));
 		return results;
 	}
 }
