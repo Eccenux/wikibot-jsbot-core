@@ -80,10 +80,18 @@ function _defaultSort(title, str) {
 	}
 
 	// ~azjatyckie nazwiska
-	if (str.search(/chińskie|Chińska|Chinach|Nihongo/i) >= 0) {
+	if (str.search(/chińskie|chińska|chinach|nihongo|nazwisko koreańskie/i) >= 0) {
 		console.warn('azjatyckie');
 		return false;
 	}
+	// ~wikingowe
+	// https://sjp.pwn.pl/poradnia/haslo/sortowanie-islandzkich-nazw-osobowych;10098.html
+	// (ciekawe, bo szwedzka wiki nie podziela tego sposobu sortowania)
+	if (str.search(/nazwisko islandzkie/i) >= 0) {
+		console.warn('islandzkie (-dotir/-son)');
+		return false;
+	}
+	
 
 	let after = str;
 	after = after.replace(/\n\[\[Kategoria:/, (a) => {
