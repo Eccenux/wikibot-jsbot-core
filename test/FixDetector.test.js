@@ -86,5 +86,24 @@ describe('FixDetector', () => {
 			assert.strictEqual(results[0].title, 'Dash Count');
 			assert.strictEqual(results[0].count, expected);
 		});
+
+		it('should not match image names in gallery', () => {
+			detector.addDetector(dashDetector, 'Dash Count');
+			const text = `
+				<gallery widths="200px" heights="160px">
+				Paris - Salon du livre1.jpg|Janina Kowalska we Florencji, 2006
+				Paris - Salon du livre2.jpg|Janina Kowalska we [[Florencji]], 2006
+				Paris - Salon du livre3.jpg
+				Paris - Salon du livre4.jpg|Paris - Salon [[2020]]
+				Paris - Salon du livre5.jpg|Paris - Salon
+				</gallery>
+				Paris - Salon [[2020]].
+			`.replace(/(\r?\n)\t+/g, '$1');
+			const expected = 3;
+			const results = detector.detect(text);
+			assert.strictEqual(results.length, 1);
+			assert.strictEqual(results[0].title, 'Dash Count');
+			assert.strictEqual(results[0].count, expected);
+		});
 	});
 });
