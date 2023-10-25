@@ -1,4 +1,5 @@
 const { FixDetector } = require("./FixDetector");
+const { dashDetector } = require("./dashDetector");
 
 /**
  * Fixability Billy.
@@ -11,7 +12,8 @@ class Fixabilly {
 		// non-pl quote
 		this.detectors.addDetector(/([^=])"([^|"\]})> \n\t.,?;][^"]*?[^=| \n\t]|[^"|{}\[\]]{1,3})"([^>|])/, 'cudzysłów pl');
 		// dashes
-		this.detectors.addDetector(/ - /, 'pauza');
+		// this.detectors.addDetector(/ - /, 'pauza');
+		this.detectors.addDetector(dashDetector, 'pauza');
 	}
 
 	/**

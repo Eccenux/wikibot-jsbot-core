@@ -2,6 +2,7 @@ const { assert } = require('chai');
 const { describe } = require('mocha');
 
 const { FixDetector } = require('../src/Fixabilly/FixDetector');
+const { dashDetector } = require('../src/Fixabilly/dashDetector');
 
 describe('FixDetector', () => {
 	let detector;
@@ -45,5 +46,45 @@ describe('FixDetector', () => {
 		const results = detector.detect(text);
 		assert.strictEqual(results.length, 1);
 		assert.strictEqual(results[0].title, 'Potent Detector');
+	});
+
+	describe('dashDetector', () => {
+		it('should not match an image in infobox', () => {
+			detector.addDetector(dashDetector, 'Dash Count');
+			const text = `
+				{{Artysta infobox
+				|imię i nazwisko       = Janina Siedakowa - Kowalska
+				|imię i nazwisko org   = 
+				|pseudonim             = 
+				|grafika               = Paris - Salon du livre 2012 - 001.jpg
+				|logo                  = Paris - Salon du livre 2012 - 001.png
+				|herb                  = Paris - Salon du livre 2012 - 001.svg
+				|hymn1                 = Paris - Salon du livre 2012 - 001.ogg
+				|hymn2                 = Paris - Salon du livre 2012 - 00ż.mp4
+				}}
+				Abc.
+			`.replace(/(\r?\n)\t+/g, '$1');
+			const expected = 1;
+			const results = detector.detect(text);
+			assert.strictEqual(results.length, 1);
+			assert.strictEqual(results[0].title, 'Dash Count');
+			assert.strictEqual(results[0].count, expected);
+		});
+		it('should not match an image in text', () => {
+			detector.addDetector(dashDetector, 'Dash Count');
+			const text = `
+				[[Plik:Paris - Salon du livre.jpg|thumb|240px|Janina Kowalska we Florencji, 2006]]
+				[[File:Paris - Salon du livre.jpg|thumb|Janina Kowalska we Florencji, 2006]]
+				[[Plik:Paris - Salon du livre.jpg|thumb]]
+				[[Plik:Paris - Salon du livre.jpg|thumb|Paris - Salon [[2020]]]]
+				[[Plik:Paris - Salon du livre.jpg|thumb|Paris - Salon]]
+				[[File:Paris - Salon du livre.jpg]]Paris - Salon [[2020]].
+			`.replace(/(\r?\n)\t+/g, '$1');
+			const expected = 3;
+			const results = detector.detect(text);
+			assert.strictEqual(results.length, 1);
+			assert.strictEqual(results[0].title, 'Dash Count');
+			assert.strictEqual(results[0].count, expected);
+		});
 	});
 });
