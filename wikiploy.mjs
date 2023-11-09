@@ -8,7 +8,8 @@ const ployBot = new WikiployLite(botpass);
 
 // custom summary
 ployBot.summary = () => {
-	return 'v2.2.4: bioSort';
+	// return 'v2.2.4: bioSort';
+	return 'github jsbot';
 }
 
 (async () => {
