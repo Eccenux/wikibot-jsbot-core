@@ -91,7 +91,7 @@ function minorSk(str, summary) {
 			/**/
 			// FISA id
 			after = str
-				.replace(/\{\{FISA\|[a-z0-9-]{24,}/g, '{{FISA}}')
+				.replace(/\{\{FISA\|[a-z0-9-]{24,}/g, '{{FISA')
 			;
 			if (after !== str) {
 				summary.push('FISA auto-id [[WP:ZDBOT]]');
