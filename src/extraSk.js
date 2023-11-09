@@ -1,5 +1,15 @@
 /* eslint-disable no-useless-escape */
 
+const { cleanupColList } = require("./cleanupColList");
+const { flexColumnTables } = require("./flexColumnTables");
+const bioSort = require('./bioSort');
+
+function extraSk(str, summary) {
+	str = permSk(str, summary);
+	str = minorSk(str, summary);
+	return str;
+}
+
 /**
  * Non-temporary changes.
  * 
@@ -7,7 +17,7 @@
  * 
  * @param {wp_sk} wp_sk 
  */
-function permSk(str) {
+function permSk(str, summary) {
 			let after;
 
 			/**/
@@ -18,13 +28,13 @@ function permSk(str) {
 			// 	str = after;
 			// }
 			// col-begin with a list
-			after = me.cleanupColList(str);
+			after = cleanupColList(str);
 			if (after !== str) {
 				summary.push('poprawa ciągłości, [[WP:Dostępność]]');
 				str = after;
 			}
 			// table -> wikiflex
-			after = me.flexColumnTables(str);
+			after = flexColumnTables(str);
 			if (after !== str) {
 				summary.push('wikiflex, [[WP:Dostępność]]');
 				str = after;
@@ -44,7 +54,7 @@ function permSk(str) {
  * Note! Large changes should get a separate file like e.g. `bioSort.js`.
  * @param {wp_sk} wp_sk 
  */
-function minorSk(str) {
+function minorSk(str, summary) {
 			let after;
 
 			/**
@@ -95,6 +105,7 @@ function minorSk(str) {
 
 // export
 if (typeof module === 'object' && module.exports) {
+	module.exports.extraSk = extraSk;
 	module.exports.permSk = permSk;
 	module.exports.minorSk = minorSk;
 }

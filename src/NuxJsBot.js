@@ -23,10 +23,8 @@
  * @see https://github.com/Eccenux/wikibot-jsbot-runner
  */
 
-const { SkTableHide } = require("./SkTableHide");
-const bioSort = require('./bioSort');
 const { Fixabilly } = require("./Fixabilly/Fixabilly");
-const { minorSk } = require("./minorSk");
+const { extraSk } = require("./extraSk");
 var logTag = '[jsbot]';
 
 class NuxJsBot {
@@ -92,14 +90,13 @@ class NuxJsBot {
 	prepareSk(wp_sk) {
 		var orig_cleanerWikiVaria = wp_sk.cleanerWikiVaria;
 		var summary = ['[[WP:SK]]'];
-		var me = this;
 
 		// dodatki do procesu SK (po zwinięciu nowiki, komentarzy itp)
 		wp_sk.cleanerWikiVaria = function(str) {
 			// orig
 			str = orig_cleanerWikiVaria.apply(this, arguments);
 
-			str = minorSk(str);
+			str = extraSk(str, summary);
 
 			return str;
 		};
@@ -127,82 +124,6 @@ class NuxJsBot {
 			const input = document.getElementById('wpTextbox1');
 			fixabilly.detect(input.value);
 		}
-	}
-	/** Count regexp occurences. */
-	countRe(text, re) {
-		const m = text.match(re);
-		return m ? m.length : 0;
-	}
-	/** Podmiana pseudo-tabel na wikiflex. */
-	flexColumnTables(str) {
-		// zwijanie
-		var tables = new SkTableHide();
-
-		str = tables.hide(str);
-
-		// [[Wikipedysta:Nux/test_sk_table_hide#Niby_kolumny]]
-		str = str.replace(/\n\{\|\n[|\-\n]*\n\|\s*(<tab<[0-9]+>tab>)\s*\|\s*(<tab<[0-9]+>tab>)\s*\n\|\}/g
-			, '\n<div class="wikiflex">\n$1\n$2\n</div>'
-		);
-
-		// j/w ale z col-begin/end
-		str = str.replace(/\n\{\{col-begin\}\}\n\s*(<tab<[0-9]+>tab>)\s*(?:\||\{\{col-(?:break|2)\}\})\s*(<tab<[0-9]+>tab>)\s*(?:\{\{col-end\}\}|\n\|\})/g
-			, '\n<div class="wikiflex">\n$1\n$2\n</div>'
-		);
-		
-		str = tables.show(str);
-
-		return str;
-	}
-	/**
-	 * Usuwanie col-break łamiących ciągłość listy.
-	 * 
-	 * Przykład poprawek:
-	 * https://pl.wikipedia.org/w/index.php?title=Mistrzostwa_%C5%9Awiata_w_Snookerze_2023&diff=70266096&oldid=70265967
-	 * @param {String} str 
-	 */
-	cleanupColList(str) {
-		// ręcznie dłubana tabela
-		if (str.search(/\|\s*<ol start/) > 0) {
-			// 1 = 1st cell, 2=2nd cell
-			const re = /\{\|[|\s]+((?:\n#.+)+)\n(?:\|\s*\w+[^|]+\||\|)\s*<ol start.+>([\s\S]+?)<\/ol>\s+\|\}/g;
-			const top = '{{Układ wielokolumnowy |szerokość=20em |liczba=2 |skurcz=1 |1=<nowiki />';
-			str = str.replace(re, (a, list1, list2) => {
-				list2 = list2.replace(/\s*<li>\s*/g, '\n# ')
-					.replace(/<\/li>/g, '')
-					.trim()
-				;
-				list1 = list1.trim();
-
-				return `${top}\n${list1}\n${list2}\n}}`
-			});
-		}
-		// bardziej typowa lista pocięta col-break
-		if (str.search(/\{\{col-(break|2)\}\}[ \n]*\n\*/) > 0) {
-			const re = /\{\{col-begin[^}]*\}\}([\s\S]+?)\{\{col-end\}\}/g;
-			const top = '{{Układ wielokolumnowy |szerokość=20em |liczba=2 |skurcz=0 | 1=<nowiki />';
-			const liRe = /\n\*.+/g;
-			const lineRe = /\n/g;
-			const breaksRe = /\s*\{\{col-(break|2)[^}]*\}\}\s*/g;
-			str = str.replace(re, (a, content) => {
-				// break early when no li/lines inside
-				if (content.search(liRe) < 0 || content.search(lineRe) < 0) {
-					return a;
-				}
-				// remove breaks to get actual content
-				content = content.replace(breaksRe, '\n')
-					.trim()
-				;
-				// make sure content is a list
-				if (this.countRe(content, liRe) !== this.countRe(content, lineRe)) {
-					console.warn(logTag, 'not a list, skipping\n', content);
-					return a;
-				}
-	
-				return `${top}\n${content}\n}}`
-			});
-		}
-		return str;
 	}
 }
 
