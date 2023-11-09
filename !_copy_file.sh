@@ -8,9 +8,9 @@ The `copyName` file will be seen as renamed and will get history only if you ena
 
 COMMENT
 
-origFile=SkTableHide.js
-copyName=SkTableHide.test.js
-branchName=duplicate-SkTableHide
+origFile=src/NuxJsBot.js
+copyName=src/minorSk.js
+branchName=duplicate-minorSk
 
 git checkout -b $branchName # create and switch to branch
 

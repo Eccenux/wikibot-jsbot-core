@@ -8,7 +8,7 @@
 		{
 			"text": "test",
 			"tooltip": "Run mocha tests.",
-			"color": "green",
+			"color": "lightgreen",
 			"commandType": "script",
 			"command": "test",
 			"priority": 0
@@ -16,7 +16,7 @@
 		{
 			"text": "build",
 			"tooltip": "Run the browserify build.",
-			"color": "green",
+			"color": "lightgreen",
 			"commandType": "script",
 			"command": "build",
 			"priority": 0
@@ -24,7 +24,7 @@
 		{
 			"text": "wikiploy only",
 			"tooltip": "Deploy pre-built script.",
-			"color": "green",
+			"color": "lightgreen",
 			"commandType": "exec",
 			"command": "npm run deploy",
 			"priority": 0
@@ -32,7 +32,7 @@
 		{
 			"text": "build & deploy",
 			"tooltip": "Build (browserify) and deploy (wikiploy).",
-			"color": "green",
+			"color": "lightgreen",
 			"commandType": "script",
 			"command": "rollout",
 			"priority": 0
