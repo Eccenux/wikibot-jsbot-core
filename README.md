@@ -7,16 +7,15 @@ Simple JS ~bot based on WP:SK.
 
 Procedura:	
 0. Włącz/sprawdź ładowanie jsbot.
-1. Nowa funkcja w `prepareSk()` i test.
+1a. Nowy moduł, testy i wywołwanie w `extraSk`.
+1b. Nowe `#minorSk` w `extraSk` i test.
 2. (temp) [[Specjalna:Uprawnienia/Nux]] (włącz [[Wikipedia:Użytkownicy o ukrytej aktywności]]).
-3. (temp) monobook
+3. (temp) monobook.
 4. Przygotowanie wyszukiwania (linki do bot-edycji):
 	```
 	jsbotsk_search_prep();
 	```
-5. (temp, opcjonalne) Wyłączenie obrazków (reguły uBlock):
-	upload.wikimedia.org * image block
-	pl.wikipedia.org * image block
+5. (temp, opcjonalne) Wyłączenie obrazków (AdBlocker Ultimate).
 ...
 X. Powrót tymczasowych zmian.
 
