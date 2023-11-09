@@ -9,8 +9,8 @@ The `copyName` file will be seen as renamed and will get history only if you ena
 COMMENT
 
 origFile=src/NuxJsBot.js
-copyName=src/minorSk.js
-branchName=duplicate-minorSk
+copyName=src/flexColumnTables.js
+branchName=duplicate-flexColumnTables
 
 git checkout -b $branchName # create and switch to branch
 
