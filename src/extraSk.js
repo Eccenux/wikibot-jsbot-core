@@ -77,7 +77,7 @@ function minorSk(str, summary) {
 				summary.push('popr. linka: John Fowler');
 				str = after;
 			}
-			/**/
+			/**
 			// 2*hiero
 			after = str
 				.replace(/:hiero[ \t]*=[ \t]*\<hiero>.{1,30}\<\/hiero>[ \t]*\<hiero>[^|}]+/g
@@ -88,17 +88,15 @@ function minorSk(str, summary) {
 				summary.push('2*hiero [[WP:ZDBOT]]');
 				str = after;
 			}
-			/**
-			// skróty w wydaniu
-			summary.push('int.');
-			str = str.replace(/\{\{[Cc]ytuj[^}]+wydanie[^}]+\}\}/g, function(a){
-				return a
-					.replace(/(wydanie *=[^|]*)(uzup)([ |])/g, '$1$2.$3')
-					.replace(/(wydanie *=[^|]*)(zmi?)([ |])/g, '$1$2.$3')
-					.replace(/(wydanie *=[^|]*)(roz|rozsz)([ |])/g, '$1$2.$3')
-					.replace(/(wydanie *=[^|]*)(pop|popr)([ |])/g, '$1$2.$3')
-				;
-			});
+			/**/
+			// FISA id
+			after = str
+				.replace(/\{\{FISA\|[a-z0-9-]{24,}/g, '{{FISA}}')
+			;
+			if (after !== str) {
+				summary.push('FISA auto-id [[WP:ZDBOT]]');
+				str = after;
+			}
 			/**/
 			return str;
 }
