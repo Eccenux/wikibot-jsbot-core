@@ -89,12 +89,21 @@ function minorSk(str, summary) {
 		str = after;
 	}
 	/**/
-	// FISA id
+	// Supercount i xtools
+	// [http://tools.wmflabs.org/supercount/index.php?user={{urlencode:{{{1}}}}}&project=pl.wikipedia Statystyki]
+	// [http://tools.wmflabs.org/xtools/pages/index.php?user={{urlencode:{{{1}}}}}&lang=pl&wiki=wikipedia&namespace=0&getall=1&redirects=noredirects Utworzone]
 	after = str
-		.replace(/\{\{FISA\|[a-z0-9-]{24,}/g, '{{FISA')
+		.replace(
+			/https?:\/\/tools\.wmflabs\.org\/supercount\/(?:index\.php)\?user=([^&]+)&project=pl.wikipedia/g,
+			'https://xtools.wmcloud.org/ec/pl.wikipedia/$1'
+		)
+		.replace(
+			/http:\/\/tools\.wmflabs\.org\/xtools\/pages\/(?:index\.php)?\?user=([^&]+)&lang=pl&wiki=wikipedia&namespace=0&getall=1&redirects=noredirects/g,
+			'https://xtools.wmcloud.org/pages/pl.wikipedia.org/$1'
+		)
 	;
 	if (after !== str) {
-		summary.push('FISA auto-id [[WP:ZDBOT]]');
+		summary.push('supercount/xtools url');
 		str = after;
 	}
 	/**/
