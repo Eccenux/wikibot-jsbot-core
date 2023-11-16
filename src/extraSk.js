@@ -18,34 +18,34 @@ function extraSk(str, summary) {
  * @param {wp_sk} wp_sk 
  */
 function permSk(str, summary) {
-			let after;
+	let after;
 
-			/**/
-			// // szablon imdb
-			// after = imdb(str);
-			// if (after !== str) {
-			// 	summary.push('szablon imdb');
-			// 	str = after;
-			// }
-			// col-begin with a list
-			after = cleanupColList(str);
-			if (after !== str) {
-				summary.push('poprawa ciągłości, [[WP:Dostępność]]');
-				str = after;
-			}
-			// table -> wikiflex
-			after = flexColumnTables(str);
-			if (after !== str) {
-				summary.push('wikiflex, [[WP:Dostępność]]');
-				str = after;
-			}
-			// bio art
-			after = bioSort.defaultSort(str);
-			if (after !== str) {
-				summary.push('sortowanie kat.');
-				str = after;
-			}
-			return str;
+	/**/
+	// // szablon imdb
+	// after = imdb(str);
+	// if (after !== str) {
+	// 	summary.push('szablon imdb');
+	// 	str = after;
+	// }
+	// col-begin with a list
+	after = cleanupColList(str);
+	if (after !== str) {
+		summary.push('poprawa ciągłości, [[WP:Dostępność]]');
+		str = after;
+	}
+	// table -> wikiflex
+	after = flexColumnTables(str);
+	if (after !== str) {
+		summary.push('wikiflex, [[WP:Dostępność]]');
+		str = after;
+	}
+	// bio art
+	after = bioSort.defaultSort(str);
+	if (after !== str) {
+		summary.push('sortowanie kat.');
+		str = after;
+	}
+	return str;
 }
 
 /**
@@ -55,50 +55,50 @@ function permSk(str, summary) {
  * @param {wp_sk} wp_sk 
  */
 function minorSk(str, summary) {
-			let after;
+	let after;
 
-			/**
-			// col-begin bez break (unstable!)
-			if (str.search(/col-break/i)<0 && str.search(/col-begin/i)>0) {
-				after = str.replace(/\{\{col-(begin|end)[^}]*\}\}/ig, '');
-				if (after !== str) {
-					summary.push('samotne col-begin/end');
-					str = after;
-				}
-			}
-			/**
-			// old link
-			after = str
-				// .replace(/autor link *= *Adam Przybylski *(\|)/g, 'autor link = Adam Przybylski (1896–1945)$1')
-				.replaceAll('[[John Fowler]]', '[[John Fowler (wynalazca)|John Fowler]]')
-				.replaceAll('[[John Fowler|', '[[John Fowler (wynalazca)|')
-			;
-			if (after !== str) {
-				summary.push('popr. linka: John Fowler');
-				str = after;
-			}
-			/**
-			// 2*hiero
-			after = str
-				.replace(/:hiero[ \t]*=[ \t]*\<hiero>.{1,30}\<\/hiero>[ \t]*\<hiero>[^|}]+/g
-					, (a) => a.replace(/<\/hiero>[ \t]*\<hiero>/g, ' ')
-				);
-			;
-			if (after !== str) {
-				summary.push('2*hiero [[WP:ZDBOT]]');
-				str = after;
-			}
-			/**/
-			// FISA id
-			after = str
-				.replace(/\{\{FISA\|[a-z0-9-]{24,}/g, '{{FISA')
-			;
-			if (after !== str) {
-				summary.push('FISA auto-id [[WP:ZDBOT]]');
-				str = after;
-			}
-			/**/
-			return str;
+	/**
+	// col-begin bez break (unstable!)
+	if (str.search(/col-break/i)<0 && str.search(/col-begin/i)>0) {
+		after = str.replace(/\{\{col-(begin|end)[^}]*\}\}/ig, '');
+		if (after !== str) {
+			summary.push('samotne col-begin/end');
+			str = after;
+		}
+	}
+	/**
+	// old link
+	after = str
+		// .replace(/autor link *= *Adam Przybylski *(\|)/g, 'autor link = Adam Przybylski (1896–1945)$1')
+		.replaceAll('[[John Fowler]]', '[[John Fowler (wynalazca)|John Fowler]]')
+		.replaceAll('[[John Fowler|', '[[John Fowler (wynalazca)|')
+	;
+	if (after !== str) {
+		summary.push('popr. linka: John Fowler');
+		str = after;
+	}
+	/**
+	// 2*hiero
+	after = str
+		.replace(/:hiero[ \t]*=[ \t]*\<hiero>.{1,30}\<\/hiero>[ \t]*\<hiero>[^|}]+/g
+			, (a) => a.replace(/<\/hiero>[ \t]*\<hiero>/g, ' ')
+		);
+	;
+	if (after !== str) {
+		summary.push('2*hiero [[WP:ZDBOT]]');
+		str = after;
+	}
+	/**/
+	// FISA id
+	after = str
+		.replace(/\{\{FISA\|[a-z0-9-]{24,}/g, '{{FISA')
+	;
+	if (after !== str) {
+		summary.push('FISA auto-id [[WP:ZDBOT]]');
+		str = after;
+	}
+	/**/
+	return str;
 }
 
 // export

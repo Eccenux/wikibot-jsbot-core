@@ -5,10 +5,12 @@ Simple JS ~bot based on WP:SK.
 
 (tags: jsbot, botjs, botskjs, js-bot)
 
-Procedura:	
+Procedura:
+
 0. Włącz/sprawdź ładowanie jsbot.
-1a. Nowy moduł, testy i wywołwanie w `extraSk`.
-1b. Nowe `#minorSk` w `extraSk` i test.
+1. Zmiany w kodzie:
+	- [XOR] Nowy moduł, testy i wywołwanie w `#permSk()` (w `extraSk`).
+	- [XOR] Nowy regexp w `#minorSk()` (w `extraSk`) i test.
 2. (temp) [[Specjalna:Uprawnienia/Nux]] (włącz [[Wikipedia:Użytkownicy o ukrytej aktywności]]).
 3. (temp) monobook.
 4. Przygotowanie wyszukiwania (linki do bot-edycji):
@@ -16,7 +18,7 @@ Procedura:
 	jsbotsk_search_prep();
 	```
 5. (temp, opcjonalne) Wyłączenie obrazków (AdBlocker Ultimate).
-...
+
 X. Powrót tymczasowych zmian.
 
 
