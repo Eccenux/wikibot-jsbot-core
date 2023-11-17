@@ -88,14 +88,14 @@ function minorSk(str, summary) {
 		summary.push('2*hiero [[WP:ZDBOT]]');
 		str = after;
 	}
-	/**/
+	/**
 	// Supercount i xtools
 	// [http://tools.wmflabs.org/supercount/index.php?user={{urlencode:{{{1}}}}}&project=pl.wikipedia Statystyki]
 	// [http://tools.wmflabs.org/xtools/pages/index.php?user={{urlencode:{{{1}}}}}&lang=pl&wiki=wikipedia&namespace=0&getall=1&redirects=noredirects Utworzone]
 	after = str
 		.replace(
-			/https?:\/\/tools\.wmflabs\.org\/supercount\/(?:index\.php)\?user=([^&]+)&project=pl.wikipedia/g,
-			'https://xtools.wmcloud.org/ec/pl.wikipedia/$1'
+			/https?:\/\/tools\.wmflabs\.org\/supercount\/(?:index\.php)\?user=([^&]+)&project=([a-z]+.wiki[pm]edia)(&[a-z0-9=]+)?/g,
+			'https://xtools.wmcloud.org/ec/$2/$1'
 		)
 		.replace(
 			/http:\/\/tools\.wmflabs\.org\/xtools\/pages\/(?:index\.php)?\?user=([^&]+)&lang=pl&wiki=wikipedia&namespace=0&getall=1&redirects=noredirects/g,
