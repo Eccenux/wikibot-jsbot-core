@@ -1,6 +1,9 @@
 /node_modules
 /*.lnk
-temp.*
 /jsbot.js
 bot.config.mjs
+*.priv.*
+*.priv
+temp.*
 *.temp.*
+*.temp

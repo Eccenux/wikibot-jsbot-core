@@ -8,9 +8,10 @@ Simple JS ~bot based on WP:SK.
 Procedura:
 
 0. Włącz/sprawdź ładowanie jsbot.
-1. Zmiany w kodzie:
-	- [XOR] Nowy moduł, testy i wywołwanie w `#permSk()` (w `extraSk`).
-	- [XOR] Nowy regexp w `#minorSk()` (w `extraSk`) i test.
+1. Zmiany w kodzie (w `extraSk.js`):
+	- [XOR] Nowy moduł, testy i wywołwanie w funkcji `#permSk()`.
+	- [XOR] Nowy moduł, tymczasowy i wywołwanie w funkcji `#tempSk()`.
+	- [XOR] Nowy regexp w funkcji `#minorSk()`.
 2. (temp) [[Specjalna:Uprawnienia/Nux]] (włącz [[Wikipedia:Użytkownicy o ukrytej aktywności]]).
 3. (temp) monobook.
 4. Przygotowanie wyszukiwania (linki do bot-edycji):

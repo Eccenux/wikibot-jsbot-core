@@ -1,6 +1,6 @@
 /* global require, describe, it */
 const { assert } = require('chai');
-const bioSort = require('../src/bioSort');
+const bioSort = require('../src/mods/perm/bioSort');
 const { describe } = require('mocha');
 // const chai = require('chai');
 // const assert = chai.assert;

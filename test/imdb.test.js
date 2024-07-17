@@ -1,6 +1,6 @@
 /* global require, describe, it */
 const { assert } = require('chai');
-const bot = require('../src/imdb');
+const bot = require('../src/mods/perm/imdb');
 const imdb = bot.imdb;
 // const chai = require('chai');
 // const assert = chai.assert;

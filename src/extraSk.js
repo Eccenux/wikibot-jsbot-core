@@ -6,6 +6,7 @@ const bioSort = require('./mods/perm/bioSort');
 
 function extraSk(str, summary) {
 	str = permSk(str, summary);
+	str = tempSk(str, summary);
 	str = minorSk(str, summary);
 	return str;
 }
@@ -20,25 +21,20 @@ function extraSk(str, summary) {
 function permSk(str, summary) {
 	let after;
 
-	/**/
-	// // szablon imdb
-	// after = imdb(str);
-	// if (after !== str) {
-	// 	summary.push('szablon imdb');
-	// 	str = after;
-	// }
 	// col-begin with a list
 	after = cleanupColList(str);
 	if (after !== str) {
 		summary.push('poprawa ciągłości, [[WP:Dostępność]]');
 		str = after;
 	}
+
 	// table -> wikiflex
 	after = flexColumnTables(str);
 	if (after !== str) {
 		summary.push('wikiflex, [[WP:Dostępność]]');
 		str = after;
 	}
+
 	// bio art
 	after = bioSort.defaultSort(str);
 	if (after !== str) {
@@ -110,9 +106,35 @@ function minorSk(str, summary) {
 	return str;
 }
 
+/**
+ * Modular, but temporary changes.
+ * 
+ * Changes speficic for current work.
+ * 
+ * @param {wp_sk} wp_sk 
+ */
+function tempSk(str, summary) {
+	let after;
+
+	// // szablon imdb
+	// after = imdb(str);
+	// if (after !== str) {
+	// 	summary.push('szablon imdb');
+	// 	str = after;
+	// }
+
+	// // snooker webarchive (url cleanup)
+	// after = archiveSnooker(str);
+	// if (after !== str) {
+	// 	summary.push('sprzątanie linków');
+	// 	str = after;
+	// }
+	
+	return str;
+}
+
+
 // export
 if (typeof module === 'object' && module.exports) {
 	module.exports.extraSk = extraSk;
-	module.exports.permSk = permSk;
-	module.exports.minorSk = minorSk;
 }
