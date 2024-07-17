@@ -1,8 +1,8 @@
 /* eslint-disable no-useless-escape */
 
-const { cleanupColList } = require("./cleanupColList");
-const { flexColumnTables } = require("./flexColumnTables");
-const bioSort = require('./bioSort');
+const { cleanupColList } = require("./mods/perm/cleanupColList");
+const { flexColumnTables } = require("./mods/perm/flexColumnTables");
+const bioSort = require('./mods/perm/bioSort');
 
 function extraSk(str, summary) {
 	str = permSk(str, summary);

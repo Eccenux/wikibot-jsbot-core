@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-escape */
-const { logTag } = require("./NuxJsBot");
+const { logTag } = require("../../NuxJsBot");
 
 /** Count regexp occurences. */
 function countRe(text, re) {

@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
 
-const { SkTableHide } = require("./SkTableHide");
+const { SkTableHide } = require("../../SkTableHide");
 
 /** Podmiana pseudo-tabel na wikiflex. */
 function flexColumnTables(str) {
