@@ -3,6 +3,7 @@
 const { cleanupColList } = require("./mods/perm/cleanupColList");
 const { flexColumnTables } = require("./mods/perm/flexColumnTables");
 const bioSort = require('./mods/perm/bioSort');
+// const { archiveSnooker } = require('./mods/archiveSnooker');
 
 function extraSk(str, summary) {
 	str = permSk(str, summary);
