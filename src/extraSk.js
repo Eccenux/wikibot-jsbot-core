@@ -104,6 +104,18 @@ function minorSk(str, summary) {
 		str = after;
 	}
 	/**/
+	// Nauka Polska -> archiwum.nauka-polska.pl
+	after = str
+		.replace(
+			/([^\/])https?:\/\/nauka-polska\.pl/g,
+			'$1https://archiwum.nauka-polska.pl'
+		)
+	;
+	if (after !== str) {
+		summary.push('archiwum.nauka-polska');
+		str = after;
+	}
+	/**/
 	return str;
 }
 
