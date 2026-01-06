@@ -118,19 +118,21 @@ function minorSk(str, summary) {
 	/**/
 
 	// `{{Przypisy|=mini}}`
-	after = str
-		.replace(
-			/\{\{Przypisy\|=mini\}\}/g,
-			'<references group=mini/>'
-		)
-		.replace(
-			/\{\{[Pp]rzypisy\|=mini\|\n([\s\S]+?<\/ref>)\s*\n\}\}\n/g,
-			'<references group=mini>\n$1\n</references>\n'
-		)
-	;
-	if (after !== str) {
-		summary.push('Przypisy mini');
-		str = after;
+	if (str.includes('rzypisy|=mini')) {
+		after = str
+			.replace(
+				/\{\{Przypisy\|=mini\}\}/g,
+				'<references group=mini/>'
+			)
+			.replace(
+				/\{\{[Pp]rzypisy\|=mini\|\n([\s\S]+?<\/ref>)\s*\n\}\}\n/g,
+				'<references group=mini>\n$1\n</references>\n'
+			)
+		;
+		if (after !== str) {
+			summary.push('Przypisy mini');
+			str = after;
+		}
 	}
 	/**/
 
