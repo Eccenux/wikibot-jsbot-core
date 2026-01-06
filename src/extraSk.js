@@ -134,6 +134,22 @@ function minorSk(str, summary) {
 			str = after;
 		}
 	}
+
+	// nie lista
+	// \{\{Przypisy\|\s*[0-9]+(em)?\s*\}\}
+	// {{Przypisy}}
+	{
+		after = str
+			.replace(
+				/\{\{Przypisy\|\s*[0-9]+(em)?\s*\}\}/g,
+				'{{Przypisy}}'
+			)
+		;
+		if (after !== str) {
+			summary.push('Przypisy nie-lista');
+			str = after;
+		}
+	}
 	/**/
 
 	return str;
