@@ -150,6 +150,15 @@ function minorSk(str, summary) {
 			str = after;
 		}
 	}
+
+	{
+		after = wp_sk.cleanerReflist(str);
+		if (after !== str) {
+			summary.push('Przypisy → references');
+			str = after;
+		}
+	}
+
 	/**/
 
 	return str;
