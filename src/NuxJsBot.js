@@ -44,11 +44,22 @@ class NuxJsBot {
 		if (model === "javascript") {
 			return;
 		}
+		let justBot = true;
 		if (location.search.search(this.botParam)>0) {
 			// prep. bocik
 			this.prepareSk(wp_sk);
-			// auto-run
-			wp_sk.cleanup( document.getElementById( 'wpTextbox1' ) );
+
+			let input = document.getElementById('wpTextbox1');
+			if (!justBot) {
+				// auto-run
+				wp_sk.cleanup(input);
+			} else {
+				// auto-run with a customCleaner only
+				wp_sk.cleanup(input, function(str) {
+					str = extraSk(str, summary);
+					return str;
+				});
+			}
 		}
 	}
 
