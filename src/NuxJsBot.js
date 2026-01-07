@@ -44,13 +44,16 @@ class NuxJsBot {
 		if (model === "javascript") {
 			return;
 		}
-		let justBot = true;
+		let justBot = mw.config.get('wgNamespaceNumber') != 0; // WP:SK only for articles
 		if (location.search.search(this.botParam)>0) {
+			wp_sk.NuxJsBot__summary = []; // our summary list
+
 			// prep. bocik
 			this.prepareSk(wp_sk);
 			
 			let input = document.getElementById('wpTextbox1');
 			if (!justBot) {
+				wp_sk.NuxJsBot__summary.push('[[WP:SK]]');
 				// auto-run
 				wp_sk.cleanup(input);
 			} else {
@@ -100,7 +103,6 @@ class NuxJsBot {
 	 */
 	prepareSk(wp_sk) {
 		var orig_cleanerWikiVaria = wp_sk.cleanerWikiVaria;
-		wp_sk.NuxJsBot__summary = ['[[WP:SK]]'];
 
 		// dodatki do procesu SK (po zwinięciu nowiki, komentarzy itp)
 		wp_sk.cleanerWikiVaria = function(str) {
