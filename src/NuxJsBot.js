@@ -48,7 +48,7 @@ class NuxJsBot {
 		if (location.search.search(this.botParam)>0) {
 			// prep. bocik
 			this.prepareSk(wp_sk);
-
+			
 			let input = document.getElementById('wpTextbox1');
 			if (!justBot) {
 				// auto-run
@@ -56,7 +56,7 @@ class NuxJsBot {
 			} else {
 				// auto-run with a customCleaner only
 				wp_sk.cleanup(input, function(str) {
-					str = extraSk(str, summary);
+					str = extraSk(str, wp_sk.NuxJsBot__summary);
 					return str;
 				});
 			}
@@ -100,14 +100,14 @@ class NuxJsBot {
 	 */
 	prepareSk(wp_sk) {
 		var orig_cleanerWikiVaria = wp_sk.cleanerWikiVaria;
-		var summary = ['[[WP:SK]]'];
+		wp_sk.NuxJsBot__summary = ['[[WP:SK]]'];
 
 		// dodatki do procesu SK (po zwinięciu nowiki, komentarzy itp)
 		wp_sk.cleanerWikiVaria = function(str) {
 			// orig
 			str = orig_cleanerWikiVaria.apply(this, arguments);
 
-			str = extraSk(str, summary);
+			str = extraSk(str, wp_sk.NuxJsBot__summary);
 
 			return str;
 		};
@@ -116,7 +116,7 @@ class NuxJsBot {
 			var changes = '0';
 			if (!wp_sk.nochanges) {
 				changes = '1';
-				document.getElementById('wpSummary').value = summary.join(', ');
+				document.getElementById('wpSummary').value = wp_sk.NuxJsBot__summary.join(', ');
 				// drób
 				document.getElementById('wpMinoredit').checked = true;
 				// don't watch
