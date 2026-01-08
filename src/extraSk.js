@@ -22,6 +22,12 @@ function extraSk(str, summary) {
 function permSk(str, summary) {
 	let after;
 
+	let mainNs = mw.config.get('wgNamespaceNumber') == 0;
+
+	if (!mainNs) {
+		return;
+	}
+
 	// col-begin with a list
 	after = cleanupColList(str);
 	if (after !== str) {
