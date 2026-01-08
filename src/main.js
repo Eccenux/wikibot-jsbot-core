@@ -5,12 +5,10 @@ const jsbot = new NuxJsBot();
 
 // run when WP:SK is fully ready
 mw.hook('userjs.wp_sk.redir.done').add(function (wp_sk, hasRedirs) {
-	console.log(logTag, 'redir done', wp_sk, hasRedirs);
-	// R opt-out (Mike)
-	if (document.querySelector('textarea').value.indexOf('{{r|:') > 0) {
-		wp_sk_r_replace_enabled = false;
-	}
-	jsbot.run(wp_sk);
+	console.log(logTag, 'redir done', wp_sk, {hasRedirs});
+	mw.hook('wikiEditor.toolbarReady').add(function ($textarea) {
+		jsbot.run(wp_sk);
+	});
 });
 
 // export

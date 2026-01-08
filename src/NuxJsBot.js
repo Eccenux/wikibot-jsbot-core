@@ -48,6 +48,9 @@ class NuxJsBot {
 		if (location.search.search(this.botParam)>0) {
 			wp_sk.NuxJsBot__summary = []; // our summary list
 
+			// R not in bot
+			wp_sk_r_replace_enabled = false;
+
 			// prep. bocik
 			this.prepareSk(wp_sk);
 			
