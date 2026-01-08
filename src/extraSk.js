@@ -131,16 +131,16 @@ function minorSk(str, summary) {
 		}
 	}
 
-	// `{{Przypisy|=mini}}`
-	if (str.includes('Przypisy|=mini')) {
+	// `{{Przypisy|=mini/nav}}`
+	if (str.includes('Przypisy|=')) {
 		after = str
 			.replace(
-				/\{\{Przypisy\|=mini\}\}/g,
-				'<references group=mini/>'
+				/\{\{Przypisy\|=([a-z]+)\}\}/g,
+				'<references group=$1/>'
 			)
 			.replace(
-				/\{\{Przypisy\|=mini\|\n([\s\S]+?<\/ref>)\s*\n\}\}\n/g,
-				'<references group=mini>\n$1\n</references>\n'
+				/\{\{Przypisy\|=([a-z]+)\|\n([\s\S]+?<\/ref>)\s*\n\}\}\n/g,
+				'<references group=$1>\n$2\n</references>\n'
 			)
 		;
 		if (after !== str) {
