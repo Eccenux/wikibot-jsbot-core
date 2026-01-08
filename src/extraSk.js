@@ -166,7 +166,7 @@ function minorSk(str, summary) {
 	}
 
 	{
-		after = wp_sk.cleanerReflist(str);
+		after = cleanerReflist(str);
 		if (after && after !== str) {
 			summary.push('Przypisy → references');
 			str = after;
@@ -180,6 +180,101 @@ function minorSk(str, summary) {
 	/**/
 
 	return str;
+}
+
+/**
+ * Czyszczenie przypisów-parametrów.
+ * 
+ * Zmienia to na refy.
+ * {{Przypisy
+|Council of Europe={{cytuj stronę |...}}
+|abecadło={{cytuj|...}}
+|kopytko={{Cytuj|...}}
+}}
+ */
+cleanerRefparams = function (tpl)
+{
+	if (tpl.search(/=\s*\{\{cytuj/i) >= 0) {
+		// new lines
+		tpl = tpl
+			.replace(/\r\n/g, '\n')
+			.replace(/\s*<ref/g, '\n<ref')
+			.replace(/(\}\}|<\/ref>)\s*\}\}$/, '$1\n}}')
+		;
+		// replace
+		tpl = tpl
+			.replace(/\s*\|\s*([^=]+)\s*=\s*\{\{[cC]ytuj/g, '\n|$1={{Cytuj') // unify
+			.replace(/\|([^=]+)=(\{\{Cytuj.+\}\})/g, (a, n, ref)=> `<ref name="${n.trim()}">${ref}</ref>`)
+		;
+		tpl = tpl
+			.replace(/\{\{Przypisy\n<ref/g, '{{Przypisy|\n<ref')
+		;
+	}
+	return tpl;
+}
+
+/**
+ * Czyszczenie z WP:SK + cleanerRefparams.
+ */
+cleanerReflist = function (str)
+{
+	var startIndex = str.search(/\{\{Przypisy\s*\|/i);
+	if (startIndex < 0) {
+		//console.log('[wp_sk]', 'no ref template with params found');
+		return false;
+	}
+
+	var ending = str.substring(startIndex);
+	var indexes = wp_sk.findTemplates(ending);
+	if (!indexes.length) {
+		console.log('[wp_sk]', 'ref template not found');
+		return false;
+	}
+
+	var part = indexes[0];
+	var tpl = ending.substring(part.start, part.end);
+
+	tpl = cleanerRefparams(tpl);
+
+	// spr. resztek po usunięciu przypisów
+	var noRefs = tpl
+		.replace(/<ref[^>]*>[\s\S]+?<\/ref>/ig, '')
+		.replace(/^\{\{\s*\w+/, '') // tpl start
+		.replace(/\}\}$/, '') // tpl end
+	;
+	// console.log(noRefs);
+
+	// nie może zawierać nazwanych parametrów
+	// (powinno pominąć `|grupa=uwagi` oraz `|=uwagi`)
+	if (noRefs.search(/\|(\s*\w{2,})?\s*=/) >= 0) {
+		console.log('[wp_sk]', 'ref template has extra params');
+		return false;
+	}
+
+	// oczyść zawartość
+	// (zostawia samą treść szablonu, bez kodu szablonu)
+	var noTpl = tpl
+		.replace(/^\{\{\s*\w+/, '') // tpl start
+		.replace(/\}\}$/, '') // tpl end
+		.trim()
+		.replace(/^\|\s*\w+\s*=/, '') // first param name
+		.replace(/^\|/, '') // nameless param
+		.trim()
+	;
+	//console.log(noTpl);
+	if (!noTpl.length) {
+		console.log('[wp_sk]', 'ref template contents seem empty');
+		return false;
+	} else if (noTpl.search(/<\/ref>/) < 0 && noTpl.search(/\{\{/) < 0) {
+		console.log('[wp_sk]', 'ref template has no refs nor templates');
+		return false;
+	}
+
+	var fixed = "<references>\n" + noTpl + "\n</references>";
+	ending = fixed + ending.substring(part.end);
+	var result = str.substring(0, startIndex + part.start) + ending;
+
+	return result;
 }
 
 /**
@@ -213,4 +308,6 @@ function tempSk(str, summary) {
 // export
 if (typeof module === 'object' && module.exports) {
 	module.exports.extraSk = extraSk;
+	module.exports.cleanerReflist = cleanerReflist;
+	module.exports.cleanerRefparams = cleanerRefparams;
 }
