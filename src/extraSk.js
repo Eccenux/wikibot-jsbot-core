@@ -25,7 +25,7 @@ function permSk(str, summary) {
 	let mainNs = mw.config.get('wgNamespaceNumber') == 0;
 
 	if (!mainNs) {
-		return;
+		return str;
 	}
 
 	// col-begin with a list
