@@ -158,6 +158,12 @@ function minorSk(str, summary) {
 				/\{\{Przypisy\|\s*[0-9]+(em)?\s*\}\}/g,
 				'{{Przypisy}}'
 			)
+			// // {{Przypisy|<!-- bez nagłówka -->}}
+			// .replace(
+			// 	///\{\{Przypisy\|\s*<!--[^>}]+-->\s*\}\}/g,
+			// 	/\{\{Przypisy\|\s*<<<[0-9]+>>>\s*\}\}/g,
+			// 	'{{Przypisy}}'
+			// )
 		;
 		if (after !== str) {
 			summary.push('Przypisy nie-lista');
@@ -204,7 +210,7 @@ let cleanerRefparams = function (tpl)
 {
 	// Mr obvious
 	tpl = tpl.replace(/\{\{Paywall\}\}/gi, '');
-	
+
 	if (tpl.search(/=\s*\{\{cytuj/i) >= 0) {
 		// new lines
 		tpl = tpl
