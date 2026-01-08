@@ -182,6 +182,14 @@ function minorSk(str, summary) {
 	return str;
 }
 
+let countChar = (str, char) => {
+	let count = 0;
+	for (const c of str) {
+		if (c === char) count++;
+	}
+	return count;
+};
+
 /**
  * Czyszczenie przypisów-parametrów.
  * 
@@ -192,7 +200,7 @@ function minorSk(str, summary) {
 |kopytko={{Cytuj|...}}
 }}
  */
-cleanerRefparams = function (tpl)
+let cleanerRefparams = function (tpl)
 {
 	if (tpl.search(/=\s*\{\{cytuj/i) >= 0) {
 		// new lines
@@ -204,7 +212,7 @@ cleanerRefparams = function (tpl)
 		// replace
 		tpl = tpl
 			.replace(/\s*\|\s*([^=]+)\s*=\s*\{\{[cC]ytuj/g, '\n|$1={{Cytuj') // unify
-			.replace(/\|([^=]+)=(\{\{Cytuj.+\}\})/g, (a, n, ref)=> `<ref name="${n.trim()}">${ref}</ref>`)
+			.replace(/\|([^=]+)=(\{\{Cytuj.+\}\})/g, (a, n, ref)=> countChar(ref, '{') === countChar(ref, '}') ? `<ref name="${n.trim()}">${ref}</ref>` : a)
 		;
 		tpl = tpl
 			.replace(/\{\{Przypisy\n<ref/g, '{{Przypisy|\n<ref')
@@ -216,7 +224,7 @@ cleanerRefparams = function (tpl)
 /**
  * Czyszczenie z WP:SK + cleanerRefparams.
  */
-cleanerReflist = function (str)
+let cleanerReflist = function (str)
 {
 	var startIndex = str.search(/\{\{Przypisy\s*\|/i);
 	if (startIndex < 0) {
