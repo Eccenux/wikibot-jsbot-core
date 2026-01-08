@@ -215,7 +215,7 @@ let countChar = (str, char) => {
  */
 let cleanerRefparams = function (tpl)
 {
-	// Mr obvious
+	// needless icon (most articles are behind one)
 	tpl = tpl.replace(/\{\{Paywall\}\}/gi, '');
 
 	if (tpl.search(/=\s*\{\{cytuj/i) >= 0) {
@@ -227,8 +227,9 @@ let cleanerRefparams = function (tpl)
 		;
 		// replace
 		tpl = tpl
+			.replace(/\s*\|\s*\|/g, '|')
 			.replace(/\s*\|\s*([^=]+)\s*=\s*\{\{[cC]ytuj/g, '\n|$1={{Cytuj') // unify
-			.replace(/\|([^=]+)=(\{\{Cytuj.+\}\})/g, (a, n, ref)=> countChar(ref, '{') === countChar(ref, '}') ? `<ref name="${n.trim()}">${ref}</ref>` : a)
+			.replace(/\|([^=\|]+)=(\{\{Cytuj.+\}\})/g, (a, n, ref)=> countChar(ref, '{') === countChar(ref, '}') ? `<ref name="${n.trim()}">${ref}</ref>` : a)
 		;
 		tpl = tpl
 			.replace(/\{\{Przypisy\n<ref/g, '{{Przypisy|\n<ref')

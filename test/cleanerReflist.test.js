@@ -148,7 +148,19 @@ describe('cleanerRefparams', function () {
 
 	});
 
-	it('notatki jprdl', function () {
+	it('podwójny pipe', function () {
+		test(`
+{{Przypisy|
+ |p_naszywki={{cytuj | url=http://www.uniforminsignia.org/?option=com_insigniasearch&Itemid=53&result=3275 | tytuł=Naszywki brygad WOP | data dostępu=2017-12-17}}
+}}
+`.trim(), `
+{{Przypisy|
+<ref name="p_naszywki">{{Cytuj | url=http://www.uniforminsignia.org/?option=com_insigniasearch&Itemid=53&result=3275 | tytuł=Naszywki brygad WOP | data dostępu=2017-12-17}}</ref>
+}}
+`.trim());
+	});
+
+	it('notatki Paywall', function () {
 
 		test(`
 {{Przypisy
