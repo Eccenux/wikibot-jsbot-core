@@ -127,7 +127,7 @@ function minorSk(str, summary) {
 	{
 		after = str
 			.replace(
-				/\{\{[Pp]rzypisy\s+([\|\}])/g,
+				/\{\{[Pp]rzypisy\s*([\|\}])/g,
 				'{{Przypisy$1'
 			)
 		;
