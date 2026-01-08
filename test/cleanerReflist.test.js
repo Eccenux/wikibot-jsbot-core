@@ -146,6 +146,31 @@ describe('cleanerRefparams', function () {
 }}
 `.trim());
 
+	});
+
+	it('notatki jprdl', function () {
+
+		test(`
+{{Przypisy
+|Council of Europe={{Paywall}} {{Cytuj |url = http://example.com/ |tytuł = Council of Europe Resolution 1671 {2009} }}
+|rfn={{Cytuj stronę |url = https://www.nytimes.com/1951/05/03/archives/council-of-europe-raises-bonn-to-the-status-of-a-full-member-bonn.html |tytuł = ''Council of Europe Raises Bonn To the Status of a Full Member; BONN IS ADMITTED TO EUROPE COUNCIL'' |autor = Lansing Warren |opublikowany = nytimes.com |data = 3 maja 1951 |język = en |data dostępu = 2023-12-15}}
+}}
+`.trim(), `
+{{Przypisy|
+<ref name="Council of Europe">{{Cytuj |url = http://example.com/ |tytuł = Council of Europe Resolution 1671 {2009} }}</ref>
+<ref name="rfn">{{Cytuj stronę |url = https://www.nytimes.com/1951/05/03/archives/council-of-europe-raises-bonn-to-the-status-of-a-full-member-bonn.html |tytuł = ''Council of Europe Raises Bonn To the Status of a Full Member; BONN IS ADMITTED TO EUROPE COUNCIL'' |autor = Lansing Warren |opublikowany = nytimes.com |data = 3 maja 1951 |język = en |data dostępu = 2023-12-15}}</ref>
+}}
+`.trim());
+
+		test(`
+{{Przypisy
+|Oxford Music Online={{Paywall}} {{Cytuj stronę |url = https://doi.org/10.1093/gmo/9781561592630.article.29993 |tytuł = Webern, Anton (Friedrich Wilhelm von) |autor = Kathryn Bailey Puffett |data = 2015-09-22 |praca = Oxford Music Online. Grove Music Online |id = via Oxford University Press |język = en |archiwum = https://archive.is/Vp8cE |zarchiwizowano = 2018-08-08 |data dostępu = 2018-08-08}}
+}}
+`.trim(), `
+{{Przypisy|
+<ref name="Oxford Music Online">{{Cytuj stronę |url = https://doi.org/10.1093/gmo/9781561592630.article.29993 |tytuł = Webern, Anton (Friedrich Wilhelm von) |autor = Kathryn Bailey Puffett |data = 2015-09-22 |praca = Oxford Music Online. Grove Music Online |id = via Oxford University Press |język = en |archiwum = https://archive.is/Vp8cE |zarchiwizowano = 2018-08-08 |data dostępu = 2018-08-08}}</ref>
+}}
+`.trim());
 
 	});
 
