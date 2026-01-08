@@ -51,6 +51,9 @@ class NuxJsBot {
 			// R not in bot
 			wp_sk_r_replace_enabled = false;
 
+			// no cats: ludzie wstawiają sobie komentarze w kategorie...
+			wp_sk.cleanerMagicLinks = (str) => str;
+
 			// prep. bocik
 			this.prepareSk(wp_sk);
 			

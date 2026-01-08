@@ -203,6 +203,9 @@ let countChar = (str, char) => {
 let cleanerRefparams = function (tpl)
 {
 	if (tpl.search(/=\s*\{\{cytuj/i) >= 0) {
+		// Mr obvious
+		tpl = tpl
+			.replace(/\{\{Paywall\}\}/g, '')
 		// new lines
 		tpl = tpl
 			.replace(/\r\n/g, '\n')
