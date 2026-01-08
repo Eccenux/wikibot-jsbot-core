@@ -117,15 +117,29 @@ function minorSk(str, summary) {
 	}
 	/**/
 
+	// spacje i wielkość liter
+	{
+		after = str
+			.replace(
+				/\{\{[Pp]rzypisy\s+([\|\}])/g,
+				'{{Przypisy$1'
+			)
+		;
+		if (after !== str) {
+			summary.push('P');
+			str = after;
+		}
+	}
+
 	// `{{Przypisy|=mini}}`
-	if (str.includes('rzypisy|=mini')) {
+	if (str.includes('Przypisy|=mini')) {
 		after = str
 			.replace(
 				/\{\{Przypisy\|=mini\}\}/g,
 				'<references group=mini/>'
 			)
 			.replace(
-				/\{\{[Pp]rzypisy\|=mini\|\n([\s\S]+?<\/ref>)\s*\n\}\}\n/g,
+				/\{\{Przypisy\|=mini\|\n([\s\S]+?<\/ref>)\s*\n\}\}\n/g,
 				'<references group=mini>\n$1\n</references>\n'
 			)
 		;
@@ -153,10 +167,14 @@ function minorSk(str, summary) {
 
 	{
 		after = wp_sk.cleanerReflist(str);
-		if (after !== str) {
+		if (after && after !== str) {
 			summary.push('Przypisy → references');
 			str = after;
 		}
+	}
+
+	if (str.includes('{{Przypisy|')) {
+		summary.push('__UWAGA__nadal_ma_Przypisy_lista');
 	}
 
 	/**/
