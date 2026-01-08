@@ -158,10 +158,11 @@ function minorSk(str, summary) {
 	// nie lista
 	// \{\{Przypisy\|\s*[0-9]+(em)?\s*\}\}
 	// {{Przypisy}}
-	{
+	let nopRe = /\{\{Przypisy\|[^|={}<]{1,50}\}\}/g;
+	if (str.search(nopRe) >= 0) {
 		after = str
 			.replace(
-				/\{\{Przypisy\|\s*[0-9]+(em)?\s*\}\}/g,
+				nopRe,
 				'{{Przypisy}}'
 			)
 			// // {{Przypisy|<!-- bez nagłówka -->}}
