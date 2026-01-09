@@ -69,6 +69,18 @@ class NuxJsBot {
 					return str;
 				});
 			}
+
+			// auto-diff
+			setTimeout(()=>{
+				document.getElementById('wpDiff')?.click();
+				setTimeout(()=>{
+					document.getElementById('wpSummaryLabel')?.closest('.editOptions')?.scrollIntoView({block: 'end'});
+					// setTimeout(()=>{
+					// 	window.scrollBy(0, -400);
+					// }, 50);
+					//document.getElementById('left-navigation')?.scrollIntoView();
+				}, 300);
+			}, 100);
 		}
 	}
 
