@@ -1,15 +1,25 @@
 /* global require, describe, it */
 const { assert } = require('chai');
-const { cleanerRefparams } = require('../src/extraSk');
+const { diffLines } = require('diff');
+const { cleanerRefParams } = require('../src/mods/cleanerReflist');
 // const chai = require('chai');
 // const assert = chai.assert;
 
-describe('cleanerRefparams', function () {
+// const { wp_sk } = require('../sk-copy');
+// global.wp_sk = wp_sk;
+
+describe('cleanerRefParams', function () {
 	
 	function test(text, expectedText) {
-		let resultText = cleanerRefparams(text);
+		let resultText = cleanerRefParams(text);
 		if (resultText !== expectedText) {
-			console.log({text, resultText, expectedText});
+			const diff = diffLines(expectedText, resultText);
+			console.log('--- diff ---');
+			for (const part of diff) {
+				const color = part.added ? '\x1b[32m' : part.removed ? '\x1b[31m' : '\x1b[0m';
+				process.stdout.write(color + part.value + '\x1b[0m');
+			}
+			console.log('\n-------------');
 		}
 		assert.equal(resultText, expectedText);
 	}
@@ -119,35 +129,6 @@ describe('cleanerRefparams', function () {
 
 	});
 
-	it('should detect problems', function () {
-		// extra `{` in title, should skip 1
-		test(`
-{{Przypisy
-|Council of Europe={{Cytuj |url = http://example.com/ |tytuł = Council of Europe Resolution 1671 {2009) }}
-|rfn={{Cytuj stronę |url = https://www.nytimes.com/1951/05/03/archives/council-of-europe-raises-bonn-to-the-status-of-a-full-member-bonn.html |tytuł = ''Council of Europe Raises Bonn To the Status of a Full Member; BONN IS ADMITTED TO EUROPE COUNCIL'' |autor = Lansing Warren |opublikowany = nytimes.com |data = 3 maja 1951 |język = en |data dostępu = 2023-12-15}}
-}}
-`.trim(), `
-{{Przypisy
-|Council of Europe={{Cytuj |url = http://example.com/ |tytuł = Council of Europe Resolution 1671 {2009) }}
-<ref name="rfn">{{Cytuj stronę |url = https://www.nytimes.com/1951/05/03/archives/council-of-europe-raises-bonn-to-the-status-of-a-full-member-bonn.html |tytuł = ''Council of Europe Raises Bonn To the Status of a Full Member; BONN IS ADMITTED TO EUROPE COUNCIL'' |autor = Lansing Warren |opublikowany = nytimes.com |data = 3 maja 1951 |język = en |data dostępu = 2023-12-15}}</ref>
-}}
-`.trim());
-
-		// should be fine
-		test(`
-{{Przypisy
-|Council of Europe={{Cytuj |url = http://example.com/ |tytuł = Council of Europe Resolution 1671 {2009} }}
-|rfn={{Cytuj stronę |url = https://www.nytimes.com/1951/05/03/archives/council-of-europe-raises-bonn-to-the-status-of-a-full-member-bonn.html |tytuł = ''Council of Europe Raises Bonn To the Status of a Full Member; BONN IS ADMITTED TO EUROPE COUNCIL'' |autor = Lansing Warren |opublikowany = nytimes.com |data = 3 maja 1951 |język = en |data dostępu = 2023-12-15}}
-}}
-`.trim(), `
-{{Przypisy|
-<ref name="Council of Europe">{{Cytuj |url = http://example.com/ |tytuł = Council of Europe Resolution 1671 {2009} }}</ref>
-<ref name="rfn">{{Cytuj stronę |url = https://www.nytimes.com/1951/05/03/archives/council-of-europe-raises-bonn-to-the-status-of-a-full-member-bonn.html |tytuł = ''Council of Europe Raises Bonn To the Status of a Full Member; BONN IS ADMITTED TO EUROPE COUNCIL'' |autor = Lansing Warren |opublikowany = nytimes.com |data = 3 maja 1951 |język = en |data dostępu = 2023-12-15}}</ref>
-}}
-`.trim());
-
-	});
-
 	it('podwójny pipe', function () {
 		test(`
 {{Przypisy|
@@ -158,6 +139,22 @@ describe('cleanerRefparams', function () {
 <ref name="p_naszywki">{{Cytuj | url=http://www.uniforminsignia.org/?option=com_insigniasearch&Itemid=53&result=3275 | tytuł=Naszywki brygad WOP | data dostępu=2017-12-17}}</ref>
 }}
 `.trim());
+	});
+
+	it('inne szablony', function () {
+
+		test(`
+{{Przypisy
+|DU={{Dziennik Ustaw|2001|73|760}}
+|MB={{Cytuj |autor=MB |tytuł=Uniwersytet Rzeszowski ma nowego rektora |opublikowany=[[Gazeta Wyborcza]] |data=7 marca 2002 |url=https://rzeszow.wyborcza.pl/rzeszow/7,34962,730377.html}}
+}}
+`.trim(), `
+{{Przypisy|
+<ref name="DU">{{Dziennik Ustaw|2001|73|760}}</ref>
+<ref name="MB">{{Cytuj |autor=MB |tytuł=Uniwersytet Rzeszowski ma nowego rektora |opublikowany=[[Gazeta Wyborcza]] |data=7 marca 2002 |url=https://rzeszow.wyborcza.pl/rzeszow/7,34962,730377.html}}</ref>
+}}
+`.trim());
+
 	});
 
 	it('notatki Paywall', function () {
