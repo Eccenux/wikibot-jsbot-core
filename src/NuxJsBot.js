@@ -70,18 +70,89 @@ class NuxJsBot {
 				});
 			}
 
-			// auto-diff
-			setTimeout(()=>{
-				document.getElementById('wpDiff')?.click();
-				setTimeout(()=>{
-					document.getElementById('wpSummaryLabel')?.closest('.editOptions')?.scrollIntoView({block: 'end'});
-					// setTimeout(()=>{
-					// 	window.scrollBy(0, -400);
-					// }, 50);
-					//document.getElementById('left-navigation')?.scrollIntoView();
-				}, 300);
-			}, 100);
+			// editor toogle
+			this.setupToggles();
+
+			// diff & scroll
+			this.autoDiff();
 		}
+	}
+
+	/** Auto-click on diff button. */
+	autoDiff() {
+		// auto-diff
+		setTimeout(() => {
+			// scroll on diff load
+			let onLoaded = () => {
+				document.getElementById('wpSummaryLabel')?.closest('.editOptions')?.scrollIntoView({
+					block: 'end'
+				});
+			};
+
+			// mw.hook...
+			const observer = new MutationObserver(() => {
+				const diff = document.querySelector('.diff');
+				if (diff) {
+					observer.disconnect();
+					onLoaded();
+				}
+			});
+			observer.observe(document.body, {
+				childList: true,
+				subtree: true
+			});
+
+			// diff-click
+			document.getElementById('wpDiff')?.click();
+		}, 100);
+	}
+
+	/** Setup toggles in bot mode. */
+	setupToggles() {
+		// Toggle editor
+		this.setupBtnToggle({
+			label: 'Toggle editor',
+			selector: '.wikiEditor-ui',
+		});
+		// Toggle editor
+		this.setupBtnToggle({
+			label: 'Toggle preview',
+			selector: '#wikiPreview',
+		});
+	}
+
+	/**
+	 * Setup toggle in bot mode.
+	 * 
+	 * Note! This assumes CSS for .is-shown is added (and assumes default is hidden).
+	 * 
+	 * @param {Object} o 
+	 * @returns 
+	 */
+	setupBtnToggle(o) {
+		// Create button
+		const toggleButton = document.createElement('button');
+		toggleButton.type = 'button';
+		toggleButton.className = 'jsbot-button';
+		toggleButton.textContent = o.label;
+
+		// Add click handler
+		if (o.selector) {
+			toggleButton.addEventListener('click', () => {
+				const editorUi = document.querySelector(o.selector);
+				if (editorUi) {
+					editorUi.classList.toggle('is-shown');
+				}
+			});
+		}
+
+		// Append to first .editButtons
+		const editButtons = document.querySelector('.editButtons');
+		if (editButtons) {
+			editButtons.appendChild(toggleButton);
+		}
+
+		return toggleButton;
 	}
 
 	/* Select node (range selection). */
