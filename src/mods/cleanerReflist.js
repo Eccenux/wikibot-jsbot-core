@@ -167,7 +167,10 @@ function cleanerReflist(str)
 	ending = fixed + ending.substring(part.end);
 	var result = str.substring(0, startIndex + part.start) + ending;
 
-	wp_sk.NuxJsBot__summary.push('Przypisy → references');
+	let info = 'Przypisy → references';
+	if (!wp_sk.NuxJsBot__summary.includes(info)) {
+		wp_sk.NuxJsBot__summary.push(info);
+	}
 
 	return result;
 }
