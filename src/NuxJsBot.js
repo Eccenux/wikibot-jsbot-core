@@ -25,6 +25,7 @@
 
 const { Fixabilly } = require("./Fixabilly/Fixabilly");
 const { extraSk } = require("./extraSk");
+const { cleanerReflist } = require("./mods/cleanerReflist");
 var logTag = '[jsbot]';
 
 class NuxJsBot {
@@ -201,9 +202,10 @@ class NuxJsBot {
 	 * @param {wp_sk} wp_sk 
 	 */
 	prepareSk(wp_sk) {
-		var orig_cleanerWikiVaria = wp_sk.cleanerWikiVaria;
+		wp_sk.cleanerReflist = cleanerReflist;
 
 		// dodatki do procesu SK (po zwinięciu nowiki, komentarzy itp)
+		var orig_cleanerWikiVaria = wp_sk.cleanerWikiVaria;
 		wp_sk.cleanerWikiVaria = function(str) {
 			// orig
 			str = orig_cleanerWikiVaria.apply(this, arguments);
