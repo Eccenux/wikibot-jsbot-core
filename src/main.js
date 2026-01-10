@@ -8,6 +8,8 @@ mw.hook('userjs.wp_sk.redir.done').add(function (wp_sk, hasRedirs) {
 	console.log(logTag, 'redir done', wp_sk, {hasRedirs});
 	mw.hook('wikiEditor.toolbarReady').add(function ($textarea) {
 		jsbot.run(wp_sk);
+		// export
+		window.NuxJsBot_jsbot = jsbot;
 	});
 });
 

@@ -46,36 +46,46 @@ class NuxJsBot {
 		}
 		let justBot = mw.config.get('wgNamespaceNumber') != 0; // WP:SK only for articles
 		if (location.search.search(this.botParam)>0) {
-			wp_sk.NuxJsBot__summary = []; // our summary list
-
-			// R not in bot
-			wp_sk_r_replace_enabled = false;
-
-			// no cats: ludzie wstawiają sobie komentarze w kategorie...
-			wp_sk.cleanerMagicLinks = (str) => str;
-
-			// prep. bocik
-			this.prepareSk(wp_sk);
-			
-			let input = document.getElementById('wpTextbox1');
-			if (!justBot) {
-				wp_sk.NuxJsBot__summary.push('[[WP:SK]]');
-				// auto-run
-				wp_sk.cleanup(input);
-			} else {
-				// auto-run with a customCleaner only
-				wp_sk.cleanup(input, function(str) {
-					str = extraSk(str, wp_sk.NuxJsBot__summary);
-					return str;
-				});
-			}
-
-			// editor toogle
-			this.setupToggles();
-
-			// diff & scroll
-			this.autoDiff();
+			this.execute(wp_sk, justBot);
 		}
+	}
+
+	/**
+	 * Execute WP:SK.
+	 * 
+	 * @param {wp_sk} wp_sk Should be ready for execution.
+	 * @param {boolean} justBot true = Just run `extraSk()`.
+	 */
+	execute(wp_sk, justBot) {
+		wp_sk.NuxJsBot__summary = []; // our summary list
+
+		// R not in bot
+		wp_sk_r_replace_enabled = false;
+
+		// no cats: ludzie wstawiają sobie komentarze w kategorie...
+		wp_sk.cleanerMagicLinks = (str) => str;
+
+		// prep. bocik
+		this.prepareSk(wp_sk);
+		
+		let input = document.getElementById('wpTextbox1');
+		if (!justBot) {
+			wp_sk.NuxJsBot__summary.push('[[WP:SK]]');
+			// auto-run
+			wp_sk.cleanup(input);
+		} else {
+			// auto-run with a customCleaner only
+			wp_sk.cleanup(input, function(str) {
+				str = extraSk(str, wp_sk.NuxJsBot__summary);
+				return str;
+			});
+		}
+
+		// editor toogle
+		this.setupToggles();
+
+		// diff & scroll
+		this.autoDiff();
 	}
 
 	/** Auto-click on diff button. */
