@@ -133,7 +133,7 @@ function minorSk(str, summary) {
 			)
 			.replace(/<ref\s+name=(["']{2,})([^'">]+)(["']{2,})/g, (a, c1, name, c2) => {
 				if (c1 != c2) a;
-				return `<ref name="${name}">`;
+				return `<ref name="${name}"`;
 			})
 		;
 		if (after !== str) {
