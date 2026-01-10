@@ -34,21 +34,29 @@ class NuxJsBot {
 		this.botParam = 'js_bot_ed=1';
 		this.skipDiffParam = 'js_bot_nd=1';
 	}
-	
+
 	/**
 	 * Prepare and execute WP:SK.
 	 * 
 	 * @param {wp_sk} wp_sk Should be ready for execution.
 	 */
 	run(wp_sk) {
-		var model = mw.config.get('wgPageContentModel');
-		if (model === "javascript") {
-			return;
-		}
-		let justBot = mw.config.get('wgNamespaceNumber') != 0; // WP:SK only for articles
-		if (location.search.search(this.botParam)>0) {
+		if (this.isAutoBotEnabled()) {
+			let justBot = mw.config.get('wgNamespaceNumber') != 0; // WP:SK only for articles
 			this.execute(wp_sk, justBot);
 		}
+	}
+
+	/** Check for auto-run. */
+	isAutoBotEnabled() {
+		var model = mw.config.get('wgPageContentModel');
+		if (model === "javascript") {
+			return false;
+		}
+		if (location.search.search(this.botParam)>0) {
+			return true;
+		}
+		return false;
 	}
 
 	/**

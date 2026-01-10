@@ -3,17 +3,23 @@ const { NuxJsBot, logTag } = require("./NuxJsBot");
 // bot instance
 const jsbot = new NuxJsBot();
 
-// run when WP:SK is fully ready
-mw.hook('userjs.wp_sk.redir.done').add(function (wp_sk, hasRedirs) {
-	console.log(logTag, 'redir done', wp_sk, {hasRedirs});
-	mw.hook('wikiEditor.toolbarReady').add(function ($textarea) {
-		jsbot.run(wp_sk);
-		// export
-		window.NuxJsBot_jsbot = jsbot;
-	});
-});
+// export: main
+window.NuxJsBot_jsbot = jsbot;
 
-// export
+if (jsbot.isAutoBotEnabled()) {
+	// disable redirs (makes things faster, doesn't require preview)
+	window.wp_sk_redir_enabled = false;
+
+	// run when WP:SK is ready
+	mw.hook('userjs.wp_sk.ready').add(function (wp_sk) {
+		mw.hook('wikiEditor.toolbarReady').add(function ($textarea) {
+			console.log(logTag, 'toolbarReady', wp_sk, {$textarea});
+			jsbot.run(wp_sk);
+		});
+	});
+}
+
+// export: helper on search page
 window.jsbotsk_search_prep = function(skipDiff) {
 	jsbot.prepareSearch(skipDiff);
 };
