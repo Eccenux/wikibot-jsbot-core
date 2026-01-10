@@ -14,6 +14,8 @@ class Fixabilly {
 		// dashes
 		// this.detectors.addDetector(/ - /, 'pauza');
 		this.detectors.addDetector(dashDetector, 'pauza');
+
+		this.className = 'Fixabilly-info';
 	}
 
 	/**
@@ -34,8 +36,11 @@ class Fixabilly {
 		if (!results.length) {
 			return false;
 		}
+		if (document.querySelector(`.${this.className}`)) {
+			return false;
+		}
 		const info = results.map(r=>`${r.title} (${r.count})`).join(', ');
-		document.querySelector('.editOptions').insertAdjacentHTML('afterbegin', `<div style="
+		document.querySelector('.editOptions').insertAdjacentHTML('afterbegin', `<div class="${this.className}" style="
 			border: 1px solid black;
 			background: gold;
 			padding: .2em .5em;

@@ -43,7 +43,15 @@ class NuxJsBot {
 	run(wp_sk) {
 		if (this.isAutoBotEnabled()) {
 			let justBot = mw.config.get('wgNamespaceNumber') != 0; // WP:SK only for articles
+
+			// editor toogle
+			this.setupToggles();
+
+			// exec
 			this.execute(wp_sk, justBot);
+
+			// diff & scroll
+			this.autoDiff();
 		}
 	}
 
@@ -68,12 +76,6 @@ class NuxJsBot {
 	execute(wp_sk, justBot) {
 		wp_sk.NuxJsBot__summary = []; // our summary list
 
-		// R not in bot
-		wp_sk_r_replace_enabled = false;
-
-		// no cats: ludzie wstawiają sobie komentarze w kategorie...
-		wp_sk.cleanerMagicLinks = (str) => str;
-
 		// prep. bocik
 		this.prepareSk(wp_sk);
 		
@@ -89,12 +91,6 @@ class NuxJsBot {
 				return str;
 			});
 		}
-
-		// editor toogle
-		this.setupToggles();
-
-		// diff & scroll
-		this.autoDiff();
 	}
 
 	/** Auto-click on diff button. */
@@ -205,12 +201,23 @@ class NuxJsBot {
 		this.linkPrepDone = true;
 		this.selectNode('.mw-search-results-container');
 	}
+
+	_donePrepareSk = false;
 	/**
 	 * Prepare WP:SK for execution (add custom procedures).
 	 * @param {wp_sk} wp_sk 
 	 */
 	prepareSk(wp_sk) {
+		if (this._donePrepareSk) {
+			return;
+		}
+		this._donePrepareSk = true;
+
+		// bot impl
 		wp_sk.cleanerReflist = cleanerReflist;
+
+		// no cats: ludzie wstawiają sobie komentarze w kategorie...
+		wp_sk.cleanerMagicLinks = (str) => str;
 
 		// dodatki do procesu SK (po zwinięciu nowiki, komentarzy itp)
 		var orig_cleanerWikiVaria = wp_sk.cleanerWikiVaria;
