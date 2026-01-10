@@ -191,8 +191,38 @@ function minorSk(str, summary) {
 		}
 	}
 
+	let classReflistStill = 'nuxjsbot-reflist-still';
+	let selectorReflistStill = '.' + classReflistStill;
 	if (str.includes('{{Przypisy|')) {
 		summary.push('__UWAGA__nadal_ma_Przypisy_lista');
+		let el = document.querySelector(selectorReflistStill);
+		if (el) {
+			el.classList.add(`${classReflistStill}-shake`);
+			setTimeout(() => el.classList.remove(`${classReflistStill}-shake`), 500);
+		} else {
+			document.querySelector('.editOptions').insertAdjacentHTML('afterbegin', `<div class="${classReflistStill}" style="
+				border: 1px solid black;
+				background: darkred; color: white;
+				padding: .2em .5em;
+				margin-bottom: .5em;
+			">UWAGA! Nadal ma {{Przypisy|...}}.</div>
+			<style>
+				@keyframes ${classReflistStill}-shake {
+					0%, 100% { transform: translateX(0); }
+					20%, 60% { transform: translateX(-10px); }
+					40%, 80% { transform: translateX(10px); }
+				}
+				.${classReflistStill}-shake {
+					animation: ${classReflistStill}-shake 0.5s;
+				}
+			</style>
+			`);
+		}
+	} else {
+		let el = document.querySelector(selectorReflistStill);
+		if (el) {
+			el.style.display = 'none';
+		}
 	}
 
 	/**/

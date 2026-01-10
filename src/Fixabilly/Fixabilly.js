@@ -15,7 +15,7 @@ class Fixabilly {
 		// this.detectors.addDetector(/ - /, 'pauza');
 		this.detectors.addDetector(dashDetector, 'pauza');
 
-		this.className = 'Fixabilly-info';
+		this.className = 'nuxjsbot-fixabilly-info';
 	}
 
 	/**
@@ -42,7 +42,7 @@ class Fixabilly {
 		const info = results.map(r=>`${r.title} (${r.count})`).join(', ');
 		document.querySelector('.editOptions').insertAdjacentHTML('afterbegin', `<div class="${this.className}" style="
 			border: 1px solid black;
-			background: gold;
+			background: gold; color: black;
 			padding: .2em .5em;
 			margin-bottom: .5em;
 		">Potencjał zmian: ${info}.</div>`);
