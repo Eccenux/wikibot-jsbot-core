@@ -219,7 +219,7 @@ class NuxJsBot {
 			var changes = '0';
 			if (!wp_sk.nochanges) {
 				changes = '1';
-				document.getElementById('wpSummary').value = wp_sk.NuxJsBot__summary.join(', ');
+				document.getElementById('wpSummary').value = Array.from(new Set( wp_sk.NuxJsBot__summary )).join(', ');
 				// drób
 				document.getElementById('wpMinoredit').checked = true;
 				// don't watch
