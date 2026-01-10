@@ -103,6 +103,8 @@ function cleanerRefParams(rawTpl)
 	// bring back full tpl
 	tpl = `{{Przypisy|\n${tpl.trim()}\n}}`;
 
+	wp_sk.NuxJsBot__summary.push('Przypisy → references');
+
 	return tpl;
 }
 
