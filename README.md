@@ -43,7 +43,7 @@ NuxJsBot_jsbot.execute(wp_sk, false);
 2. Posortować po dacie (najlepiej dacie utworzenia).
 3. Przejść na **koniec wyników** (zmienić offset). To jest ważne, bo wyniki zmieniają się w trakcie, ale idąc od końca zmienia się tylko koniec.
 4. Przygotowanie wyszukiwania (linki do bot-edycji):
-	```
+	```js
 	jsbotsk_search_prep();
 	```
 

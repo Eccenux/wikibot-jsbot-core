@@ -131,11 +131,11 @@ class NuxJsBot {
 			label: 'Toggle editor',
 			selector: '.wikiEditor-ui',
 		});
-		// Toggle editor
-		this.setupBtnToggle({
-			label: 'Toggle preview',
-			selector: '#wikiPreview',
-		});
+		// Toggle Preview
+		// this.setupBtnToggle({
+		// 	label: 'Toggle preview',
+		// 	selector: '#wikiPreview',
+		// });
 	}
 
 	/**
