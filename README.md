@@ -13,13 +13,13 @@ Procedura:
 	- [XOR] Nowy moduł, tymczasowy i wywołwanie w funkcji `#tempSk()`.
 	- [XOR] Nowy regexp w funkcji `#minorSk()`.
 2. (temp) [[Specjalna:Uprawnienia/Nux]] (włącz [[Wikipedia:Użytkownicy o ukrytej aktywności]]).
-3. (temp,opcjonalnie) monobook.
-4. (temp,opcjonalnie) wyłącz podgląd przy edycji.
+3. (temp, opcjonalnie) monobook.
+4. (temp, opcjonalnie) wyłącz podgląd przy edycji.
 5. Przygotowanie wyszukiwania (linki do bot-edycji):
 	```
 	jsbotsk_search_prep();
 	```
-6. (temp, opcjonalne) Wyłączenie obrazków (AdBlocker Ultimate).
+6. (temp, opcjonalne) Wyłączenie obrazków (e.g [Image Block (Hemant Vats)](https://addons.mozilla.org/en-US/firefox/addon/image-block/)).
 
 X. Powrót tymczasowych zmian.
 
