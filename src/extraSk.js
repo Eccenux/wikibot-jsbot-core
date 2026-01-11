@@ -284,14 +284,18 @@ function tempSk(str, summary) {
 function rawPreSk(str, summary) {
 	let after;
 
-	// stare przypisy
+	/**/
+	// stare przypisy z sekcją
 	after = str
-		.replace(/\{\{Przypisy\|\s*<!--[^{}->\n]{0,100}--!?>\s*\}\}/i, '{{Przypisy}}')
+		.replace(/\{\{Przypisy\|\s*<!--[^{}\->\n]{0,100}--!?>\s*\}\}/ig, '{{Przypisy}}')
 	;
 	if (after !== str) {
 		summary.push('Przypisy komentarz');
 		str = after;
 	}
+	/**/
+
+	return str;
 }
 
 
