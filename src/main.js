@@ -17,6 +17,14 @@ if (jsbot.isAutoBotEnabled()) {
 		mw.hook('wikiEditor.toolbarReady').add(function ($textarea) {
 			console.log(logTag, 'toolbarReady', wp_sk, {$textarea});
 			jsbot.run(wp_sk);
+
+			// extra for hidden img
+			setTimeout(() => {
+				document.querySelectorAll('#wikiEditor-section-main .group-custom img')?.forEach(img => {
+					if (img.alt) img.parentElement.setAttribute('data-alt', img.alt);
+					if (img.title) img.parentElement.setAttribute('title', img.title);
+				});
+			}, 3000);
 		});
 	});
 }
