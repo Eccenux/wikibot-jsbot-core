@@ -127,21 +127,33 @@ function cleanerReflist(str)
 	var part = indexes[0];
 	var tpl = ending.substring(part.start, part.end);
 
+	tpl = tpl.trim();
+
+	// obsługa `|grupa=uwagi` oraz `|=uwagi`
+	var groupName = '';
+	tpl = tpl.replace(/\|(?:=\s*|grupa\s*=\s*)([a-zA-Z0-9\-_]+)\s*\|/, (a, name) => {
+		groupName = name;
+		return '\n|';
+	});
+
+	// parametry-przypisy
 	tpl = cleanerRefParams(tpl);
 
-	// spr. resztek po usunięciu przypisów
-	var noRefs = tpl
-		.replace(/<ref[^>]*>[\s\S]+?<\/ref>/ig, '')
-		.replace(/^\{\{\s*\w+/, '') // tpl start
-		.replace(/\}\}$/, '') // tpl end
-	;
-	// console.log(noRefs);
+	// pre-walidacja
+	{
+		// spr. resztek po usunięciu przypisów
+		let noRefs = tpl
+			.replace(/<ref[^>]*>[\s\S]+?<\/ref>/ig, '')
+			.replace(/^\{\{\s*\w+/, '') // tpl start
+			.replace(/\}\}$/, '') // tpl end
+		;
+		// console.log(noRefs);
 
-	// nie może zawierać nazwanych parametrów
-	// (powinno pominąć `|grupa=uwagi` oraz `|=uwagi`)
-	if (noRefs.search(/\|(\s*\w{2,})?\s*=/) >= 0) {
-		console.log('[wp_sk]', 'ref template has extra params');
-		return false;
+		// nie może zawierać nazwanych parametrów
+		if (noRefs.search(/\|(\s*\w{2,})?\s*=/) >= 0) {
+			console.log('[wp_sk]', 'ref template has extra params');
+			return false;
+		}
 	}
 
 	// oczyść zawartość
@@ -163,11 +175,18 @@ function cleanerReflist(str)
 		return false;
 	}
 
-	var fixed = "<references>\n" + noTpl + "\n</references>";
+	let fixed = groupName.length ? `<references group="${groupName}">\n` : "<references>\n";
+	fixed += noTpl + "\n</references>";
 	ending = fixed + ending.substring(part.end);
 	var result = str.substring(0, startIndex + part.start) + ending;
 
-	wp_sk.NuxJsBot__summary.push('Przypisy → references');
+	if (typeof wp_sk === 'object') {
+		if (!groupName.length) {
+			wp_sk.NuxJsBot__summary.push('Przypisy → references');
+		} else {
+			wp_sk.NuxJsBot__summary.push('Przypisy → references(group)');
+		}
+	}
 
 	return result;
 }

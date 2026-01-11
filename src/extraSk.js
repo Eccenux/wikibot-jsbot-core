@@ -147,12 +147,8 @@ function minorSk(str, summary) {
 	if (str.includes('Przypisy|=')) {
 		after = str
 			.replace(
-				/\{\{Przypisy\|=([a-z]+)\}\}/g,
+				/\{\{Przypisy\|=([a-zA-Z]+)\}\}/g,
 				'<references group=$1/>'
-			)
-			.replace(
-				/\{\{Przypisy\|=([a-z]+)\|\n([\s\S]+?<\/ref>)\s*\n\}\}\n/g,
-				'<references group=$1>\n$2\n</references>\n'
 			)
 		;
 		if (after !== str) {

@@ -1,7 +1,7 @@
 /* global require, describe, it */
 const { assert } = require('chai');
 const { diffLines } = require('diff');
-const { cleanerRefParams } = require('../src/mods/cleanerReflist');
+const { cleanerRefParams, cleanerReflist } = require('../src/mods/cleanerReflist');
 // const chai = require('chai');
 // const assert = chai.assert;
 
@@ -183,4 +183,70 @@ describe('cleanerRefParams', function () {
 
 	});
 
+});
+
+describe('cleanerReflist', function () {
+	
+	function test(text, expectedText) {
+		let resultText = cleanerReflist(text);
+		if (resultText !== expectedText) {
+			const diff = diffLines(expectedText, resultText);
+			console.log('--- diff ---');
+			for (const part of diff) {
+				const color = part.added ? '\x1b[32m' : part.removed ? '\x1b[31m' : '\x1b[0m';
+				process.stdout.write(color + part.value + '\x1b[0m');
+			}
+			console.log('\n-------------');
+		}
+		assert.equal(resultText, expectedText);
+	}
+
+	it('should replace all', function () {
+		test(`
+{{Przypisy
+|Council of Europe Parliamentary={{cytuj stronę |url = http://web.archive.org/web/20100710200420/http://assembly.coe.int/Main.asp?link=/Documents/AdoptedText/ta09/ERES1671.htm |tytuł = Council of Europe Parliamentary Assembly Resolution 1671 (2009) – Situation in Belarus |autor = assembly.coe.int |język = en |data dostępu = 2013-06-15}}
+|zawRosja={{cytuj stronę |url = https://www.coe.int/en/web/portal/-/council-of-europe-suspends-russia-s-rights-of-representation |tytuł = Council of Europe suspends Russia’s rights of representation |autor = |opublikowany = Council of Europe |data = 2021-02-25 |język = en |data dostępu = 2021-02-25}}
+|rfn={{Cytuj stronę |url = https://www.nytimes.com/1951/05/03/archives/council-of-europe-raises-bonn-to-the-status-of-a-full-member-bonn.html |tytuł = ''Council of Europe Raises Bonn To the Status of a Full Member; BONN IS ADMITTED TO EUROPE COUNCIL'' |autor = Lansing Warren |opublikowany = nytimes.com |data = 3 maja 1951 |język = en |data dostępu = 2023-12-15}}
+}}
+`.trim(), `
+<references>
+<ref name="Council of Europe Parliamentary">{{Cytuj stronę |url = http://web.archive.org/web/20100710200420/http://assembly.coe.int/Main.asp?link=/Documents/AdoptedText/ta09/ERES1671.htm |tytuł = Council of Europe Parliamentary Assembly Resolution 1671 (2009) – Situation in Belarus |autor = assembly.coe.int |język = en |data dostępu = 2013-06-15}}</ref>
+<ref name="zawRosja">{{Cytuj stronę |url = https://www.coe.int/en/web/portal/-/council-of-europe-suspends-russia-s-rights-of-representation |tytuł = Council of Europe suspends Russia’s rights of representation |autor = |opublikowany = Council of Europe |data = 2021-02-25 |język = en |data dostępu = 2021-02-25}}</ref>
+<ref name="rfn">{{Cytuj stronę |url = https://www.nytimes.com/1951/05/03/archives/council-of-europe-raises-bonn-to-the-status-of-a-full-member-bonn.html |tytuł = ''Council of Europe Raises Bonn To the Status of a Full Member; BONN IS ADMITTED TO EUROPE COUNCIL'' |autor = Lansing Warren |opublikowany = nytimes.com |data = 3 maja 1951 |język = en |data dostępu = 2023-12-15}}</ref>
+</references>
+`.trim());
+	});
+
+	it('should support groups with ref-params', function () {
+		test(`
+{{Przypisy|=mini
+|Council of Europe Parliamentary={{cytuj stronę |url = http://web.archive.org/web/20100710200420/http://assembly.coe.int/Main.asp?link=/Documents/AdoptedText/ta09/ERES1671.htm |tytuł = Council of Europe Parliamentary Assembly Resolution 1671 (2009) – Situation in Belarus |autor = assembly.coe.int |język = en |data dostępu = 2013-06-15}}
+|zawRosja={{cytuj stronę |url = https://www.coe.int/en/web/portal/-/council-of-europe-suspends-russia-s-rights-of-representation |tytuł = Council of Europe suspends Russia’s rights of representation |autor = |opublikowany = Council of Europe |data = 2021-02-25 |język = en |data dostępu = 2021-02-25}}
+|rfn={{Cytuj stronę |url = https://www.nytimes.com/1951/05/03/archives/council-of-europe-raises-bonn-to-the-status-of-a-full-member-bonn.html |tytuł = ''Council of Europe Raises Bonn To the Status of a Full Member; BONN IS ADMITTED TO EUROPE COUNCIL'' |autor = Lansing Warren |opublikowany = nytimes.com |data = 3 maja 1951 |język = en |data dostępu = 2023-12-15}}
+}}
+`.trim(), `
+<references group="mini">
+<ref name="Council of Europe Parliamentary">{{Cytuj stronę |url = http://web.archive.org/web/20100710200420/http://assembly.coe.int/Main.asp?link=/Documents/AdoptedText/ta09/ERES1671.htm |tytuł = Council of Europe Parliamentary Assembly Resolution 1671 (2009) – Situation in Belarus |autor = assembly.coe.int |język = en |data dostępu = 2013-06-15}}</ref>
+<ref name="zawRosja">{{Cytuj stronę |url = https://www.coe.int/en/web/portal/-/council-of-europe-suspends-russia-s-rights-of-representation |tytuł = Council of Europe suspends Russia’s rights of representation |autor = |opublikowany = Council of Europe |data = 2021-02-25 |język = en |data dostępu = 2021-02-25}}</ref>
+<ref name="rfn">{{Cytuj stronę |url = https://www.nytimes.com/1951/05/03/archives/council-of-europe-raises-bonn-to-the-status-of-a-full-member-bonn.html |tytuł = ''Council of Europe Raises Bonn To the Status of a Full Member; BONN IS ADMITTED TO EUROPE COUNCIL'' |autor = Lansing Warren |opublikowany = nytimes.com |data = 3 maja 1951 |język = en |data dostępu = 2023-12-15}}</ref>
+</references>
+`.trim());
+	});
+
+	it('should support groups with plain refs', function () {
+		test(`
+{{Przypisy|=mini_ABC
+|
+<ref name="Council of Europe Parliamentary">{{Cytuj stronę |url = http://web.archive.org/web/20100710200420/http://assembly.coe.int/Main.asp?link=/Documents/AdoptedText/ta09/ERES1671.htm |tytuł = Council of Europe Parliamentary Assembly Resolution 1671 (2009) – Situation in Belarus |autor = assembly.coe.int |język = en |data dostępu = 2013-06-15}}</ref>
+<ref name="zawRosja">{{Cytuj stronę |url = https://www.coe.int/en/web/portal/-/council-of-europe-suspends-russia-s-rights-of-representation |tytuł = Council of Europe suspends Russia’s rights of representation |autor = |opublikowany = Council of Europe |data = 2021-02-25 |język = en |data dostępu = 2021-02-25}}</ref>
+<ref name="rfn">{{Cytuj stronę |url = https://www.nytimes.com/1951/05/03/archives/council-of-europe-raises-bonn-to-the-status-of-a-full-member-bonn.html |tytuł = ''Council of Europe Raises Bonn To the Status of a Full Member; BONN IS ADMITTED TO EUROPE COUNCIL'' |autor = Lansing Warren |opublikowany = nytimes.com |data = 3 maja 1951 |język = en |data dostępu = 2023-12-15}}</ref>
+}}
+`.trim(), `
+<references group="mini_ABC">
+<ref name="Council of Europe Parliamentary">{{Cytuj stronę |url = http://web.archive.org/web/20100710200420/http://assembly.coe.int/Main.asp?link=/Documents/AdoptedText/ta09/ERES1671.htm |tytuł = Council of Europe Parliamentary Assembly Resolution 1671 (2009) – Situation in Belarus |autor = assembly.coe.int |język = en |data dostępu = 2013-06-15}}</ref>
+<ref name="zawRosja">{{Cytuj stronę |url = https://www.coe.int/en/web/portal/-/council-of-europe-suspends-russia-s-rights-of-representation |tytuł = Council of Europe suspends Russia’s rights of representation |autor = |opublikowany = Council of Europe |data = 2021-02-25 |język = en |data dostępu = 2021-02-25}}</ref>
+<ref name="rfn">{{Cytuj stronę |url = https://www.nytimes.com/1951/05/03/archives/council-of-europe-raises-bonn-to-the-status-of-a-full-member-bonn.html |tytuł = ''Council of Europe Raises Bonn To the Status of a Full Member; BONN IS ADMITTED TO EUROPE COUNCIL'' |autor = Lansing Warren |opublikowany = nytimes.com |data = 3 maja 1951 |język = en |data dostępu = 2023-12-15}}</ref>
+</references>
+`.trim());
+	});
 });
