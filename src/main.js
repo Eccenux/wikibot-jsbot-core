@@ -7,15 +7,18 @@ const jsbot = new NuxJsBot();
 window.NuxJsBot_jsbot = jsbot;
 
 if (jsbot.isAutoBotEnabled()) {
+	console.debug(logTag, 'init, isAutoBotEnabled');
+
 	// disable redirs (makes things faster, doesn't require preview)
 	window.wp_sk_redir_enabled = false;
 	// R not in bot
-	wp_sk_r_replace_enabled = false;
+	window.wp_sk_r_replace_enabled = false;
 
 	// run when WP:SK is ready
 	mw.hook('userjs.wp_sk.ready').add(function (wp_sk) {
 		mw.hook('wikiEditor.toolbarReady').add(function ($textarea) {
-			console.log(logTag, 'toolbarReady', wp_sk, {$textarea});
+			console.debug(logTag, 'init, toolbarReady', wp_sk, {$textarea});
+
 			jsbot.run(wp_sk);
 
 			// extra for hidden img
