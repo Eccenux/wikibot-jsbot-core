@@ -51,7 +51,9 @@ class NuxJsBot {
 			this.execute(wp_sk, justBot);
 
 			// diff & scroll
-			this.autoDiff();
+			if (location.search.search(this.skipDiffParam) < 0) {
+				this.autoDiff();
+			}
 		}
 	}
 
@@ -243,10 +245,6 @@ class NuxJsBot {
 				console.warn(logTag, 'brak zmian');
 			}
 			document.getElementById('wpSummary').insertAdjacentHTML('afterend', `<span id="jsbot-sk-done" data-changes="${changes}"/>`);
-			// auto-diff
-			if (location.search.search(this.skipDiffParam) < 0) {
-				$('#wpDiff').click();
-			}
 
 			// Fixabilly integration
 			const fixabilly = new Fixabilly();
