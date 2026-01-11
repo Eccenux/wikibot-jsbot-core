@@ -276,8 +276,27 @@ function tempSk(str, summary) {
 	return str;
 }
 
+/**
+ * Replacements inside of nowiki etc.
+ * 
+ * WARNING! This can be VERY dangerous. Use wisely.
+ */
+function rawPreSk(str, summary) {
+	let after;
+
+	// stare przypisy
+	after = str
+		.replace(/\{\{Przypisy\|\s*<!--[^{}->\n]{0,100}--!?>\s*\}\}/i, '{{Przypisy}}')
+	;
+	if (after !== str) {
+		summary.push('Przypisy komentarz');
+		str = after;
+	}
+}
+
 
 // export
 if (typeof module === 'object' && module.exports) {
 	module.exports.extraSk = extraSk;
+	module.exports.rawPreSk = rawPreSk;
 }

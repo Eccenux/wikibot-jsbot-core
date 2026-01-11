@@ -24,7 +24,7 @@
  */
 
 const { Fixabilly } = require("./Fixabilly/Fixabilly");
-const { extraSk } = require("./extraSk");
+const { extraSk, rawPreSk } = require("./extraSk");
 const { cleanerReflist } = require("./mods/cleanerReflist");
 var logTag = '[jsbot]';
 
@@ -88,10 +88,10 @@ class NuxJsBot {
 			wp_sk.cleanup(input);
 		} else {
 			// auto-run with a customCleaner only
-			wp_sk.cleanup(input, function(str) {
-				str = extraSk(str, wp_sk.NuxJsBot__summary);
-				return str;
-			});
+			wp_sk.cleanup(input
+				, (str) => extraSk(str, wp_sk.NuxJsBot__summary)
+				, (str) => rawPreSk(str, wp_sk.NuxJsBot__summary)
+			);
 		}
 	}
 
