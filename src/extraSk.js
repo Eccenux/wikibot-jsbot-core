@@ -4,6 +4,7 @@ const { cleanupColList } = require("./mods/perm/cleanupColList");
 const { flexColumnTables } = require("./mods/perm/flexColumnTables");
 const bioSort = require('./mods/perm/bioSort');
 const { cleanerReflist } = require("./mods/cleanerReflist");
+const { logTag } = require("./NuxJsBot");
 // const { archiveSnooker } = require('./mods/archiveSnooker');
 
 function extraSk(str, summary) {
@@ -183,12 +184,34 @@ function minorSk(str, summary) {
 		}
 	}
 
+	// repeat cleanerReflist() as long as it does something
 	{
-		after = cleanerReflist(str);
-		if (after && after !== str) {
-			summary.push('Przypisy → references');
-			str = after;
-		}
+		let repeatCount = 0;
+		const maxCount = 10;
+		let canRepeat = false;
+		do {
+			after = cleanerReflist(str);
+			if (after && after !== str) {
+				repeatCount++;
+				if (repeatCount == 1) {
+					summary.push('Przypisy → references');
+				}
+
+				let countBefore = (str.match(/\{\{Przypisy\s*\|/gi) || []).length;
+				let countAfter = (after.match(/\{\{Przypisy\s*\|/gi) || []).length;
+				if (countAfter > 0 && countBefore > countAfter && repeatCount < maxCount) {
+					console.warn(logTag, 'Reflist still there.', {countBefore, countAfter});
+					canRepeat = true;
+				} else {
+					canRepeat = false;
+					if (repeatCount > 1) {
+						summary.push(`reflist x${repeatCount}`);
+					}
+				}
+
+				str = after;
+			}
+		} while(canRepeat);
 	}
 
 	let classReflistStill = 'nuxjsbot-reflist-still';
