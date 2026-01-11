@@ -127,11 +127,15 @@ function cleanerReflist(str)
 	var part = indexes[0];
 	var tpl = ending.substring(part.start, part.end);
 
-	tpl = tpl.trim();
+	// base cleanup
+	tpl = tpl
+		.trim()
+		.replace(/\n[ \t]?[*#\-][*#\-\s]*(<ref)/g, '\n$1')
+	;
 
 	// obsługa `|grupa=uwagi` oraz `|=uwagi`
 	var groupName = '';
-	tpl = tpl.replace(/\|(?:=\s*|grupa\s*=\s*)([a-zA-Z0-9\-_]+)\s*\|/, (a, name) => {
+	tpl = tpl.replace(/\|(?:=\s*|grupa\s*=\s*)([a-zA-Z0-9\-_\?]+)\s*\|/, (a, name) => {
 		groupName = name;
 		return '\n|';
 	});

@@ -273,4 +273,18 @@ describe('cleanerReflist', function () {
 </references>
 `.trim());
 	});
+
+	it('should support questionable group', function () {
+		test(`
+{{Przypisy|=?|
+* <ref name="1.">Białoruś dane z 12.03.2021</ref>
+* <ref name="2.">Białoruś dane z 26.03.2021</ref>
+}}
+`.trim(), `
+<references group="?">
+<ref name="1.">Białoruś dane z 12.03.2021</ref>
+<ref name="2.">Białoruś dane z 26.03.2021</ref>
+</references>
+`.trim());
+	});
 });
