@@ -1,6 +1,6 @@
 /** Detector definition. */
 class Detector {
-	constructor(detector, title) {
+	constructor(detector, title, important = false) {
 		this.countMatches = ()=>false;
 		// detector types
 		if (detector instanceof RegExp) {
@@ -18,6 +18,7 @@ class Detector {
 		}
 
 		this.title = title;
+		this.important = important;
 	}
 }
 
@@ -25,6 +26,7 @@ class Detector {
 class FixResult {
 	constructor(detector, count) {
 		this.title = detector.title;
+		this.important = detector.important;
 		this.count = count;
 	}
 	/**
@@ -55,8 +57,8 @@ class FixDetector {
 	 * 	(the function should return a number of detected matches or a potential strength).
 	 * @param {String} title Short info.
 	 */
-	addDetector(detector, title) {
-		const newDetector = new Detector(detector, title);
+	addDetector(detector, title, important = false) {
+		const newDetector = new Detector(detector, title, important);
 		this.detectors.push(newDetector);
 	}
 

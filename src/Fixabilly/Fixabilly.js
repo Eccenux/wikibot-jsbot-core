@@ -10,7 +10,7 @@ class Fixabilly {
 	constructor() {
 		this.detectors = new FixDetector();
 		// non-pl quote
-		this.detectors.addDetector(/([^=])"([^|"\]})> \n\t.,?;][^"]*?[^=| \n\t]|[^"|{}\[\]]{1,3})"([^>|])/, 'cudzysłów pl');
+		this.detectors.addDetector(/([^=])"([^|"\]})> \n\t.,?;][^"]*?[^=| \n\t]|[^"|{}\[\]]{1,3})"([^>|])/, 'cudzysłów pl', true);
 		// dashes
 		// this.detectors.addDetector(/ - /, 'pauza');
 		this.detectors.addDetector(dashDetector, 'pauza');
@@ -33,7 +33,7 @@ class Fixabilly {
 
 	/** Show res. */
 	render(results) {
-		if (!results.length) {
+		if (!results.length || !results.filter(r=>r.important).length) {
 			return false;
 		}
 		if (document.querySelector(`.${this.className}`)) {
