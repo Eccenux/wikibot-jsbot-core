@@ -60,8 +60,8 @@ function cleanerRefParams(rawTpl)
 	// needless icon (most articles are behind one)
 	let tpl = rawTpl.replace(/\{\{Paywall\}\}/gi, '');
 
-	// no params
-	if (tpl.search(/\|\s*([^=|]+)\s*=\s*\{\{/) < 0) {
+	// no named params
+	if (tpl.search(/\|\s*([^=|]+)\s*=/) < 0) {
 		return tpl;
 	}
 

@@ -217,6 +217,30 @@ describe('cleanerReflist', function () {
 `.trim());
 	});
 
+	it('support link refs', function () {
+		test(`
+{{Przypisy
+|Mielec=[https://encyklopedia.mielec.pl/?p=144 Encyklopedia miasta Mielca, Kalendarium 1944-1989]
+}}
+`.trim(), `
+<references>
+<ref name="Mielec">[https://encyklopedia.mielec.pl/?p=144 Encyklopedia miasta Mielca, Kalendarium 1944-1989]</ref>
+</references>
+`.trim());
+	});
+
+	it('support text refs', function () {
+		test(`
+{{Przypisy
+|Encyklika 2025=Encyklika miasta Mielca, Mielec: PWNT, 2025.
+}}
+`.trim(), `
+<references>
+<ref name="Encyklika 2025">Encyklika miasta Mielca, Mielec: PWNT, 2025.</ref>
+</references>
+`.trim());
+	});
+
 	it('should support groups with ref-params', function () {
 		test(`
 {{Przypisy|=mini
