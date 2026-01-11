@@ -5,11 +5,25 @@ Prosty ~bot w stylu AWB oparty na WP:SK.
 
 Program działa w trakcie edycji na stronie, ale ze specjalnym parametrem. Zmiany uruchamiane są wówczas automatycznie, ale można wprowadzania poprawki automatu lub dodatkowe zmiany ręcznie. Dostępny jest normalny edytor, choć domyślnie ukryty.
 
-Parametry specjalne:
-- botParam = 'js_bot_ed=1' – uruchomienie auto-edycji (zmian bota). Dodawane do wyszukiwania przez `jsbotsk_search_prep()`.
-- skipDiffParam = 'js_bot_nd=1' – pominięcie uruchamiania diffa. Dodawane do wyszukiwania przez `jsbotsk_search_prep(true)`.
+Domyślnie dla artykułów (`ns=0`) bot (`extraSk()`) jest uruchamiany razem z pełnym WP:SK.
+W innych przestrzeniach uruchamiane jest tylko `extraSk()` (używane jest tylko `nowiki.hide` z WP:SK).
 
 (tags: jsbot, botjs, botskjs, js-bot)
+
+## Uruchamianie bota
+
+Parametry specjalne w URL (dodane po `action=edit`):
+- `&js_bot_ed=1` – uruchomienie auto-edycji (zmian bota). Dodawane do wyszukiwania przez `jsbotsk_search_prep()`.
+- `&js_bot_nd=1` – pominięcie uruchamiania diffa. Dodawane do wyszukiwania przez `jsbotsk_search_prep(true)`.
+
+Bota można też uruchomić ręcznie w oknie edycji:
+```js
+// tylko bot
+NuxJsBot_jsbot.execute(wp_sk, true);
+
+// bot + WP:SK
+NuxJsBot_jsbot.execute(wp_sk, false);
+```
 
 ## Procedura
 
