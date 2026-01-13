@@ -36,7 +36,27 @@ NuxJsBot_jsbot.execute(wp_sk, false);
 2. (temp) [[Specjalna:Uprawnienia/Nux]] (włącz [[Wikipedia:Użytkownicy o ukrytej aktywności]]).
 3. (temp, opcjonalnie) Ustaw skórkę Książka.
 4. (temp, opcjonalnie) Wyłącz podgląd przy edycji.
-5. (temp, opcjonalnie) Wyłączenie obrazków (e.g [Image Block (Hemant Vats)](https://addons.mozilla.org/en-US/firefox/addon/image-block/)).
+5. (temp, opcjonalnie) Wyłączenie obrazków (patrz niżej).
+
+### Wyłączenie obrazków
+
+(1) uBlock „Moje filtry”:
+- Ustawienia ogólne.
+- „Moje filtry”:
+```
+! temp dla jsbot
+! (ukrywa duże obrazki tj. 100px i większe)
+! (`important` powoduje nadpisanie EasyList itp)
+/https:\/\/upload\.wikimedia\.org\/wikipedia\/commons\/thumb\/\w+\/\w+\/[^/]+\/[0-9]{3,}px-[^/]+/$domain=pl.wikipedia.org,important
+```
+
+(2) uBlock wszystkie obrazki:
+- Ustawienia witryny.
+- Opcja „obrazki” (po lewej).
+
+(3) Image Block:
+- [Image Block (Hemant Vats)](https://addons.mozilla.org/en-US/firefox/addon/image-block/)
+- Blokuje wszystkie obrazki i na każdej witrynie za jednym kliknięciem.
 
 ### Zmiany stron
 1. Wyszukać coś z użyciem `incategory:"nazwa bez ns"`, `hastemplate:"nazwa bez ns"` itp.
