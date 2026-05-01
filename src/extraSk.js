@@ -62,14 +62,25 @@ function permSk(str, summary) {
 function minorSk(str, summary) {
 	let after;
 
-	// rozmiary obrazków
-	if (str.includes('220px-')) {
+	if (str.includes('upload.wikimedia.org')) {
+		// rozmiary obrazków
 		after = str.replace(
-			/([^/])https?:\/\/upload\.wikimedia\.org\/([a-z]+\/[a-z]+)\/thumb\/(.\/..\/[^/]+)\/220px-[^/ \t\n]+/ig, 
+			/([^/])https?:\/\/upload\.wikimedia\.org\/([a-z]+\/[a-z]+)\/thumb\/(.\/..\/[^/]+)\/[0-9]{3,}px-[^/ \t\n<]+/g, 
 			'$1https://upload.wikimedia.org/$2/$3'
 		);
 		if (after !== str) {
 			summary.push('[[phab:T414805]] poprawa zepsutych obrazków');
+			str = after;
+		}
+
+		// linki do pliku w pliku
+		after = str.replace(
+			// /(\[\[([A-Z][a-z]+):[^\]]+\.[a-z0-9]+[^\]]*)\|link *= *(https?:)?\/\/upload\.wikimedia\.org[^\]\| ]+/g, 
+			/\|link ?= ?(https?:)?\/\/upload\.wikimedia\.org[^\]\| ]+/g, 
+			''
+		);
+		if (after !== str) {
+			summary.push('zbędny / zły link [[phab:T414805]]');
 			str = after;
 		}
 	}

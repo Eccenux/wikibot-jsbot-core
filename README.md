@@ -30,13 +30,13 @@ NuxJsBot_jsbot.execute(wp_sk, false);
 ### Przygotowanie
 0. Włącz/sprawdź ładowanie jsbot.
 1. Zmiany w kodzie (w `extraSk.js`):
-	- [XOR] Nowy moduł, testy i wywołanie w funkcji `#permSk()`.
-	- [XOR] Nowy moduł, tymczasowy i wywołanie w funkcji `#tempSk()`.
-	- [XOR] Nowy regexp w funkcji `#minorSk()`.
+	- [XOR] Ładne i trwałe: Nowy moduł, testy i wywołanie w funkcji `#permSk()`.
+	- [XOR] Chwilowe, rozwojowe: Nowy moduł, tymczasowy i wywołanie w funkcji `#tempSk()`.
+	- [XOR] Chwilowe, szybkie: Nowy regexp w funkcji `#minorSk()`.
 2. (temp) [[Specjalna:Uprawnienia/Nux]] (włącz [[Wikipedia:Użytkownicy o ukrytej aktywności]]).
 3. (temp, opcjonalnie) Ustaw skórkę Książka.
 4. (temp, opcjonalnie) Wyłącz podgląd przy edycji.
-5. (temp, opcjonalnie) Wyłączenie obrazków (patrz niżej).
+5. (temp, opcjonalnie) Wyłączenie obrazków (**sekcja poniżej**).
 
 ### Wyłączenie obrazków
 
