@@ -62,6 +62,18 @@ function permSk(str, summary) {
 function minorSk(str, summary) {
 	let after;
 
+	// rozmiary obrazków
+	if (str.includes('220px-')) {
+		after = str.replace(
+			/([^/])https?:\/\/upload\.wikimedia\.org\/([a-z]+\/[a-z]+)\/thumb\/(.\/..\/[^/]+)\/220px-[^/ \t\n]+/ig, 
+			'$1https://upload.wikimedia.org/$2/$3'
+		);
+		if (after !== str) {
+			summary.push('[[phab:T414805]] poprawa zepsutych obrazków');
+			str = after;
+		}
+	}
+
 	/**
 	// col-begin bez break (unstable!)
 	if (str.search(/col-break/i)<0 && str.search(/col-begin/i)>0) {
