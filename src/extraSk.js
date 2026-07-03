@@ -62,6 +62,31 @@ function permSk(str, summary) {
 function minorSk(str, summary) {
 	let after;
 
+	after = str
+		.replaceAll(
+			new RegExp('https?://' + RegExp.escape('data.aad.gov.au/aadc/gaz/scar/display_name.cfm?gaz_id='), 'g'),
+			'https://placenames.aq/place-names/'
+		)
+	;
+	if (after !== str) {
+		summary.push('popr. linków: SCAR');
+		str = after;
+	}
+	after = str
+		.replaceAll(
+			'https://www.arctowski.home.pl/',
+			'http://www.arctowski.home.pl/',
+		)
+		.replaceAll(
+			'http://www.arctowski.home.pl/arctowski/biblioteka/antar_mapki/orthophoto79.jpg',
+			'https://arctowski.aq/en/maps/'
+		)
+	;
+	if (after !== str) {
+		summary.push('arctowski mapa');
+		str = after;
+	}
+	/**
 	if (str.includes('upload.wikimedia.org')) {
 		// rozmiary obrazków
 		after = str.replace(

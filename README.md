@@ -40,6 +40,8 @@ NuxJsBot_jsbot.execute(wp_sk, false);
 
 ### Wyłączenie obrazków
 
+3 możliwości, wybierz dowolną
+
 (1) uBlock „Moje filtry”:
 - Ustawienia ogólne.
 - „Moje filtry”:
