@@ -4,5 +4,14 @@
     "editor.insertSpaces": false,
 	"search.exclude": {
 		"package-lock.json": true
-	}
+	},
+	"spellright.language": [
+		"en",
+		"pl"
+	],
+	"spellright.documentTypes": [
+		"markdown",
+		"latex",
+		"plaintext"
+	]
 }
